@@ -333,7 +333,7 @@ public class Tools {
 		}
 	}
 
-	public static String wrapResults(String json, Long count, Integer page) {
+	public static String wrapPagedResults(String json, Long count, Integer page) {
 		return "{\"results\":" + json + ",\"count\": " + count + ",\"page\":" + page + "}";
 	}
 

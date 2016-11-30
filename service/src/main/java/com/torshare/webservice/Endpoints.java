@@ -69,7 +69,7 @@ public class Endpoints {
 
             LazyList<Tables.Torrent> torrents = p.getPage(page);
 
-            return Tools.wrapResults(torrents.toJson(false), p.getCount(), page);
+            return Tools.wrapPagedResults(torrents.toJson(false), p.getCount(), page);
 
         });
     }
