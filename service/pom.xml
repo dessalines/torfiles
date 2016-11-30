@@ -2,15 +2,23 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.tchoulihan</groupId>
-	<artifactId>picard-library-to-torrents</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>torshare</artifactId>
+	<version>0.0.1</version>
 
 	<properties>
-		<main.class>com.picard.torrents.Main</main.class>
+		<main.class>com.torshare.webservice.WebService</main.class>
 		<jlibtorrent.version>1.2.0.4</jlibtorrent.version>
+		<spark.version>2.5.3</spark.version>
+
+		<!--The Database location and login, here's a sample-->
+		<jdbc.url>jdbc:postgresql://127.0.0.1/torshare</jdbc.url>
+		<jdbc.username>postgres</jdbc.username>
+		<jdbc.password></jdbc.password>
+
+		<activejdbc.version>1.4.11</activejdbc.version>
+		<version>${project.version}</version>
+
 	</properties>
-
-
 
 	<build>
 		<plugins>
@@ -63,6 +71,42 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<changeLogFile>src/main/resources/liquibase/db.changelog-master.xml</changeLogFile>
+					<driver>org.postgresql.Driver</driver>
+					<url>${jdbc.url}</url>
+					<username>${jdbc.username}</username>
+					<password>${jdbc.password}</password>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>update</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>write-project-properties</goal>
+						</goals>
+						<configuration>
+							<outputFile>${project.build.outputDirectory}/app.properties</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 	</build>
@@ -70,30 +114,74 @@
 
 	<dependencies>
 
-		<!-- <dependency> <groupId>com.frostwire</groupId> <artifactId>jlibtorrent</artifactId>
-			<version>1.1.0.1</version> </dependency> -->
+		<dependency>
+			<groupId>com.despegar</groupId>
+			<artifactId>spark-test</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 
 		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.6.2</version>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>3.5.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.4.1208.jre7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.7.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.javalite</groupId>
+			<artifactId>activejdbc</artifactId>
+			<version>${activejdbc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>opensymphony</groupId>
+					<artifactId>oscache</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sparkjava</groupId>
+			<artifactId>spark-core</artifactId>
+			<version>${spark.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-simple</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>com.frostwire</groupId>
 			<artifactId>jlibtorrent</artifactId>
-			<version>${jlibtorrent.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.frostwire</groupId>
-			<artifactId>jlibtorrent-windows</artifactId>
-			<version>${jlibtorrent.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.frostwire</groupId>
-			<artifactId>jlibtorrent-macosx</artifactId>
 			<version>${jlibtorrent.version}</version>
 		</dependency>
 
