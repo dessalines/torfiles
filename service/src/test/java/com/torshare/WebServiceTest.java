@@ -37,4 +37,20 @@ public class WebServiceTest {
         assertEquals("hello", response.body);
         assertNotNull(testServer.getApplication());
     }
+
+    @Test
+    public void searchResults() throws Exception {
+        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
+                "/search" +
+                        "?limit=4" +
+                        "&page=1" +
+                        "&orderBy=name_desc" +
+                        "&q=corp" +
+                        "&orderBy=seeders_desc" +
+
+                        "", null);
+        assertEquals(response.body, "{\"results\":[{\"age\":\"2016-10-01T07:00:00Z\",\"created\":\"2016-12-01T05:02:45Z\",\"id\":1,\"info_hash\":\"c6ca71741152a467c0dbaaa9802bedd69dee1714\",\"leechers\":32,\"name\":\"The Corporation 2003 (Dvdrip) XviD\",\"seeders\":25,\"size_bytes\":1400}],\"count\": 1,\"page\":1}");
+        assertEquals(200, response.status);
+
+    }
 }

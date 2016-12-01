@@ -338,8 +338,14 @@ public class Tools {
 	}
 
 	public static String tokenizeNameQuery(String nameQuery) {
-		// TODO write this later
-		return nameQuery;
+		String[] words = nameQuery.split("\\s+");
+
+		StringBuilder sb = new StringBuilder();
+		for (String cWord : words) {
+			sb.append("%" + cWord + "%");
+		}
+
+		return sb.toString();
 	}
 
 	public static String buildOrderBy(String[] orderBy) {

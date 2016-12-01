@@ -36,7 +36,7 @@ public class WebService {
     private Boolean docker = false;
 
     @Option(name="-liquibase", usage="Run liquibase changesets")
-    private Boolean liquibase = true;
+    private Boolean liquibase = false;
 
     public void doMain(String[] args) {
 

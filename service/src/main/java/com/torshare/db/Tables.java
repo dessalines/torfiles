@@ -11,7 +11,5 @@ public class Tables {
     @Table("torrent")
     public static class Torrent extends Model {}
 
-    @Table("torrent_view")
-    public static class TorrentView extends Model {}
 
 }

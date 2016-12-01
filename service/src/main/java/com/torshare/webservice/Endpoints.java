@@ -53,23 +53,30 @@ public class Endpoints {
     public static void search() {
 
         get("/search", (req, res) -> {
-            Integer limit = Integer.valueOf(req.queryParams("limit"));
-            Integer page = Integer.valueOf(req.queryParams("page"));
-            String[] orderBy = req.queryParamsValues("orderBy");
-            String nameQuery = req.queryParams("name");
 
-            String nameToken = Tools.tokenizeNameQuery(nameQuery);
-            String orderByStr = Tools.buildOrderBy(orderBy);
+            String limitParam = req.queryParams("limit");
+            Integer limit = (limitParam != null) ? Integer.valueOf(limitParam) : 25;
+
+            String pageParam = req.queryParams("page");
+            Integer page = (pageParam != null) ? Integer.valueOf(pageParam) : 1;
+
+            String[] orderByParam = req.queryParamsValues("orderBy");
+            String orderBy = Tools.buildOrderBy(orderByParam);
+
+            String nameParam = req.queryParams("q");
+            String nameTokens = Tools.tokenizeNameQuery(nameParam);
 
             Paginator p = new Paginator(Tables.Torrent.class,
                     limit,
-                    "name like ?",
-                    nameToken)
-                    .orderBy(orderByStr);
+                    "name ilike ?",
+                    nameTokens)
+                    .orderBy(orderBy);
 
             LazyList<Tables.Torrent> torrents = p.getPage(page);
 
-            return Tools.wrapPagedResults(torrents.toJson(false), p.getCount(), page);
+            return Tools.wrapPagedResults(torrents.toJson(false),
+                    p.getCount(),
+                    page);
 
         });
     }
