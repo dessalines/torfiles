@@ -338,6 +338,9 @@ public class Tools {
 	}
 
 	public static String tokenizeNameQuery(String nameQuery) {
+        if (nameQuery == null) {
+            return "%";
+        }
 		String[] words = nameQuery.split("\\s+");
 
 		StringBuilder sb = new StringBuilder();

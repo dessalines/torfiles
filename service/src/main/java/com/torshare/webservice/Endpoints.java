@@ -54,6 +54,9 @@ public class Endpoints {
 
         get("/search", (req, res) -> {
 
+            String nameParam = req.queryParams("q");
+            String nameTokens = Tools.tokenizeNameQuery(nameParam);
+
             String limitParam = req.queryParams("limit");
             Integer limit = (limitParam != null) ? Integer.valueOf(limitParam) : 25;
 
@@ -62,9 +65,6 @@ public class Endpoints {
 
             String[] orderByParam = req.queryParamsValues("orderBy");
             String orderBy = Tools.buildOrderBy(orderByParam);
-
-            String nameParam = req.queryParams("q");
-            String nameTokens = Tools.tokenizeNameQuery(nameParam);
 
             Paginator p = new Paginator(Tables.Torrent.class,
                     limit,

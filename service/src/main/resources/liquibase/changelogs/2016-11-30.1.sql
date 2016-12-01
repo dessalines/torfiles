@@ -30,9 +30,14 @@ create table torrent_tracker (
 
 insert into torrent (info_hash, name, size_bytes, age, seeders, leechers)
     values ('c6ca71741152a467c0dbaaa9802bedd69dee1714', 'The Corporation 2003 (Dvdrip) XviD', 1400, '2016-10-01', 25, 32);
+insert into torrent (info_hash, name, size_bytes, age, seeders, leechers)
+    values ('c6ca71741152a467c0dbaaa9sdfbedd69dee1714', 'Blatherville(2001)', 1500, '2016-10-01', 1, 3);
 
 insert into torrent_tracker (torrent_id, tracker)
     values (1, 'udp://tracker.coppersurfer.tk:6969');
+insert into torrent_tracker (torrent_id, tracker)
+    values (2, 'udp://tracker.coppersurfer.tk:6969');
+
 
 create index idx_torrent_name on torrent(name);
 create index idx_torrent_size_bytes on torrent(size_bytes);

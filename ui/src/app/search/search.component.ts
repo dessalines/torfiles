@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import {SearchService} from './search.service';
 
 @Component({
 	selector: 'app-search',
@@ -16,10 +17,11 @@ export class SearchComponent implements OnInit {
 		{ title: 'Leechers', name: 'leechers', sort: 'desc' }
 	];
 	public page: number = 1;
-	public itemsPerPage: number = 10;
+	public itemsPerPage: number = 25;
 	public maxSize: number = 5;
-	public numPages: number = 1;
-	public length: number = 0;
+	public length: number = 1;
+	public data: Array<any>;
+
 
 	public config: any = {
 		paging: true,
@@ -28,10 +30,8 @@ export class SearchComponent implements OnInit {
 		className: ['table-striped', 'table-bordered']
 	};
 
-	private data: Array<any> = [];
+	public constructor(private searchService: SearchService) {
 
-	public constructor() {
-		this.length = this.data.length;
 	}
 
 	public ngOnInit(): void {
@@ -125,7 +125,15 @@ export class SearchComponent implements OnInit {
 		// let sortedData = this.changeSort(filteredData, this.config);
 		// this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
 		// this.length = sortedData.length;
+
+
 		console.log(config);
+
+		this.searchService.getSearchResults('').subscribe(d => {
+			console.log(d);
+			this.rows = d.results;
+			this.length = d.count;
+		});
 	}
 
 	public onCellClick(data: any): any {

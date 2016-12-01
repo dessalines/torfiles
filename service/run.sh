@@ -1,1 +1,1 @@
-java -jar target/calibre-library-to-torrents.jar "$@"
+java -jar target/torshare.jar "$@"
