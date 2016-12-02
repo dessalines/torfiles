@@ -9,6 +9,15 @@ import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Paginator;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.Part;
+
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+
 import static spark.Spark.*;
 
 /**
@@ -29,7 +38,7 @@ public class Endpoints {
         before((req, res) -> {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Credentials", "true");
-            res.header("Access-Control-Allow-Headers", "content-type,user");
+            res.header("Access-Control-Allow-Headers", "Origin, content-type,X-Requested-With");
             res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
             Tools.dbInit();
         });
@@ -82,6 +91,31 @@ public class Endpoints {
     }
 
     public static void upload() {
+
+        options("/upload", (req, res) -> "OKAY");
+
+        post("/upload", (request, response) -> {
+
+            Path tempDir = Files.createTempDirectory("upload");
+            Path tempFile = Files.createTempFile(tempDir, "", "");
+
+            request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+
+            log.info(request.raw().toString());
+
+            for (Part e : request.raw().getParts()) {
+                log.info(e.getName());
+            }
+
+            try (InputStream is = request.raw().getPart("file").getInputStream()) {
+                // Use the input stream to create a file
+                Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            log.info("temp file: " + tempFile.toAbsolutePath());
+
+            return "File uploaded";
+        });
 
     }
 

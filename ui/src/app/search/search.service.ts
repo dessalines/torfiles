@@ -19,14 +19,11 @@ export class SearchService {
 		orderBy: Array<string>
 	): string {
 
-		console.log(orderBy);
-
-        let url: string = environment.endpoint + 'search?';
-			'?limit=' + limit +
+        let url: string = environment.endpoint + 'search?' + 
+			'limit=' + limit +
 			'&page=' + page;
 
 		for (let cOrderBy of orderBy) {
-			console.log(cOrderBy);
 			url += '&orderBy=' + cOrderBy;
 		}
 
@@ -43,7 +40,8 @@ export class SearchService {
 	getSearchResults(q: string = 'all',
 		limit: number = 25,
 		page: number = 1,
-		orderBy: Array<string> = ['seeders_desc']): Observable<SearchResults> {
+		orderBy: Array<string> = ['seeders-desc']): Observable<SearchResults> {
+
 		return this.http.get(this.searchUrl(q, limit, page, orderBy))
 			.map(r => r.json())
 			.catch(this.handleError);

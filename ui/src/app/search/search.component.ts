@@ -11,14 +11,14 @@ export class SearchComponent implements OnInit {
 	public rows: Array<any> = [];
 	public columns: Array<any> = [
 		{ title: 'Name', name: 'name', sort: true},
-		{ title: 'Size', name: 'size', sort: true},
+		{ title: 'Size', name: 'size_bytes', sort: true},
 		{ title: 'Age', name: 'age', sort: true },
 		{ title: 'Seeders', name: 'seeders', sort: 'desc' },
-		{ title: 'Leechers', name: 'leechers', sort: 'desc' }
+		{ title: 'Leechers', name: 'leechers', sort: true }
 	];
 	public page: number = 1;
-	public itemsPerPage: number = 25;
-	public maxSize: number = 5;
+	public limit: number = 25;
+	public maxPaginators: number = 5;
 	public length: number = 1;
 	public data: Array<any>;
 
@@ -39,8 +39,8 @@ export class SearchComponent implements OnInit {
 	}
 
 	public changePage(page: any, data: Array<any> = this.data): Array<any> {
-		// let start = (page.page - 1) * page.itemsPerPage;
-		// let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
+		// let start = (page.page - 1) * page.limit;
+		// let end = page.limit > -1 ? (start + page.limit) : data.length;
 		// return data.slice(start, end);
 		return [];
 	}
@@ -112,7 +112,7 @@ export class SearchComponent implements OnInit {
 		// return filteredData;
 	}
 
-	public onChangeTable(config: any, page: any = { page: this.page, itemsPerPage: this.itemsPerPage }): any {
+	public onChangeTable(config: any, page: any = { page: this.page, limit: this.limit }): any {
 		// if (config.filtering) {
 		// 	Object.assign(this.config.filtering, config.filtering);
 		// }
@@ -126,18 +126,36 @@ export class SearchComponent implements OnInit {
 		// this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
 		// this.length = sortedData.length;
 
+		this.page = page.page;
 
-		console.log(config);
+		let q: string = config.filtering.filterString;
 
-		this.searchService.getSearchResults('').subscribe(d => {
-			console.log(d);
+		let orderBy: Array<string> = this.buildOrderByArray(config);
+
+		this.searchService.getSearchResults(q, this.limit, this.page, orderBy).subscribe(d => {
 			this.rows = d.results;
 			this.length = d.count;
 		});
 	}
 
 	public onCellClick(data: any): any {
-		console.log(data);
+		
+	}
+
+	private buildOrderByArray(config: any): Array<string> {
+		let orderByArray: Array<string> = [];
+
+		for (let sortOption of config.sorting.columns) {
+			if (typeof sortOption.sort === 'string' && sortOption.sort.length > 0) {
+				orderByArray.push(sortOption.name + '-' + sortOption.sort);
+			}
+		}
+
+		if (orderByArray.length == 0) {
+			orderByArray = undefined;
+		}
+
+		return orderByArray;
 	}
 }
 

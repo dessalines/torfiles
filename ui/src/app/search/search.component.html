@@ -1,16 +1,23 @@
 <div class="row">
-  <div class="col-md-4">
-    <input *ngIf="config.filtering" placeholder="Filter all columns"
-      [ngTableFiltering]="config.filtering" class="form-control"
-      (tableChanged)="onChangeTable(config)" />
+  <div class="col-lg-6">
+    <form>
+      <div class="form-group">
+        <div class="input-group">
+          <input [ngTableFiltering]="config.filtering" type="text"
+            class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+        		<button (click)="onChangeTable(config)" class="btn btn-secondary" type="submit">Search</button>
+      		</span>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
-<br>
 <ng-table [config]="config" (tableChanged)="onChangeTable(config)"
   (cellClicked)="onCellClick($event)" [rows]="rows" [columns]="columns">
 </ng-table>
 <pagination *ngIf="config.paging" class="pagination-sm"
-  [(ngModel)]="page" [totalItems]="length" [itemsPerPage]="itemsPerPage"
-  [maxSize]="maxSize" [boundaryLinks]="true" [rotate]="false"
+  [(ngModel)]="page" [totalItems]="length" [itemsPerPage]="limit"
+  [maxSize]="maxPaginators" [boundaryLinks]="true" [rotate]="false"
   (pageChanged)="onChangeTable(config, $event)" (numPages)="numPages = $event">
 </pagination>

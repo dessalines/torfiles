@@ -355,7 +355,7 @@ public class Tools {
 		StringBuilder sb = new StringBuilder();
 		String sep = "";
 		for (String cOrderBy : orderBy) {
-			String[] split = cOrderBy.split("_");
+			String[] split = cOrderBy.split("-");
 			sb.append(sep);
 			sb.append(split[0] + " " + split[1]);
 			sep = ",";

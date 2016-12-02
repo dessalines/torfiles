@@ -45,9 +45,9 @@ public class WebServiceTest {
                 "/search" +
                         "?limit=4" +
                         "&page=1" +
-                        "&orderBy=name_desc" +
+                        "&orderBy=name-desc" +
                         //"&q=corp" +
-                        "&orderBy=seeders_desc" +
+                        "&orderBy=seeders-desc" +
                         "", null);
         assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
         assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9sdfbedd69dee1714"));
