@@ -3,10 +3,21 @@ package com.torshare;
 
 import com.despegar.sparkjava.test.SparkClient;
 import com.despegar.sparkjava.test.SparkServer;
+import com.frostwire.jlibtorrent.TorrentInfo;
+import com.torshare.db.Actions;
+import com.torshare.db.Tables;
+import com.torshare.tools.DataSources;
+import com.torshare.tools.Tools;
+import com.torshare.torrent.LibtorrentEngine;
 import com.torshare.webservice.WebService;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import spark.servlet.SparkApplication;
+
+import java.io.File;
+import java.util.NoSuchElementException;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
@@ -17,7 +28,9 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class WebServiceTest {
 
+
     public static class TestContollerTestSparkApplication implements SparkApplication {
+
         @Override
         public void init() {
             try {
@@ -46,12 +59,15 @@ public class WebServiceTest {
                         "?limit=4" +
                         "&page=1" +
                         "&orderBy=name-desc" +
-                        //"&q=corp" +
+                        "&q=comintern" +
                         "&orderBy=seeders-desc" +
                         "", null);
-        assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
-        assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9sdfbedd69dee1714"));
+//        System.out.println(response.body);
         assertEquals(200, response.status);
+        assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
+
 
     }
+
+
 }

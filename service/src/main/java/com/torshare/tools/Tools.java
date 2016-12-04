@@ -352,6 +352,11 @@ public class Tools {
 	}
 
 	public static String buildOrderBy(String[] orderBy) {
+
+		if (orderBy == null) {
+			return "seeders desc";
+		}
+
 		StringBuilder sb = new StringBuilder();
 		String sep = "";
 		for (String cOrderBy : orderBy) {
@@ -363,5 +368,7 @@ public class Tools {
 
 		return sb.toString();
 	}
+
+
 }
 

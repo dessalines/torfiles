@@ -26,4 +26,8 @@ public class DataSources {
 
     public static final Integer EXPIRE_SECONDS = 86400 * 7; // stays logged in for 7 days
 
+    public static final String LIBTORRENT_PATH = CODE_DIR + "/lib/libjlibtorrent.so";
+
+    public static final String UBUNTU_TORRENT = CODE_DIR + "/src/main/resources/ubuntu-16.10-desktop-amd64.iso.torrent";
+
 }

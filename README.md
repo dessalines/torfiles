@@ -111,3 +111,8 @@ You can redirect ports in linux to route from port 80 to this port:
 
 ## Bugs and feature requests
 Have a bug or a feature request? If your issue isn't [already listed](https://github.com/dessalines/flowchat/issues/), then open a [new issue here](https://github.com/dessalines/flowchat/issues/new).
+
+
+# Exports
+- All magnet links
+- pg_dump file

@@ -12,9 +12,10 @@ import { UploadComponent } from './upload/upload.component';
 import { AppRoutingModule }     from './app-routing.module';
 import { SearchComponent } from './search/search.component';
 
-import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { PaginationModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
+import { FileSizePipe } from './pipes/file-size.pipe';
+import { MomentPipe } from './pipes/moment.pipe';
 
 @NgModule({
   declarations: [
@@ -24,13 +25,14 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
     FooterComponent,
     SearchComponent,
     UploadComponent,
+    FileSizePipe,
+    MomentPipe,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    Ng2TableModule,
     PaginationModule,
     FileUploadModule
   ],

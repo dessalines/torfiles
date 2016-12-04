@@ -1,9 +1,12 @@
 package com.torshare.webservice;
 
 import ch.qos.logback.classic.Logger;
+import com.frostwire.jlibtorrent.TorrentInfo;
+import com.torshare.db.Actions;
 import com.torshare.db.Tables;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
+import com.torshare.torrent.LibtorrentEngine;
 import org.eclipse.jetty.http.HttpStatus;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Paginator;
@@ -96,23 +99,22 @@ public class Endpoints {
 
         post("/upload", (request, response) -> {
 
-            Path tempDir = Files.createTempDirectory("upload");
-            Path tempFile = Files.createTempFile(tempDir, "", "");
+            File tempFile = File.createTempFile("temp_file", ".torrent");
 
             request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
 
-            log.info(request.raw().toString());
-
-            for (Part e : request.raw().getParts()) {
-                log.info(e.getName());
-            }
-
             try (InputStream is = request.raw().getPart("file").getInputStream()) {
                 // Use the input stream to create a file
-                Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(is, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            log.info("temp file: " + tempFile.toAbsolutePath());
+            log.info(tempFile.getAbsolutePath());
+
+            TorrentInfo ti =  new TorrentInfo(tempFile);
+
+            Actions.saveTorrentInfo(ti);
+
+            LibtorrentEngine.INSTANCE.addTorrent(ti);
 
             return "File uploaded";
         });

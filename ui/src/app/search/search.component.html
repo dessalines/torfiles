@@ -3,21 +3,43 @@
     <form>
       <div class="form-group">
         <div class="input-group">
-          <input [ngTableFiltering]="config.filtering" type="text"
+          <input [(ngModel)]="searchTerm" name="searchTerm" type="text"
             class="form-control" placeholder="Search for...">
           <span class="input-group-btn">
-        		<button (click)="onChangeTable(config)" class="btn btn-secondary" type="submit">Search</button>
-      		</span>
+            <button (click)="onChangeTable(config)" class="btn btn-secondary" type="submit">Search</button>
+          </span>
         </div>
       </div>
     </form>
   </div>
 </div>
-<ng-table [config]="config" (tableChanged)="onChangeTable(config)"
-  (cellClicked)="onCellClick($event)" [rows]="rows" [columns]="columns">
-</ng-table>
-<pagination *ngIf="config.paging" class="pagination-sm"
-  [(ngModel)]="page" [totalItems]="length" [itemsPerPage]="limit"
-  [maxSize]="maxPaginators" [boundaryLinks]="true" [rotate]="false"
-  (pageChanged)="onChangeTable(config, $event)" (numPages)="numPages = $event">
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th (click)="toggleSort('name')">Name <span class="{{getSortingClass('name')}}"></span></th>
+      <th (click)="toggleSort('size_bytes')">Size <span class="{{getSortingClass('size_bytes')}}"></span></th>
+      <th (click)="toggleSort('age')">Age <span class="{{getSortingClass('age')}}"></span></th>
+      <th (click)="toggleSort('seeders')">Seeders <span class="{{getSortingClass('seeders')}}"></span></th>
+      <th (click)="toggleSort('leechers')">Leechers <span class="{{getSortingClass('leechers')}}"></span></th>
+      <th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of rows">
+      <td>{{row.name}}</td>
+      <td>{{row.size_bytes | fileSize: true}}</td>
+      <td>{{row.age | moment}}</td>
+      <td>{{row.seeders}}</td>
+      <td>{{row.leechers}}</td>
+      <td>
+        <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)"><i class="fa fa-fw fa-magnet text-danger"></i></a>
+        <a href="#"><i class="fa fa-fw fa-download text-muted"></i></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<pagination class="pagination-sm" [(ngModel)]="page"
+  [totalItems]="length" [itemsPerPage]="limit" [maxSize]="maxPaginators"
+  [boundaryLinks]="true" [rotate]="false" (pageChanged)="onChangeTable(config, $event)"
+  (numPages)="numPages = $event">
 </pagination>

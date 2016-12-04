@@ -8,6 +8,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
+import com.torshare.torrent.LibtorrentEngine;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import spark.Spark;
 
 import java.io.File;
+import java.io.IOException;
 
 import static spark.Spark.init;
 import static spark.Spark.staticFiles;
@@ -38,7 +40,10 @@ public class WebService {
     @Option(name="-liquibase", usage="Run liquibase changesets")
     private Boolean liquibase = false;
 
-    public void doMain(String[] args) {
+    @Option(name="-add_torrents", usage="Add current torrents in the DB")
+    private Boolean addTorrents = true;
+
+    public void doMain(String[] args) throws IOException {
 
         if (args != null) {
             parseArguments(args);
@@ -60,6 +65,12 @@ public class WebService {
 
         if (liquibase) {
             Tools.runLiquibase();
+        }
+
+        LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
+
+        if (addTorrents) {
+            lte.addTorrentsOnStartup();
         }
 
         staticFiles.externalLocation(uiDist.getAbsolutePath());
