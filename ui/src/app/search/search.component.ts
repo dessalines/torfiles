@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import {SearchService} from './search.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class SearchComponent implements OnInit {
 		'name': '',
 		'size_bytes': '',
 		'age': '',
-		'seeders': 'desc',
+		'seeders': '',
 		'leechers': ''
 	};
 
@@ -102,6 +103,10 @@ export class SearchComponent implements OnInit {
 
 		this.page = 1;
 		this.onChangeTable();
+	}
+
+	private getDownloadLink(infoHash: string) {
+		return environment.endpoint + 'torrent_download/' + infoHash;
 	}
 }
 

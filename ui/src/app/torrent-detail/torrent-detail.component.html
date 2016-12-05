@@ -1,0 +1,47 @@
+<div *ngIf="d">
+  <h1>{{d.name}}</h1>
+  <hr>
+  <div class="row">
+    <div class="col-xs-8">
+      <span class="text-success"><i class="fa fa-fw fa-arrow-up"></i>Seeders: {{d.seeders}}</span>
+      <span class="text-danger"><i class="fa fa-fw fa-arrow-down"></i>Leechers: {{d.leechers}}</span>
+    </div>
+    <div class="col-xs-4 text-xs-right">
+      <a [href]="sanitizer.bypassSecurityTrustUrl(d.magnetLink)"
+        class="btn btn-danger btn-sm"><i class="fa fa-fw fa-magnet"></i></a>
+      <a [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(d.infoHash))" class="btn btn-secondary btn-sm"><i class="fa fa-fw fa-download"></i></a>
+    </div>
+  </div>
+  <br>
+  <div class="card">
+    <div class="card-block">
+      <h4 class="card-title">Details</h4>
+      <div class="row">
+        <div class="col-md-6">
+          <p><b>Info Hash:</b> {{d.infoHash}}</p>
+          <p *ngIf="d.creator"><b>Creator:</b> {{d.creator}}</p>
+          <p><b>Creation date:</b> {{d.creationDate*1000
+            | moment}}</p>
+        </div>
+        <div class="col-md-6">
+          <p><b>Total Size:</b> {{d.sizeBytes | fileSize:
+            true}}
+          </p>
+          <p><b># of Files:</b> {{d.files.length}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-block">
+      <h4 class="card-title">Files</h4>
+      <p *ngFor="let file of d.files">{{file}}</p>
+    </div>
+  </div>
+  <div *ngIf="d.comment" class="card">
+    <div class="card-block">
+      <h4 class="card-title">Comment</h4>
+      <p>{{d.comment}}</p>
+    </div>
+  </div>
+</div>

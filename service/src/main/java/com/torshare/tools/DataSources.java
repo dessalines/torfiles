@@ -30,4 +30,6 @@ public class DataSources {
 
     public static final String UBUNTU_TORRENT = CODE_DIR + "/src/main/resources/ubuntu-16.10-desktop-amd64.iso.torrent";
 
+    public static final String TROTSKY_TORRENT = CODE_DIR + "/src/main/resources/trotsky_fascism.torrent";
+
 }

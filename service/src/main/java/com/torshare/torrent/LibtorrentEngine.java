@@ -122,16 +122,23 @@ public enum LibtorrentEngine {
                     case SCRAPE_REPLY:
                         ScrapeReplyAlert c = (ScrapeReplyAlert) alert;
                         Tools.dbInit();
-                        trackerCount.remove(c.handle().infoHash().toString());
-                        Actions.saveSeeders(c.handle().infoHash().toString(), c.getComplete(), c.getIncomplete());
+                        Integer countz = trackerCount.get(c.handle().infoHash().toString()) + 1;
+                        if (c.getComplete() == 0 && countz < c.handle().trackers().size()) {
+                            log.info(countz + "");
+                            c.handle().swig().scrape_tracker(countz);
+                            trackerCount.put(c.handle().infoHash().toString(), countz);
+                        } else {
+                            trackerCount.remove(c.handle().infoHash().toString());
+                            Actions.saveSeeders(c.handle().infoHash().toString(), c.getComplete(), c.getIncomplete());
+                        }
                         Tools.dbClose();
                         break;
                     case SCRAPE_FAILED:
                         ScrapeFailedAlert v = (ScrapeFailedAlert) alert;
                         Integer count = trackerCount.get(v.handle().infoHash().toString()) + 1;
-                        trackerCount.put(v.handle().infoHash().toString(), count);
                         if (count < v.handle().trackers().size()) {
                             log.info(count + "");
+                            trackerCount.put(v.handle().infoHash().toString(), count);
                             v.handle().swig().scrape_tracker(count);
                         }
                         break;

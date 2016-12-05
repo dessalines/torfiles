@@ -16,6 +16,9 @@ import { PaginationModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { MomentPipe } from './pipes/moment.pipe';
+import { TorrentDetailComponent } from './torrent-detail/torrent-detail.component';
+import {SearchService} from './search/search.service';
+import { TorrentDetailService} from './torrent-detail.service';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,7 @@ import { MomentPipe } from './pipes/moment.pipe';
     UploadComponent,
     FileSizePipe,
     MomentPipe,
+    TorrentDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +40,7 @@ import { MomentPipe } from './pipes/moment.pipe';
     PaginationModule,
     FileUploadModule
   ],
-  providers: [],
+  providers: [SearchService, TorrentDetailService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

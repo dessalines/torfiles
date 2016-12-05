@@ -1,5 +1,7 @@
 package com.torshare.tools;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.frostwire.jlibtorrent.Entry;
 import com.frostwire.jlibtorrent.swig.*;
 import liquibase.Liquibase;
@@ -31,6 +33,9 @@ import java.util.zip.ZipFile;
 public class Tools {
 
 	static final Logger log = LoggerFactory.getLogger(Tools.class);
+
+	public static ObjectMapper JACKSON = new ObjectMapper();
+	public static TypeFactory typeFactory = JACKSON.getTypeFactory();
 
 	public static final SimpleDateFormat SDF = new SimpleDateFormat("YYYY");
 

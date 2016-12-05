@@ -7,12 +7,14 @@ import com.torshare.db.Tables;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
 import com.torshare.torrent.LibtorrentEngine;
+import com.torshare.types.TorrentDetail;
 import org.eclipse.jetty.http.HttpStatus;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Paginator;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import java.io.File;
@@ -119,6 +121,36 @@ public class Endpoints {
             return "File uploaded";
         });
 
+    }
+
+    public static void detail() {
+        get("/torrent_detail/:info_hash", (req, res) -> {
+            String infoHash = req.params(":info_hash");
+            Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
+
+            TorrentInfo ti = TorrentInfo.bdecode(torrent.getBytes("bencode"));
+
+            TorrentDetail td = TorrentDetail.create(
+                    ti,
+                    torrent.getInteger("seeders"),
+                    torrent.getInteger("leechers"));
+
+            return td.json();
+
+        });
+
+        get("/torrent_download/:info_hash", (req, res) -> {
+
+            String infoHash = req.params(":info_hash");
+            Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
+
+            HttpServletResponse raw = res.raw();
+            raw.getOutputStream().write(torrent.getBytes("bencode"));
+            raw.getOutputStream().flush();
+            raw.getOutputStream().close();
+
+            return res.raw();
+        });
     }
 
 

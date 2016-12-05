@@ -6,6 +6,7 @@ import com.torshare.db.Tables;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
 import com.torshare.torrent.LibtorrentEngine;
+import com.torshare.types.TorrentDetail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import static junit.framework.TestCase.assertEquals;
 public class DBTest {
 
     File ubuntuTorrent = new File(DataSources.UBUNTU_TORRENT);
+    File trotskyTorrent = new File(DataSources.TROTSKY_TORRENT);
     LibtorrentEngine lte;
 
 
@@ -91,9 +93,14 @@ public class DBTest {
     }
 
     @Test
-    public void asdf() throws Exception {
-        TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
-        lte.addTorrent(ti);
+    public void testTorrentDetail() throws Exception {
+        TorrentInfo ti = new TorrentInfo(trotskyTorrent);
+        TorrentDetail td = TorrentDetail.create(ti, 0, 0);
+
+        assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines", td.getName());
+        assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3",
+                td.getFiles().get(0));
+        assertEquals("d1f28f0c1b89ddd9a39205bef0be3715d117f91b", td.getInfoHash());
     }
 
 

@@ -26,14 +26,14 @@
   </thead>
   <tbody>
     <tr *ngFor="let row of rows">
-      <td>{{row.name}}</td>
+      <td><a [routerLink]="['/torrent', row.info_hash]">{{row.name}}</a></td>
       <td>{{row.size_bytes | fileSize: true}}</td>
       <td>{{row.age | moment}}</td>
       <td>{{row.seeders}}</td>
       <td>{{row.leechers}}</td>
       <td>
         <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)"><i class="fa fa-fw fa-magnet text-danger"></i></a>
-        <a href="#"><i class="fa fa-fw fa-download text-muted"></i></a>
+        <a [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))"><i class="fa fa-fw fa-download text-muted"></i></a>
       </td>
     </tr>
   </tbody>
