@@ -16,7 +16,7 @@ const routes: Routes = [
 	{ path: 'torrent/:info_hash', component: TorrentDetailComponent }
 ];
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
+	imports: [RouterModule.forRoot(routes, { useHash: true })],
 	exports: [RouterModule]
 })
 export class AppRoutingModule { }

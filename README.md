@@ -21,7 +21,7 @@ Tech used:
 - [Java Spark](https://github.com/perwendel/spark), [Bootstrap v4](https://github.com/twbs/bootstrap), [Angular2](https://github.com/angular/angular), [Angular-cli](https://github.com/angular/angular-cli), [ng2-bootstrap](http://valor-software.com/ng2-bootstrap/), [ActiveJDBC](http://javalite.io/activejdbc), [Liquibase](http://www.liquibase.org/), [Postgres](https://www.postgresql.org/), 
 
 
-Join the subreddit: [/r/flowchat](https://www.reddit.com/r/flowchat/)
+<!-- Join the subreddit: [/r/flowchat](https://www.reddit.com/r/flowchat/) -->
 
 
 ## Installation 
@@ -35,9 +35,12 @@ Join the subreddit: [/r/flowchat](https://www.reddit.com/r/flowchat/)
 `git clone https://github.com/dessalines/torshare`
 
 ### Setup a postgres database
+
+`psql -c 'create database torshare;' -U postgres`
+
 [Here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04) are some instructions to get your DB up and running.
 
-### Edit your pom.xml file to point to your database
+### (If changing db name or user) Edit your pom.xml file to point to your database
 ```sh
 cd torshare
 vim service/pom.xml
@@ -53,13 +56,15 @@ Edit it to point to your own database:
 
 #### Install Torshare
 
-for local testing: 
+Local testing:
 
 `./install_dev.sh` and goto `http://localhost:4567/`
 
-for a production environment, edit `ui/config/environment.prod.ts` to point to your hostname, then run:
+for a production environment:
 
-`./install_prod.sh`
+- edit `ui/config/environment.prod.ts` to point to your hostname
+- Create a (.jks) file with your ssl certs
+- `./install_prod.sh`
 
 You can redirect ports in linux to route from port 80 to this port:
 

@@ -8,7 +8,7 @@
 	<properties>
 		<main.class>com.torshare.webservice.WebService</main.class>
 		<jlibtorrent.version>1.2.0.4</jlibtorrent.version>
-		<spark.version>2.5.3</spark.version>
+		<spark.version>2.5</spark.version>
 		<activejdbc.version>1.4.11</activejdbc.version>
 
 		<!--The Database location and login, here's a sample-->
