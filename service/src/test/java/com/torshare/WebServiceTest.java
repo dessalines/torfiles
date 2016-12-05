@@ -80,7 +80,7 @@ public class WebServiceTest {
     public void jsonDump() throws Exception {
         SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
                 "/torshare.json", null);
-        assertTrue(response.body.contains("magnet:?xt=urn:btih:0403fb4728bd788fbcb67e87d6feb241ef38c75a&dn=ubuntu-16.10-desktop-amd64.iso"));
+        assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
     }
 
 

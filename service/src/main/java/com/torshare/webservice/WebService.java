@@ -86,9 +86,6 @@ public class WebService {
         Endpoints.export();
         Endpoints.exceptions();
 
-
-
-
     }
 
     private void parseArguments(String[] args) {

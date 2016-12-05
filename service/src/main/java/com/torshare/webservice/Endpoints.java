@@ -1,6 +1,7 @@
 package com.torshare.webservice;
 
 import ch.qos.logback.classic.Logger;
+import com.frostwire.jlibtorrent.Entry;
 import com.frostwire.jlibtorrent.TorrentInfo;
 import com.torshare.db.Actions;
 import com.torshare.db.Tables;
@@ -101,14 +102,14 @@ public class Endpoints {
 
         options("/upload", (req, res) -> "OKAY");
 
-        post("/upload", (request, response) -> {
+        post("/upload", (req, res) -> {
 
             File tempFile = File.createTempFile("temp_file", ".torrent");
             tempFile.deleteOnExit();
 
-            request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
 
-            try (InputStream is = request.raw().getPart("file").getInputStream()) {
+            try (InputStream is = req.raw().getPart("file").getInputStream()) {
                 // Use the input stream to create a file
                 Files.copy(is, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
@@ -123,6 +124,28 @@ public class Endpoints {
 
             // Return the infoHash if it was successful
             return ti.infoHash().toString();
+        });
+
+        post("/upload_magnet_links", (req, res) -> {
+            log.info(req.body());
+
+            LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
+            String lines[] = req.body().split("\\r?\\n");
+
+            Integer torrentsAdded = 0;
+
+            for (int i = 0; i < lines.length; i++) {
+                byte[] data = lte.fetchMagnetURI(lines[i]);
+                if (data != null) {
+                    TorrentInfo ti = TorrentInfo.bdecode(data);
+                    Actions.saveTorrentInfo(ti);
+                    lte.addTorrent(ti);
+                    torrentsAdded++;
+                }
+            }
+
+            return "{\"message\":\"" + torrentsAdded + " Torrents Added\"}";
+
         });
 
     }

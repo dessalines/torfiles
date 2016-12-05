@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { environment } from '../../../environments/environment';
+import { UploadService } from '../../services';
 
 const URL = environment.endpoint + 'upload';
 
@@ -11,6 +12,10 @@ const URL = environment.endpoint + 'upload';
 })
 export class UploadComponent implements OnInit {
 
+	private magnetTextArea: string;
+	private magnetUploadMessage: string;
+	private magnetUploading: boolean = false;
+
 	public uploader: FileUploader = new FileUploader({ url: URL });
 	public hasBaseDropZoneOver: boolean = false;
 
@@ -18,16 +23,30 @@ export class UploadComponent implements OnInit {
 		this.hasBaseDropZoneOver = e;
 	}
 
-	constructor() { }
+	constructor(private uploadService: UploadService) { }
 
 	ngOnInit() {
 		this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 		this.uploader.onCompleteItem = (file => {
-			console.log(file);
-			console.log(file._xhr.responseText);
-
 		});
 	}
+
+	uploadMagnets() {
+
+		console.log(this.magnetTextArea);
+
+		this.magnetUploading = true;
+		this.uploadService.uploadMagnetLinks(this.magnetTextArea).subscribe(
+			d => {
+				this.magnetUploadMessage = d.message;
+				this.magnetUploading = false;
+			}, error => {
+				this.magnetUploadMessage = error;
+				this.magnetUploading = false;
+			});
+	}
+
+
 
 
 

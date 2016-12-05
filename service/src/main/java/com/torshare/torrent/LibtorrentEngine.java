@@ -65,15 +65,17 @@ public enum LibtorrentEngine {
 //        log.info("dzht peers = " + asdf.size());
     }
 
-    public void fetchMagnetURI(String uri) {
+    public byte[] fetchMagnetURI(String uri) {
         log.info("Fetching the magnet uri, please wait...");
         byte[] data = s.fetchMagnet(uri, 30);
 
         if (data != null) {
-            log.info(Entry.bdecode(data).string());
+//            log.info(Entry.bdecode(data).toString());
         } else {
-            log.info("Failed to retrieve the magnet");
+            throw new NoSuchElementException("Failed to retrieve the magnet:" + uri.toString());
         }
+
+        return data;
 
     }
 
@@ -93,7 +95,7 @@ public enum LibtorrentEngine {
 
     private void setupAlerts() {
 
-        Map<String, Integer> trackerCount = new HashMap<String, Integer>();
+        Map<String, Integer> trackerCount = new HashMap<>();
 
         s.addListener(new AlertListener() {
             @Override
@@ -111,6 +113,8 @@ public enum LibtorrentEngine {
                 log.info(alert.message());
 
                 switch (type) {
+                    // TODO
+//                     add metadata received alert, because torrentAdded fires for magnets, without trackers populated
                     case TORRENT_ADDED:
                         TorrentAddedAlert a = (TorrentAddedAlert) alert;
                         trackerCount.put(a.handle().infoHash().toString(), 0);

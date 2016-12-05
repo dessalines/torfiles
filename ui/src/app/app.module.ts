@@ -19,7 +19,8 @@ import {
 
 import {
   SearchService,
-  TorrentDetailService } from './services';
+  TorrentDetailService,
+  UploadService } from './services';
 
 import { AppRoutingModule }     from './app-routing.module';
 import { PaginationModule } from 'ng2-bootstrap/ng2-bootstrap';
@@ -46,7 +47,7 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
     PaginationModule,
     FileUploadModule
   ],
-  providers: [SearchService, TorrentDetailService],
+  providers: [SearchService, TorrentDetailService, UploadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

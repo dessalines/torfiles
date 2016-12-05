@@ -8,6 +8,15 @@
         [uploader]="uploader" multiple accept=".torrent, application/x-bittorrent"
       />
     </div>
+    <h3>Magnet Links</h3>
+    <textarea class="form-control" rows="5" [(ngModel)]="magnetTextArea"
+      placeholder="one per line.."></textarea>
+    <br>
+    <button (click)="uploadMagnets()" class="btn btn-block btn-secondary">
+      <i *ngIf="magnetUploading" class="fa fa-fw fa-circle-o-notch fa-spin"></i>
+      <span *ngIf="!magnetUploading">Upload magnets</span>
+    </button>
+    <p *ngIf="magnetUploadMessage" class="text-warning">{{magnetUploadMessage}}</p>
   </div>
   <div class="col-md-9" style="margin-bottom: 40px">
     <h3>Uploads <small>files: {{ uploader?.queue?.length }}</small></h3>
