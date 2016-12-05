@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 const URL = environment.endpoint + 'upload';
 
@@ -21,7 +21,12 @@ export class UploadComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit() {
-		this.uploader.onAfterAddingFile = (file)=> { file.withCredentials = false; };
+		this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+		this.uploader.onCompleteItem = (file => {
+			console.log(file);
+			console.log(file._xhr.responseText);
+
+		});
 	}
 
 

@@ -21,7 +21,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of uploader.queue">
-          <td><strong>{{ item?.file?.name }}</strong></td>
+          <td *ngIf="!item.isSuccess"><strong>{{ item?.file?.name }}</strong></td>
+          <td *ngIf="item.isSuccess"><a [routerLink]="['/torrent', item._xhr.responseText]">{{ item?.file?.name }}</a></td>
           <td nowrap>
             <button type="button" class="btn btn-success btn-sm"
               (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
@@ -37,9 +38,9 @@
             </button>
           </td>
           <td class="text-center">
-            <span *ngIf="item.isSuccess"><i class="fa fa-fw fa-check"></i></span>
-            <span *ngIf="item.isCancel"><i class="fa fa-fw fa-ban"></i></span>
-            <span *ngIf="item.isError"><i class="fa fa-fw fa-minus-circle"></i></span>
+            <span *ngIf="item.isSuccess"><i class="text-success fa fa-fw fa-check"></i></span>
+            <span *ngIf="item.isCancel"><i class="text-warning fa fa-fw fa-ban"></i></span>
+            <span *ngIf="item.isError"><i class="text-danger fa fa-fw fa-minus-circle"></i>{{item._xhr.responseText}}</span>
           </td>
         </tr>
       </tbody>

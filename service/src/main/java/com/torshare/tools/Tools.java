@@ -359,7 +359,7 @@ public class Tools {
 	public static String buildOrderBy(String[] orderBy) {
 
 		if (orderBy == null) {
-			return "seeders desc";
+			return "seeders desc nulls last";
 		}
 
 		StringBuilder sb = new StringBuilder();
@@ -371,7 +371,8 @@ public class Tools {
 			sep = ",";
 		}
 
-		return sb.toString();
+
+		return sb.toString() + " nulls last";
 	}
 
 

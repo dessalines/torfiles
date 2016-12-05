@@ -6,7 +6,7 @@
           <input [(ngModel)]="searchTerm" name="searchTerm" type="text"
             class="form-control" placeholder="Search for...">
           <span class="input-group-btn">
-            <button (click)="onChangeTable(config)" class="btn btn-secondary" type="submit">Search</button>
+            <button (click)="page=1;onChangeTable()" class="btn btn-secondary" type="submit">Search</button>
           </span>
         </div>
       </div>
@@ -33,13 +33,14 @@
       <td>{{row.leechers}}</td>
       <td>
         <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)"><i class="fa fa-fw fa-magnet text-danger"></i></a>
-        <a [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))"><i class="fa fa-fw fa-download text-muted"></i></a>
+        <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))"><i class="fa fa-fw fa-download text-muted"></i></a>
       </td>
     </tr>
   </tbody>
 </table>
 <pagination class="pagination-sm" [(ngModel)]="page"
   [totalItems]="length" [itemsPerPage]="limit" [maxSize]="maxPaginators"
-  [boundaryLinks]="true" [rotate]="false" (pageChanged)="onChangeTable(config, $event)"
+  [boundaryLinks]="true" [rotate]="false" (pageChanged)="onChangeTable($event)"
   (numPages)="numPages = $event">
 </pagination>
+<div>{{length}} results</div>

@@ -52,6 +52,7 @@ public enum LibtorrentEngine {
         log.info("Added torrent: " + ti.name());
 
         Path tempDir = Files.createTempDirectory("tmp");
+        tempDir.toFile().deleteOnExit();
 
         this.s.download(ti, tempDir.toFile());
 

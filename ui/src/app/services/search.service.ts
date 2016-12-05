@@ -7,7 +7,7 @@ import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { environment } from '../../environments/environment';
 
-import {SearchResults} from './search-results.interface';
+import {SearchResults} from '../shared/search-results.interface';
 
 @Injectable()
 export class SearchService {

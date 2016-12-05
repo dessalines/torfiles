@@ -1,13 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent} from './home/home.component';
-import { UploadComponent } from './upload/upload.component';
-import { TorrentDetailComponent } from './torrent-detail/torrent-detail.component';
+import {
+	HomeComponent,
+	UploadComponent,
+	TorrentDetailComponent,
+	ExportComponent
+} from './components';
+
 
 const routes: Routes = [
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent },
 	{ path: 'upload', component: UploadComponent },
+	{ path: 'export', component: ExportComponent },
 	{ path: 'torrent/:info_hash', component: TorrentDetailComponent }
 ];
 @NgModule({

@@ -10,6 +10,7 @@ import com.torshare.torrent.LibtorrentEngine;
 import com.torshare.types.TorrentDetail;
 import org.eclipse.jetty.http.HttpStatus;
 import org.javalite.activejdbc.LazyList;
+import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.Paginator;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +18,10 @@ import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import static spark.Spark.*;
@@ -34,7 +35,7 @@ public class Endpoints {
 
     public static void status() {
 
-        get ("/hello", (req, res) -> "hello");
+        get("/hello", (req, res) -> "hello");
 
         get("/version", (req, res) -> {
             return "{\"version\":\"" + DataSources.PROPERTIES.getProperty("version") + "\"}";
@@ -61,6 +62,7 @@ public class Endpoints {
             e.printStackTrace();
             res.status(HttpStatus.BAD_REQUEST_400);
             res.body(e.getMessage());
+            Tools.dbClose();
         });
     }
 
@@ -102,6 +104,7 @@ public class Endpoints {
         post("/upload", (request, response) -> {
 
             File tempFile = File.createTempFile("temp_file", ".torrent");
+            tempFile.deleteOnExit();
 
             request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
 
@@ -112,13 +115,14 @@ public class Endpoints {
 
             log.info(tempFile.getAbsolutePath());
 
-            TorrentInfo ti =  new TorrentInfo(tempFile);
+            TorrentInfo ti = new TorrentInfo(tempFile);
 
             Actions.saveTorrentInfo(ti);
 
             LibtorrentEngine.INSTANCE.addTorrent(ti);
 
-            return "File uploaded";
+            // Return the infoHash if it was successful
+            return ti.infoHash().toString();
         });
 
     }
@@ -139,9 +143,13 @@ public class Endpoints {
 
         });
 
+    }
+
+    public static void download() {
+
         get("/torrent_download/:info_hash", (req, res) -> {
 
-            String infoHash = req.params(":info_hash");
+            String infoHash = req.params(":info_hash").split(".torrent")[0];
             Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
 
             HttpServletResponse raw = res.raw();
@@ -152,6 +160,34 @@ public class Endpoints {
             return res.raw();
         });
     }
+
+    public static void export() {
+
+        get("/torshare.pgdump", (req, res) -> {
+
+            File file = File.createTempFile("torshare_dump", ".pgdump");
+            file.deleteOnExit();
+
+            ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "pg_dump torshare");
+            pb.redirectOutput(file);
+            final Process process = pb.start();
+            process.waitFor();
+
+            HttpServletResponse raw = res.raw();
+            raw.getOutputStream().write(Files.readAllBytes(file.toPath()));
+            raw.getOutputStream().flush();
+            raw.getOutputStream().close();
+
+            return res.raw();
+        });
+
+        get("/torshare.json", (req, res) -> {
+            LazyList<Tables.Torrent> torrents = Tables.Torrent.findAll();
+            return torrents.toJson(false);
+        });
+
+    }
+
 
 
 

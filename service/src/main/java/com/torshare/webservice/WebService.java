@@ -82,6 +82,8 @@ public class WebService {
         Endpoints.search();
         Endpoints.upload();
         Endpoints.detail();
+        Endpoints.download();
+        Endpoints.export();
         Endpoints.exceptions();
 
 

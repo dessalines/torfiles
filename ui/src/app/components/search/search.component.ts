@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import {SearchService} from './search.service';
+import {SearchService} from '../../services';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -48,7 +48,6 @@ export class SearchComponent implements OnInit {
 		this.searchService.getSearchResults(this.searchTerm, this.limit, this.page, orderBy).subscribe(d => {
 			this.rows = d.results;
 			this.length = d.count;
-			console.log(this.rows);
 		});
 	}
 
@@ -62,8 +61,6 @@ export class SearchComponent implements OnInit {
     			orderByArray.push(key + '-' + val);
     		}
 		}
-
-		console.log(orderByArray);
 
 		return orderByArray;
 	}
@@ -106,7 +103,7 @@ export class SearchComponent implements OnInit {
 	}
 
 	private getDownloadLink(infoHash: string) {
-		return environment.endpoint + 'torrent_download/' + infoHash;
+		return environment.endpoint + 'torrent_download/' + infoHash + '.torrent';
 	}
 }
 
