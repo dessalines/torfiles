@@ -56,23 +56,23 @@ public enum LibtorrentEngine {
 
         this.s.download(ti, tempDir.toFile());
 
-        log.info("temp dir: " + tempDir.toAbsolutePath().toString());
+//        log.info("temp dir: " + tempDir.toAbsolutePath().toString());
 
 //
 //
 //        ArrayList<TcpEndpoint> asdf = s.dhtGetPeers(ti.infoHash(),120);
 //
-//        System.out.println("dzht peers = " + asdf.size());
+//        log.info("dzht peers = " + asdf.size());
     }
 
     public void fetchMagnetURI(String uri) {
-        System.out.println("Fetching the magnet uri, please wait...");
+        log.info("Fetching the magnet uri, please wait...");
         byte[] data = s.fetchMagnet(uri, 30);
 
         if (data != null) {
-            System.out.println(Entry.bdecode(data));
+            log.info(Entry.bdecode(data).string());
         } else {
-            System.out.println("Failed to retrieve the magnet");
+            log.info("Failed to retrieve the magnet");
         }
 
     }
@@ -107,10 +107,8 @@ public enum LibtorrentEngine {
             public void alert(Alert<?> alert) {
                 AlertType type = alert.type();
 
-                System.out.println(alert.what());
-                System.out.println(alert.message());
-
-
+                log.info(alert.what());
+                log.info(alert.message());
 
                 switch (type) {
                     case TORRENT_ADDED:
@@ -125,7 +123,6 @@ public enum LibtorrentEngine {
                         Tools.dbInit();
                         Integer countz = trackerCount.get(c.handle().infoHash().toString()) + 1;
                         if (c.getComplete() == 0 && countz < c.handle().trackers().size()) {
-                            log.info(countz + "");
                             c.handle().swig().scrape_tracker(countz);
                             trackerCount.put(c.handle().infoHash().toString(), countz);
                         } else {
@@ -138,19 +135,18 @@ public enum LibtorrentEngine {
                         ScrapeFailedAlert v = (ScrapeFailedAlert) alert;
                         Integer count = trackerCount.get(v.handle().infoHash().toString()) + 1;
                         if (count < v.handle().trackers().size()) {
-                            log.info(count + "");
                             trackerCount.put(v.handle().infoHash().toString(), count);
                             v.handle().swig().scrape_tracker(count);
                         }
                         break;
 //                    case DHT_GET_PEERS:
 //                        DhtGetPeersAlert e = (DhtGetPeersAlert) alert;
-//                        System.out.println(e.message());
+//                        log.info(e.message());
 //                        break;
                     case DHT_GET_PEERS_REPLY:
                         DhtGetPeersReplyAlert d = (DhtGetPeersReplyAlert) alert;
-                        System.out.println(d.infoHash());
-                        System.out.println(d.numPeers());
+//                        log.info(d.infoHash());
+//                        log.info(d.numPeers());
                         break;
 
                 }
