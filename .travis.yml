@@ -8,7 +8,7 @@ before_install:
 - cd service
 #after_success:
 #- cd ..
-#- ./deploy.sh
+#- ./deploy.sh asdf
 addons:
   postgresql: '9.3'
   apt:
