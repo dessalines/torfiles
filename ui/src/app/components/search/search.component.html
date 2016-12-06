@@ -21,7 +21,7 @@
       <th (click)="toggleSort('age')">Age <span class="{{getSortingClass('age')}}"></span></th>
       <th (click)="toggleSort('seeders')">Seeders <span class="{{getSortingClass('seeders')}}"></span></th>
       <th (click)="toggleSort('leechers')">Leechers <span class="{{getSortingClass('leechers')}}"></span></th>
-      <th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -32,8 +32,8 @@
       <td>{{row.seeders}}</td>
       <td>{{row.leechers}}</td>
       <td>
-        <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)"><i class="fa fa-fw fa-magnet text-danger"></i></a>
-        <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))"><i class="fa fa-fw fa-download text-muted"></i></a>
+        <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)" tooltip="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
+        <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))" tooltip="Download .torrent"><i class="fa fa-fw fa-download text-muted"></i></a>
       </td>
     </tr>
   </tbody>

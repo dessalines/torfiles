@@ -5,25 +5,31 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {
-  HomeComponent, 
+  HomeComponent,
   NavbarComponent,
   FooterComponent,
   UploadComponent,
   TorrentDetailComponent,
   SearchComponent,
-  ExportComponent } from './components';
+  ExportComponent
+} from './components';
 
 import {
   MomentPipe,
-  FileSizePipe } from './pipes';
+  FileSizePipe
+} from './pipes';
 
 import {
   SearchService,
   TorrentDetailService,
-  UploadService } from './services';
+  UploadService
+} from './services';
 
-import { AppRoutingModule }     from './app-routing.module';
-import { PaginationModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { AppRoutingModule } from './app-routing.module';
+import {
+  PaginationModule,
+  TooltipModule
+} from 'ng2-bootstrap/ng2-bootstrap';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 
 @NgModule({
@@ -45,6 +51,7 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
     HttpModule,
     AppRoutingModule,
     PaginationModule,
+    TooltipModule,
     FileUploadModule
   ],
   providers: [SearchService, TorrentDetailService, UploadService],
