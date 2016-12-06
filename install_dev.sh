@@ -1,7 +1,7 @@
 # Building the front end
 cd ui
 yarn
-ng build
+ng build -dev
 cd ..
 
 # Building the back end
