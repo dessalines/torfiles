@@ -13,31 +13,35 @@
     </form>
   </div>
 </div>
-<table class="table table-striped table-bordered table-responsive">
-  <thead>
-    <tr>
-      <th (click)="toggleSort('name')">Name <span class="{{getSortingClass('name')}}"></span></th>
-      <th (click)="toggleSort('size_bytes')">Size <span class="{{getSortingClass('size_bytes')}}"></span></th>
-      <th (click)="toggleSort('age')">Age <span class="{{getSortingClass('age')}}"></span></th>
-      <th (click)="toggleSort('seeders')">Seeders <span class="{{getSortingClass('seeders')}}"></span></th>
-      <th (click)="toggleSort('leechers')">Leechers <span class="{{getSortingClass('leechers')}}"></span></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let row of rows">
-      <td><a [routerLink]="['/torrent', row.info_hash]">{{row.name}}</a></td>
-      <td>{{row.size_bytes | fileSize: true}}</td>
-      <td>{{row.age | moment}}</td>
-      <td>{{row.seeders}}</td>
-      <td>{{row.leechers}}</td>
-      <td>
-        <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)" tooltip="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
-        <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))" tooltip="Download .torrent"><i class="fa fa-fw fa-download text-muted"></i></a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th (click)="toggleSort('name')">Name <span class="{{getSortingClass('name')}}"></span></th>
+        <th (click)="toggleSort('size_bytes')">Size <span class="{{getSortingClass('size_bytes')}}"></span></th>
+        <th (click)="toggleSort('age')">Age <span class="{{getSortingClass('age')}}"></span></th>
+        <th (click)="toggleSort('seeders')">Seeders <span class="{{getSortingClass('seeders')}}"></span></th>
+        <th (click)="toggleSort('leechers')">Leechers <span class="{{getSortingClass('leechers')}}"></span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows">
+        <td><a [routerLink]="['/torrent', row.info_hash]">{{row.name}}</a></td>
+        <td>{{row.size_bytes | fileSize: true}}</td>
+        <td>{{row.age | moment}}</td>
+        <td>{{row.seeders}}</td>
+        <td>{{row.leechers}}</td>
+        <td>
+          <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)"
+            tooltip="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
+          <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))"
+            tooltip="Download .torrent"><i class="fa fa-fw fa-download text-muted"></i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <pagination class="pagination-sm" [(ngModel)]="page"
   [totalItems]="length" [itemsPerPage]="limit" [maxSize]="maxPaginators"
   [boundaryLinks]="true" [rotate]="false" (pageChanged)="onChangeTable($event)"
