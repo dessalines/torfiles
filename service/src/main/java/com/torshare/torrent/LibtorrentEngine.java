@@ -38,6 +38,7 @@ public enum LibtorrentEngine {
         s.start();
         s.pause();
 
+
         try {
             setupAlerts();
 //            dhtBootstrap();
@@ -67,7 +68,7 @@ public enum LibtorrentEngine {
 
     public byte[] fetchMagnetURI(String uri) {
         log.info("Fetching the magnet uri, please wait...");
-        byte[] data = s.fetchMagnet(uri, 30);
+        byte[] data = s.fetchMagnet(uri, 120);
 
         if (data != null) {
 //            log.info(Entry.bdecode(data).toString());
@@ -122,6 +123,13 @@ public enum LibtorrentEngine {
                         a.handle().forceDHTAnnounce();
 
                         break;
+                    case METADATA_RECEIVED:
+                        MetadataReceivedAlert x = (MetadataReceivedAlert) alert;
+                        trackerCount.put(x.handle().infoHash().toString(), 0);
+                        x.handle().scrapeTracker(); // TDOO need to make this periodic
+                        x.handle().forceDHTAnnounce();
+                        break;
+
                     case SCRAPE_REPLY:
                         ScrapeReplyAlert c = (ScrapeReplyAlert) alert;
                         Tools.dbInit();

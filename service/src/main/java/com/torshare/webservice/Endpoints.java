@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.NoSuchElementException;
 
 import static spark.Spark.*;
 
@@ -138,9 +139,14 @@ public class Endpoints {
                 byte[] data = lte.fetchMagnetURI(lines[i]);
                 if (data != null) {
                     TorrentInfo ti = TorrentInfo.bdecode(data);
-                    Actions.saveTorrentInfo(ti);
-                    lte.addTorrent(ti);
-                    torrentsAdded++;
+                    try {
+                        Actions.saveTorrentInfo(ti);
+                        lte.addTorrent(ti);
+                        torrentsAdded++;
+                    } catch(NoSuchElementException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
 
