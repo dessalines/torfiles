@@ -6,7 +6,7 @@ services:
 before_install:
 - psql -c 'create database torshare;' -U postgres
 - cd service
-after_install:
+after_success:
 - cd ..
 - "./deploy.sh"
 addons:
