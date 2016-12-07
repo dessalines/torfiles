@@ -38,6 +38,9 @@ public enum LibtorrentEngine {
         s.start();
         s.pause();
 
+        s.maxActiveDownloads(9999);
+        s.maxActiveSeeds(9999);
+
 
         try {
             setupAlerts();
