@@ -1,5 +1,6 @@
 package com.torshare;
 
+import com.frostwire.jlibtorrent.Entry;
 import com.frostwire.jlibtorrent.TorrentInfo;
 import com.torshare.db.Actions;
 import com.torshare.db.Tables;
@@ -12,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.sql.Timestamp;
 import java.util.NoSuchElementException;
 
 import static junit.framework.TestCase.assertEquals;
@@ -23,6 +26,7 @@ public class DBTest {
 
     File ubuntuTorrent = new File(DataSources.UBUNTU_TORRENT);
     File trotskyTorrent = new File(DataSources.TROTSKY_TORRENT);
+    File sigurTorrent = new File("/home/tyler/torrent_tmp/41ba53c4030899476479b4f525d56a08aefd8958.torrent");
     LibtorrentEngine lte;
 
 
@@ -78,15 +82,24 @@ public class DBTest {
     @Test
     public void testBencode() throws Exception {
 
+
         TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
-        Tables.Torrent t = Actions.saveTorrentInfo(ti);
+//        TorrentInfo ti = TorrentInfo.bdecode(Files.readAllBytes(sigurTorrent.toPath()));
+
+
+
+        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
+        if (t != null) t.delete();
+
+        t = Actions.saveTorrentInfo(ti);
 
         byte[] data = t.getBytes("bencode");
 
-//        System.out.println(Entry.bdecode(data));
-
         TorrentInfo ti_2 = TorrentInfo.bdecode(data);
 
+
+//        System.out.println(ti.creationDate());
+//        System.out.println(new Timestamp(ti.creationDate()*1000L));
         assertEquals("ubuntu-16.10-desktop-amd64.iso", ti_2.name());
 
         t.delete();

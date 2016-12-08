@@ -8,7 +8,8 @@ export class MomentPipe implements PipeTransform {
 
   transform(value: number): string {
       // return moment(value).format('MM-DD-YYYY');
-      return moment(value).fromNow(true);
+
+      return (value!= null) ? moment(value).fromNow(true): '';
   }
 
 }

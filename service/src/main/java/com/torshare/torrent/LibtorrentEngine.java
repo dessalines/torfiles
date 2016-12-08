@@ -6,6 +6,7 @@ import com.torshare.db.Actions;
 import com.torshare.db.Tables;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
+import org.apache.commons.io.FileUtils;
 import org.javalite.activejdbc.LazyList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,10 +37,13 @@ public enum LibtorrentEngine {
         s = new SessionManager();
 
         s.start();
-        s.pause();
+//        s.pause();
 
-        s.maxActiveDownloads(9999);
-        s.maxActiveSeeds(9999);
+        s.maxActiveDownloads(-1);
+        s.maxActiveSeeds(-1);
+        s.downloadRateLimit(1000);
+
+
 
 
         try {
@@ -56,7 +60,7 @@ public enum LibtorrentEngine {
         log.info("Added torrent: " + ti.name());
 
         Path tempDir = Files.createTempDirectory("tmp");
-        tempDir.toFile().deleteOnExit();
+        Tools.recursiveDeleteOnShutdownHook(tempDir);
 
         this.s.download(ti, tempDir.toFile());
 
@@ -99,8 +103,6 @@ public enum LibtorrentEngine {
 
     private void setupAlerts() {
 
-        Map<String, Integer> trackerCount = new HashMap<>();
-
         s.addListener(new AlertListener() {
             @Override
             public int[] types() {
@@ -117,51 +119,36 @@ public enum LibtorrentEngine {
                 log.info(alert.message());
 
                 switch (type) {
-                    // TODO
-//                     add metadata received alert, because torrentAdded fires for magnets, without trackers populated
                     case TORRENT_ADDED:
                         TorrentAddedAlert a = (TorrentAddedAlert) alert;
-                        trackerCount.put(a.handle().infoHash().toString(), 0);
-                        a.handle().scrapeTracker(); // TDOO need to make this periodic
-                        a.handle().forceDHTAnnounce();
-
-                        break;
-                    case METADATA_RECEIVED:
-                        MetadataReceivedAlert x = (MetadataReceivedAlert) alert;
-                        trackerCount.put(x.handle().infoHash().toString(), 0);
-                        x.handle().scrapeTracker(); // TDOO need to make this periodic
-                        x.handle().forceDHTAnnounce();
+                        a.handle().resume();
+                        a.handle().setAutoManaged(false);
                         break;
 
-                    case SCRAPE_REPLY:
-                        ScrapeReplyAlert c = (ScrapeReplyAlert) alert;
-                        Tools.dbInit();
-                        Integer countz = trackerCount.get(c.handle().infoHash().toString()) + 1;
-                        if (c.getComplete() == 0 && countz < c.handle().trackers().size()) {
-                            c.handle().swig().scrape_tracker(countz);
-                            trackerCount.put(c.handle().infoHash().toString(), countz);
-                        } else {
-                            trackerCount.remove(c.handle().infoHash().toString());
-                            Actions.saveSeeders(c.handle().infoHash().toString(), c.getComplete(), c.getIncomplete());
-                        }
-                        Tools.dbClose();
+                    case TRACKER_REPLY:
+                        TrackerReplyAlert tra = (TrackerReplyAlert) alert;
+                        log.info("list peers count: " + tra.handle().status().listPeers());
                         break;
-                    case SCRAPE_FAILED:
-                        ScrapeFailedAlert v = (ScrapeFailedAlert) alert;
-                        Integer count = trackerCount.get(v.handle().infoHash().toString()) + 1;
-                        if (count < v.handle().trackers().size()) {
-                            trackerCount.put(v.handle().infoHash().toString(), count);
-                            v.handle().swig().scrape_tracker(count);
+
+                    case DHT_REPLY:
+                        DhtReplyAlert dhtReply = (DhtReplyAlert) alert;
+                        log.info("dht reply peers: " + dhtReply.numPeers());
+                        log.info("num peers: " + dhtReply.handle().status().numPeers());
+                        log.info("num seeds: " + dhtReply.handle().status().numSeeds());
+                        log.info("list peers count: " + dhtReply.handle().status().listPeers());
+                        log.info("list seeds count: " + dhtReply.handle().status().listSeeds());
+                        log.info("num complete: " + dhtReply.handle().status().numComplete());
+                        log.info("num incomplete: " + dhtReply.handle().status().numIncomplete());
+                        log.info("creation date: " + dhtReply.handle().torrentFile().creationDate());
+                        int peers = dhtReply.handle().status().listPeers();
+                        int seeds = dhtReply.handle().status().listSeeds();
+
+                        if (peers != 0) {
+                            Tools.dbInit();
+                            Actions.saveSeeders(dhtReply.handle().infoHash().toString(), seeds, peers);
+                            Tools.dbClose();
                         }
-                        break;
-//                    case DHT_GET_PEERS:
-//                        DhtGetPeersAlert e = (DhtGetPeersAlert) alert;
-//                        log.info(e.message());
-//                        break;
-                    case DHT_GET_PEERS_REPLY:
-                        DhtGetPeersReplyAlert d = (DhtGetPeersReplyAlert) alert;
-//                        log.info(d.infoHash());
-//                        log.info(d.numPeers());
+
                         break;
 
                 }

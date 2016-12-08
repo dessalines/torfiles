@@ -33,7 +33,7 @@ public class Actions {
                 "info_hash", ti.infoHash().toString(),
                 "name", ti.name(),
                 "size_bytes", ti.totalSize(),
-                "age", new Timestamp(new Long(ti.creationDate())*1000L),
+                "age", (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L): null,
                 "magnet_link", ti.makeMagnetUri(),
                 "bencode", ti.bencode());
 
