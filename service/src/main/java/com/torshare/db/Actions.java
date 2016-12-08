@@ -43,12 +43,12 @@ public class Actions {
 
     }
 
-    public static void saveSeeders(String infoHash, int seeders, int leechers) {
+    public static void saveSeeders(String infoHash, int seeders, int peers) {
         Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
 
         torrent.set(
-                "seeders", seeders,
-                "leechers", leechers)
+                "seeders", (seeders !=0) ? seeders: null,
+                "peers", peers)
                 .saveIt();
     }
 

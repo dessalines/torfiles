@@ -4,7 +4,7 @@ export interface SearchResult {
 	name: string;
 	age: number;
 	created: number;
-	leechers: number;
+	peers: number;
 	seeders: number;
 	size_bytes: number;
 }
