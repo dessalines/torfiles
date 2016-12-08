@@ -166,7 +166,7 @@ public class Endpoints {
             TorrentDetail td = TorrentDetail.create(
                     ti,
                     torrent.getInteger("seeders"),
-                    torrent.getInteger("leechers"));
+                    torrent.getInteger("peers"));
 
             return td.json();
 

@@ -15,11 +15,11 @@ public class TorrentDetail implements JSONWriter {
     private String name, creator, magnetLink, comment, infoHash;
     private Timestamp creationDate;
     private List<String> trackers, files;
-    private Integer numFiles, seeders, leechers;
+    private Integer numFiles, seeders, peers;
     private Long sizeBytes;
 
 
-    private TorrentDetail(TorrentInfo ti, Integer seeders, Integer leechers) {
+    private TorrentDetail(TorrentInfo ti, Integer seeders, Integer peers) {
         this.name = ti.name();
         this.infoHash = ti.infoHash().toString();
         this.creator = ti.creator();
@@ -29,15 +29,15 @@ public class TorrentDetail implements JSONWriter {
         this.numFiles = ti.numFiles();
         this.sizeBytes = ti.totalSize();
         this.seeders = seeders;
-        this.leechers = leechers;
+        this.peers = peers;
 
         this.trackers = getTrackers(ti.trackers());
 
         this.files = filePaths(ti.files());
     }
 
-    public static TorrentDetail create(TorrentInfo ti, Integer seeders, Integer leechers) {
-        return new TorrentDetail(ti, seeders, leechers);
+    public static TorrentDetail create(TorrentInfo ti, Integer seeders, Integer peers) {
+        return new TorrentDetail(ti, seeders, peers);
     }
 
     private static List<String> getTrackers(List<AnnounceEntry> entries) {
@@ -97,8 +97,8 @@ public class TorrentDetail implements JSONWriter {
         return seeders;
     }
 
-    public Integer getLeechers() {
-        return leechers;
+    public Integer getPeers() {
+        return peers;
     }
 
     public Long getSizeBytes() {
