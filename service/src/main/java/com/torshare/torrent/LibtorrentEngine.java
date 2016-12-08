@@ -39,8 +39,8 @@ public enum LibtorrentEngine {
         s.start();
 //        s.pause();
 
-        s.maxActiveDownloads(-1);
-        s.maxActiveSeeds(-1);
+//        s.maxActiveDownloads(-1);
+//        s.maxActiveSeeds(-1);
         s.downloadRateLimit(1000);
 
 
@@ -115,14 +115,14 @@ public enum LibtorrentEngine {
             public void alert(Alert<?> alert) {
                 AlertType type = alert.type();
 
-                log.info(alert.what());
-                log.info(alert.message());
+//                log.info(alert.what());
+//                log.info(alert.message());
 
                 switch (type) {
                     case TORRENT_ADDED:
                         TorrentAddedAlert a = (TorrentAddedAlert) alert;
                         a.handle().resume();
-                        a.handle().setAutoManaged(false);
+//                        a.handle().setAutoManaged(false);
                         break;
 
                     case TRACKER_REPLY:
