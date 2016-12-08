@@ -7,9 +7,10 @@
       <span class="text-danger"><i class="fa fa-fw fa-arrow-down"></i>Peers: {{d.peers}}</span>
     </div>
     <div class="col-xs-4 text-xs-right">
-      <a [href]="sanitizer.bypassSecurityTrustUrl(d.magnetLink)" tooltip="Magnet link"
-        class="btn btn-danger btn-sm"><i class="fa fa-fw fa-magnet"></i></a>
-      <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(d.infoHash))" tooltip="Download .torrent" [tooltipAppendToBody]="true"
+      <a [href]="sanitizer.bypassSecurityTrustUrl(d.magnetLink)"
+        tooltip="Magnet link" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-magnet"></i></a>
+      <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(d.infoHash))"
+        tooltip="Download .torrent" [tooltipAppendToBody]="true"
         class="btn btn-secondary btn-sm"><i class="fa fa-fw fa-download"></i></a>
     </div>
   </div>
@@ -36,7 +37,9 @@
   <div class="card">
     <div class="card-block">
       <h4 class="card-title">Files</h4>
-      <p *ngFor="let file of d.files">{{file}}</p>
+      <ul>
+        <li *ngFor="let file of d.files">{{file}}</li>
+      </ul>
     </div>
   </div>
   <div *ngIf="d.comment" class="card">
