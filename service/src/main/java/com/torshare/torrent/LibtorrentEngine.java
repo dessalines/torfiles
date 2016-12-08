@@ -122,7 +122,7 @@ public enum LibtorrentEngine {
                     case TORRENT_ADDED:
                         TorrentAddedAlert a = (TorrentAddedAlert) alert;
                         a.handle().resume();
-//                        a.handle().setAutoManaged(false);
+                        a.handle().setAutoManaged(false);
                         break;
 
                     case TRACKER_REPLY:
