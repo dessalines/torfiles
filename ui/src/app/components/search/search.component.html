@@ -20,8 +20,8 @@
         <th (click)="toggleSort('name')">Name <span class="{{getSortingClass('name')}}"></span></th>
         <th (click)="toggleSort('size_bytes')">Size <span class="{{getSortingClass('size_bytes')}}"></span></th>
         <th (click)="toggleSort('age')">Age <span class="{{getSortingClass('age')}}"></span></th>
-        <th (click)="toggleSort('seeders')">Seeders <span class="{{getSortingClass('seeders')}}"></span></th>
-        <th (click)="toggleSort('leechers')">Leechers <span class="{{getSortingClass('leechers')}}"></span></th>
+        <th (click)="toggleSort('seeders')">Seeds <span class="{{getSortingClass('seeders')}}"></span></th>
+        <th (click)="toggleSort('peers')">Peers <span class="{{getSortingClass('peers')}}"></span></th>
         <th></th>
       </tr>
     </thead>
@@ -31,7 +31,7 @@
         <td>{{row.size_bytes | fileSize: true}}</td>
         <td>{{row.age | moment}}</td>
         <td>{{row.seeders}}</td>
-        <td>{{row.leechers}}</td>
+        <td>{{row.peers}}</td>
         <td>
           <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)"
             tooltip="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>

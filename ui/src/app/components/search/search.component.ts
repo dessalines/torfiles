@@ -20,7 +20,7 @@ export class SearchComponent implements OnInit {
 		'size_bytes': '',
 		'age': '',
 		'seeders': '',
-		'leechers': ''
+		'peers': ''
 	};
 
 	public page: number = 1;

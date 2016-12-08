@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-xs-8">
       <span class="text-success"><i class="fa fa-fw fa-arrow-up"></i>Seeders: {{d.seeders}}</span>
-      <span class="text-danger"><i class="fa fa-fw fa-arrow-down"></i>Leechers: {{d.leechers}}</span>
+      <span class="text-danger"><i class="fa fa-fw fa-arrow-down"></i>Peers: {{d.peers}}</span>
     </div>
     <div class="col-xs-4 text-xs-right">
       <a [href]="sanitizer.bypassSecurityTrustUrl(d.magnetLink)" tooltip="Magnet link"
