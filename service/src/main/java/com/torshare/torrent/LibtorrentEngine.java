@@ -115,8 +115,8 @@ public enum LibtorrentEngine {
             public void alert(Alert<?> alert) {
                 AlertType type = alert.type();
 
-//                log.info(alert.what());
-//                log.info(alert.message());
+                log.info(alert.what());
+                log.info(alert.message());
 
                 switch (type) {
                     case TORRENT_ADDED:
@@ -139,7 +139,6 @@ public enum LibtorrentEngine {
                         log.info("list seeds count: " + dhtReply.handle().status().listSeeds());
                         log.info("num complete: " + dhtReply.handle().status().numComplete());
                         log.info("num incomplete: " + dhtReply.handle().status().numIncomplete());
-                        log.info("creation date: " + dhtReply.handle().torrentFile().creationDate());
                         int peers = dhtReply.handle().status().listPeers();
                         int seeds = dhtReply.handle().status().listSeeds();
 
@@ -149,6 +148,8 @@ public enum LibtorrentEngine {
                             Tools.dbClose();
                         }
 
+                        break;
+                    case METADATA_RECEIVED:
                         break;
 
                 }
