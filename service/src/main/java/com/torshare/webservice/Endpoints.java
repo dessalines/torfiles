@@ -145,7 +145,7 @@ public class Endpoints {
             }
             executor.shutdown();
 
-            executor.awaitTermination(24, TimeUnit.HOURS);
+            executor.awaitTermination(24, TimeUnit.DAYS);
 
 
             return "{\"message\":\"All Done\"}";

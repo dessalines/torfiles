@@ -74,11 +74,11 @@ public enum LibtorrentEngine {
         Tools.dbClose();
 
         log.info("Fetching the magnet uri, please wait...");
-        byte[] data = s.fetchMagnet(uri, 900);
+        byte[] data = s.fetchMagnet(uri, Integer.MAX_VALUE);
 
 
         if (data != null) {
-//            log.info(Entry.bdecode(data).toString());
+            log.info(Entry.bdecode(data).toString());
         } else {
             throw new NoSuchElementException("Failed to retrieve the magnet:" + uri.toString());
         }
