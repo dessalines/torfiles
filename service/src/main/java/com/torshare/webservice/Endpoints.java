@@ -164,15 +164,8 @@ public static class FetchMagnetRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            byte[] data = LibtorrentEngine.INSTANCE.fetchMagnetURI(magnetLink);
-            if (data != null) {
-                TorrentInfo ti = TorrentInfo.bdecode(data);
-                Tools.dbInit();
-                Actions.saveTorrentInfo(ti);
-                Tools.dbClose();
-                LibtorrentEngine.INSTANCE.addTorrent(ti);
-            }
-        } catch(NoSuchElementException | IOException e) {
+            LibtorrentEngine.INSTANCE.fetchMagnetURI(magnetLink);
+        } catch(NoSuchElementException e) {
             e.printStackTrace();
         }
     }

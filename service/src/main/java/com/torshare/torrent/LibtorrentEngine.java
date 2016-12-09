@@ -62,7 +62,7 @@ public enum LibtorrentEngine {
 
     public byte[] fetchMagnetURI(String uri) {
 
-        String infoHash = uri.split("btih:")[1].substring(0,40);
+        String infoHash = uri.split("btih:")[1].substring(0, 40);
 
         Tools.dbInit();
         Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
@@ -157,12 +157,21 @@ public enum LibtorrentEngine {
                         break;
                     case METADATA_RECEIVED:
                         MetadataReceivedAlert mar = (MetadataReceivedAlert) alert;
+                        byte[] data = mar.torrentData();
+                        log.info(data.toString());
+
+                        TorrentInfo ti = TorrentInfo.bdecode(data);
+                        try {
+                            Tools.dbInit();
+                            Actions.saveTorrentInfo(ti);
+                            Tools.dbClose();
+                            addTorrent(ti);
+                        } catch (IOException e) {}
+
+
                         break;
 
                 }
-
-
-
             }
         };
     }
@@ -208,7 +217,6 @@ public enum LibtorrentEngine {
         } catch (InterruptedException e) {
             // ignore
         }
-
 
 
         // no more trigger of DHT stats
