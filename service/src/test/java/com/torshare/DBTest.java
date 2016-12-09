@@ -79,7 +79,7 @@ public class DBTest {
         t.delete();
     }
 
-    @Test
+//    @Test
     public void fetchMagnetURI() throws Exception {
 
 

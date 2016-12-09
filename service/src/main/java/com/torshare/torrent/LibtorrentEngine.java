@@ -141,6 +141,7 @@ public enum LibtorrentEngine {
                             Tools.dbInit();
                             Actions.saveSeeders(dhtReply.handle().infoHash().toString(), seeds, peers);
                             Tools.dbClose();
+//                            dhtReply.handle().pause();
                         }
 
                         break;

@@ -141,15 +141,17 @@ public class Endpoints {
             ExecutorService executor = Executors.newFixedThreadPool(lines.length);
             for (int i = 0; i < lines.length; i++) {
                 String magnetLink = lines[i];
-                String infoHash = magnetLink.split("btih:")[1].substring(0, 40);
+                String infoHash = null;
+                try {
+                    infoHash = magnetLink.split("btih:")[1].substring(0, 40);
+                } catch(Exception e) {}
 
                 // Find a way to batch this
                 Tools.dbInit();
                 Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
 
-
                 if (torrent != null) {
-                    throw new NoSuchElementException("Torrent Already Added: " + infoHash);
+                    log.info("Torrent Already Added: " + infoHash);
                 } else {
                     Runnable worker = new FetchMagnetRunnable(magnetLink);
                     executor.execute(worker);
