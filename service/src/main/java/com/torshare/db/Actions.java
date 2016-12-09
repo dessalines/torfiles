@@ -26,7 +26,7 @@ public class Actions {
         Torrent torrent = Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
 
         if (torrent != null) {
-            throw new NoSuchElementException("Torrent already exists.");
+            throw new NoSuchElementException("Torrent already exists: " + ti.infoHash().toString());
         }
 
         torrent = Torrent.createIt(

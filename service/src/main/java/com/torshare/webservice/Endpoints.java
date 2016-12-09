@@ -25,6 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static spark.Spark.*;
 
@@ -135,26 +138,47 @@ public class Endpoints {
 
             Integer torrentsAdded = 0;
 
+            ExecutorService executor = Executors.newFixedThreadPool(lines.length);
             for (int i = 0; i < lines.length; i++) {
-                byte[] data = lte.fetchMagnetURI(lines[i]);
-                if (data != null) {
-                    TorrentInfo ti = TorrentInfo.bdecode(data);
-                    try {
-                        Actions.saveTorrentInfo(ti);
-                        lte.addTorrent(ti);
-                        torrentsAdded++;
-                    } catch(NoSuchElementException e) {
-                        e.printStackTrace();
-                    }
-
-                }
+                Runnable worker = new FetchMagnetRunnable(lines[i]);
+                executor.execute(worker);
             }
+            executor.shutdown();
 
-            return "{\"message\":\"" + torrentsAdded + " Torrents Added\"}";
+            executor.awaitTermination(24, TimeUnit.HOURS);
+
+
+            return "{\"message\":\"All Done\"}";
 
         });
 
     }
+
+public static class FetchMagnetRunnable implements Runnable {
+    private final String magnetLink;
+
+    FetchMagnetRunnable(String magnetLink) {
+        this.magnetLink = magnetLink;
+    }
+
+    @Override
+    public void run() {
+        try {
+            byte[] data = LibtorrentEngine.INSTANCE.fetchMagnetURI(magnetLink);
+            if (data != null) {
+                TorrentInfo ti = TorrentInfo.bdecode(data);
+                Tools.dbInit();
+                Actions.saveTorrentInfo(ti);
+                Tools.dbClose();
+                LibtorrentEngine.INSTANCE.addTorrent(ti);
+            }
+        } catch(NoSuchElementException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
 
     public static void detail() {
         get("/torrent_detail/:info_hash", (req, res) -> {

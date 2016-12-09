@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+
 /**
  * Created by tyler on 12/2/16.
  */
@@ -36,22 +37,13 @@ public enum LibtorrentEngine {
 
         s = new SessionManager();
 
-        s.start();
-//        s.pause();
+        dhtBootstrap();
 
-//        s.maxActiveDownloads(-1);
-//        s.maxActiveSeeds(-1);
-        s.downloadRateLimit(1000);
+        s.addListener(alerts());
 
-
-
-
-        try {
-            setupAlerts();
-//            dhtBootstrap();
-        } catch(Throwable e) {
-            e.printStackTrace();
-        }
+        s.maxActiveDownloads(-1);
+        s.maxActiveSeeds(-1);
+        s.downloadRateLimit(10000);
 
     }
 
@@ -66,16 +58,24 @@ public enum LibtorrentEngine {
 
 //        log.info("temp dir: " + tempDir.toAbsolutePath().toString());
 
-//
-//
-//        ArrayList<TcpEndpoint> asdf = s.dhtGetPeers(ti.infoHash(),120);
-//
-//        log.info("dzht peers = " + asdf.size());
     }
 
     public byte[] fetchMagnetURI(String uri) {
+
+        String infoHash = uri.split("btih:")[1].substring(0,40);
+
+        Tools.dbInit();
+        Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
+
+
+        if (torrent != null) {
+            throw new NoSuchElementException("Torrent Already Added: " + infoHash);
+        }
+        Tools.dbClose();
+
         log.info("Fetching the magnet uri, please wait...");
-        byte[] data = s.fetchMagnet(uri, 120);
+        byte[] data = s.fetchMagnet(uri, 900);
+
 
         if (data != null) {
 //            log.info(Entry.bdecode(data).toString());
@@ -101,14 +101,20 @@ public enum LibtorrentEngine {
         Tools.dbClose();
     }
 
-    private void setupAlerts() {
+    private AlertListener alerts() {
 
-        s.addListener(new AlertListener() {
+        return new AlertListener() {
             @Override
             public int[] types() {
-                return null;
-            }
+//                return null;
+                return new int[]{
+                        AlertType.TORRENT_ADDED.swig(),
+                        AlertType.TRACKER_REPLY.swig(),
+                        AlertType.DHT_REPLY.swig(),
+                        AlertType.METADATA_RECEIVED.swig()
+                };
 
+            }
 
 
             @Override
@@ -142,7 +148,7 @@ public enum LibtorrentEngine {
                         int peers = dhtReply.handle().status().listPeers();
                         int seeds = dhtReply.handle().status().listSeeds();
 
-                        if (peers != 0) {
+                        if (!dhtReply.handle().name().startsWith("fetch_magnet___magnet") && peers != 0) {
                             Tools.dbInit();
                             Actions.saveSeeders(dhtReply.handle().infoHash().toString(), seeds, peers);
                             Tools.dbClose();
@@ -150,6 +156,7 @@ public enum LibtorrentEngine {
 
                         break;
                     case METADATA_RECEIVED:
+                        MetadataReceivedAlert mar = (MetadataReceivedAlert) alert;
                         break;
 
                 }
@@ -157,7 +164,57 @@ public enum LibtorrentEngine {
 
 
             }
-        });
+        };
+    }
+
+    private void dhtBootstrap() {
+
+        log.info("Bootstrapping DHT nodes...");
+        final CountDownLatch signal = new CountDownLatch(1);
+
+        // the session stats are posted about once per second.
+        AlertListener l = new AlertListener() {
+            @Override
+            public int[] types() {
+                return new int[]{AlertType.SESSION_STATS.swig(), AlertType.DHT_STATS.swig()};
+            }
+
+            @Override
+            public void alert(Alert<?> alert) {
+
+                if (alert.type().equals(AlertType.SESSION_STATS)) {
+                    s.postDhtStats();
+                }
+
+                if (alert.type().equals(AlertType.DHT_STATS)) {
+
+                    long nodes = s.stats().dhtNodes();
+                    // wait for at least 10 nodes in the DHT.
+                    if (nodes >= 10) {
+                        signal.countDown();
+                    }
+                }
+            }
+        };
+
+        s.addListener(l);
+        s.start();
+        s.postDhtStats();
+
+        // waiting for nodes in DHT (10 seconds)
+        boolean r = false;
+        try {
+            r = signal.await(10, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            // ignore
+        }
+
+
+
+        // no more trigger of DHT stats
+        s.removeListener(l);
+
+        log.info("Done bootstrapping");
     }
 
 }
