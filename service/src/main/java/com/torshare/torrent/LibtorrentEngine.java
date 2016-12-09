@@ -62,17 +62,6 @@ public enum LibtorrentEngine {
 
     public byte[] fetchMagnetURI(String uri) {
 
-        String infoHash = uri.split("btih:")[1].substring(0, 40);
-
-        Tools.dbInit();
-        Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-
-
-        if (torrent != null) {
-            throw new NoSuchElementException("Torrent Already Added: " + infoHash);
-        }
-        Tools.dbClose();
-
         log.info("Fetching the magnet uri, please wait...");
         byte[] data = s.fetchMagnet(uri, Integer.MAX_VALUE);
 
