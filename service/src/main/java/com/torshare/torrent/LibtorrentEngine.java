@@ -110,8 +110,8 @@ public enum LibtorrentEngine {
             public void alert(Alert<?> alert) {
                 AlertType type = alert.type();
 
-                log.info(alert.what());
-                log.info(alert.message());
+//                log.info(alert.what());
+//                log.info(alert.message());
 
                 switch (type) {
                     case TORRENT_ADDED:
@@ -127,13 +127,13 @@ public enum LibtorrentEngine {
 
                     case DHT_REPLY:
                         DhtReplyAlert dhtReply = (DhtReplyAlert) alert;
-                        log.info("dht reply peers: " + dhtReply.numPeers());
-                        log.info("num peers: " + dhtReply.handle().status().numPeers());
-                        log.info("num seeds: " + dhtReply.handle().status().numSeeds());
-                        log.info("list peers count: " + dhtReply.handle().status().listPeers());
-                        log.info("list seeds count: " + dhtReply.handle().status().listSeeds());
-                        log.info("num complete: " + dhtReply.handle().status().numComplete());
-                        log.info("num incomplete: " + dhtReply.handle().status().numIncomplete());
+                        log.debug("dht reply peers: " + dhtReply.numPeers());
+                        log.debug("num peers: " + dhtReply.handle().status().numPeers());
+                        log.debug("num seeds: " + dhtReply.handle().status().numSeeds());
+                        log.debug("list peers count: " + dhtReply.handle().status().listPeers());
+                        log.debug("list seeds count: " + dhtReply.handle().status().listSeeds());
+                        log.debug("num complete: " + dhtReply.handle().status().numComplete());
+                        log.debug("num incomplete: " + dhtReply.handle().status().numIncomplete());
                         int peers = dhtReply.handle().status().listPeers();
                         int seeds = dhtReply.handle().status().listSeeds();
 

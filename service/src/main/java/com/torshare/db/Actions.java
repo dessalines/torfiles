@@ -50,6 +50,9 @@ public class Actions {
                 "seeders", (seeders !=0) ? seeders: null,
                 "peers", peers)
                 .saveIt();
+
+        log.info("Saving seeders for torrent: ", torrent.toJson(true));
+
     }
 
 

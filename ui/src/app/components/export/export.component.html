@@ -5,6 +5,10 @@
 <pre>GET /torrent_details/info_hash</pre>
 <p>Search:</p>
 <pre>GET /search?q=SEARCH_TERMS&limit=LIMIT&page=PAGE&orderBy=seeders-desc&orderBy=peers-asc...</pre>
+<p>Upload magnet links</p>
+<pre>POST /upload_magnet_links , BODY: 1 magnet link per line</pre>
+<p>Upload torrent</p>
+<pre>POST /upload , file: 1 .torrent file</pre>
 <h1>Export</h1>
 <ul>
   <li><a [href]="jsonDump()">Database JSON dump (magnet links, names, etc)</a></li>
