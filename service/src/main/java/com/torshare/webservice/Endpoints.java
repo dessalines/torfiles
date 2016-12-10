@@ -138,13 +138,14 @@ public class Endpoints {
 
             Integer torrentsAdded = 0;
 
-            ExecutorService executor = Executors.newFixedThreadPool(lines.length);
+            ExecutorService executor = Executors.newFixedThreadPool(15);
             for (int i = 0; i < lines.length; i++) {
                 String magnetLink = lines[i];
                 String infoHash = null;
                 try {
                     infoHash = magnetLink.split("btih:")[1].substring(0, 40);
-                } catch(Exception e) {}
+                } catch (Exception e) {
+                }
 
                 // Find a way to batch this
                 Tools.dbInit();
@@ -168,25 +169,57 @@ public class Endpoints {
 
         });
 
+        post("/upload_magnet_links_blocking", (req, res) -> {
+            log.info(req.body());
+
+            LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
+            String lines[] = req.body().split("\\r?\\n");
+
+            Integer torrentsAdded = 0;
+
+            for (int i = 0; i < lines.length; i++) {
+                String magnetLink = lines[i];
+                String infoHash = null;
+                try {
+                    infoHash = magnetLink.split("btih:")[1].substring(0, 40);
+
+
+                    // Find a way to batch this
+                    Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
+                    if (torrent != null) {
+                        log.info("Torrent Already Added: " + infoHash);
+                    } else {
+                        lte.fetchMagnetURI(magnetLink);
+                        torrentsAdded++;
+                    }
+                } catch (Exception e) {
+                }
+
+
+            }
+
+            return "{\"message\":\"Torrents added: " + torrentsAdded + "\"}";
+
+        });
+
     }
 
-public static class FetchMagnetRunnable implements Runnable {
-    private final String magnetLink;
+    public static class FetchMagnetRunnable implements Runnable {
+        private final String magnetLink;
 
-    FetchMagnetRunnable(String magnetLink) {
-        this.magnetLink = magnetLink;
-    }
+        FetchMagnetRunnable(String magnetLink) {
+            this.magnetLink = magnetLink;
+        }
 
-    @Override
-    public void run() {
-        try {
-            LibtorrentEngine.INSTANCE.fetchMagnetURI(magnetLink);
-        } catch(NoSuchElementException e) {
-            e.printStackTrace();
+        @Override
+        public void run() {
+            try {
+                LibtorrentEngine.INSTANCE.fetchMagnetURI(magnetLink);
+            } catch (NoSuchElementException e) {
+                e.printStackTrace();
+            }
         }
     }
-}
-
 
 
     public static void detail() {
@@ -249,9 +282,6 @@ public static class FetchMagnetRunnable implements Runnable {
         });
 
     }
-
-
-
 
 
 }

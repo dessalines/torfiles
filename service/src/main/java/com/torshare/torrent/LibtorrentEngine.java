@@ -63,12 +63,9 @@ public enum LibtorrentEngine {
     public byte[] fetchMagnetURI(String uri) {
 
         log.info("Fetching the magnet uri, please wait...");
-        byte[] data = s.fetchMagnet(uri, Integer.MAX_VALUE);
+        byte[] data = s.fetchMagnet(uri, 90);
 
-
-        if (data != null) {
-            log.info(Entry.bdecode(data).toString());
-        } else {
+        if (data == null) {
             throw new NoSuchElementException("Failed to retrieve the magnet:" + uri.toString());
         }
 
@@ -147,8 +144,8 @@ public enum LibtorrentEngine {
                         break;
                     case METADATA_RECEIVED:
                         MetadataReceivedAlert mar = (MetadataReceivedAlert) alert;
+                        log.info("metadata received for " + mar.handle().name());
                         byte[] data = mar.torrentData();
-                        log.info(data.toString());
 
                         TorrentInfo ti = TorrentInfo.bdecode(data);
                         try {
