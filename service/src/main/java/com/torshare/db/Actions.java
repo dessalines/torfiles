@@ -51,7 +51,7 @@ public class Actions {
                 "peers", peers)
                 .saveIt();
 
-        log.info("Saving seeders for torrent: " + torrent.toJson(true));
+        log.info("Saving seeders for torrent: " + torrent.getString("name"));
 
     }
 
