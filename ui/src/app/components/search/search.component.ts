@@ -4,6 +4,9 @@ import {SearchService} from '../../services';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 @Component({
 	selector: 'app-search',
@@ -13,6 +16,8 @@ import { environment } from '../../../environments/environment';
 export class SearchComponent implements OnInit {
 
 	private searchTerm: string = '';
+	private searchChanged: Subject<string> = new Subject<string>();
+
 	private rows: Array<any> = [];
 
 	private sorting: any = {
@@ -29,14 +34,28 @@ export class SearchComponent implements OnInit {
 	public length: number = 1;
 	public data: Array<any>;
 
-
 	constructor(private searchService: SearchService,
 		private sanitizer: DomSanitizer) {
-
+		this.setupSearch();
 	}
 
 	public ngOnInit(): void {
 		this.onChangeTable();
+	}
+
+	private setupSearch() {
+		this.searchChanged
+            .debounceTime(300) // wait 300ms after the last event before emitting last event
+            .distinctUntilChanged() // only emit if value is different from previous value
+            .subscribe(st => {
+            	this.searchTerm = st;
+            	this.onChangeTable();
+            });
+	}
+
+	private newSearch(event) {
+		this.page = 1;
+		this.searchChanged.next(event);
 	}
 
 	public onChangeTable(page: any = { page: this.page, limit: this.limit }): any {
