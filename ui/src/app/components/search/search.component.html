@@ -6,7 +6,7 @@
           <input [ngModel]="searchTerm" (ngModelChange)="newSearch($event)" name="searchTerm" type="text"
             class="form-control" placeholder="Search for...">
           <span class="input-group-btn">
-            <button (click)="page=1;onChangeTable()" class="btn btn-secondary" type="submit">Search</button>
+            <button (click)="page=1;onChangeTable()" class="btn btn-secondary" type="submit"><i class="fa fa-fw fa-search"></i></button>
           </span>
         </div>
       </div>
