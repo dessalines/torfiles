@@ -63,12 +63,12 @@ Local testing:
 for a production environment:
 
 - edit `ui/config/environment.prod.ts` to point to your hostname
-- Create a (.jks) file with your ssl certs
+- Create a (.jks) file with your ssl certs, put it in your home directory, @ `keystore.jks`
 - `./install_prod.sh`
 
-You can redirect ports in linux to route from port 80 to this port:
+You can redirect ports in linux to route from port 443, or 80 to this port:
 
-`sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 4567`
+`sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 4567`
 
 ==========
 

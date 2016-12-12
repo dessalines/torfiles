@@ -47,4 +47,4 @@
   [boundaryLinks]="true" [rotate]="false" (pageChanged)="onChangeTable($event)"
   (numPages)="numPages = $event">
 </pagination>
-<div>{{length}} results</div>
+<div>{{length.toLocaleString()}} results</div>

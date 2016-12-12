@@ -269,9 +269,9 @@ public class Endpoints {
             process.waitFor();
 
             HttpServletResponse raw = res.raw();
-            raw.getOutputStream().write(Files.readAllBytes(file.toPath()));
-            raw.getOutputStream().flush();
-            raw.getOutputStream().close();
+            res.header("Content-Length", String.valueOf(file.length()));
+
+            writeToServletOS(file, raw.getOutputStream());
 
             return res.raw();
         });
@@ -285,6 +285,25 @@ public class Endpoints {
             LazyList<Tables.Torrent> torrents = Tables.Torrent.findAll();
             return Tools.torrentsToCsv(torrents);
         });
+
+    }
+
+    private static void writeToServletOS(File file, OutputStream os) throws IOException {
+        FileInputStream in = null;
+
+        in = new FileInputStream(file);
+        byte[] buffer = new byte[1024];
+        int bytesRead = 0;
+
+        while ((bytesRead = in.read(buffer)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+
+//                raw.getOutputStream().flush(); // might not be necessary
+
+        in.close();
+        os.flush();
+        os.close();
 
     }
 
