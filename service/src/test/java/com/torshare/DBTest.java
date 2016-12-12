@@ -12,6 +12,8 @@ import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
 import com.torshare.torrent.LibtorrentEngine;
 import com.torshare.types.TorrentDetail;
+import org.javalite.activejdbc.LazyList;
+import org.javalite.activejdbc.Model;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +23,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -140,6 +143,14 @@ public class DBTest {
         String infoHash = uri.split("btih:")[1].substring(0,40);
 
         assertEquals(infoHash, "aebe4853b4b7679c61a8377bd63b8833e41b4c6d");
+    }
+
+    @Test
+    public void csvTest() throws Exception {
+        LazyList<Tables.Torrent> ts = Tables.Torrent.findAll();
+        String csv = Tools.torrentsToCsv(ts);
+//        System.out.println(csv);
+        assertTrue(csv.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
     }
 
 

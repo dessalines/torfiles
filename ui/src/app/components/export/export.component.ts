@@ -17,8 +17,14 @@ export class ExportComponent implements OnInit {
   	return environment.endpoint + 'torshare.json';
   }
 
+  csvDump(): string {
+    return environment.endpoint + 'torshare.csv';
+  }
+
   pgDump(): string {
   	return environment.endpoint + 'torshare.pgdump';
   }
+
+
 
 }

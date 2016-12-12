@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.frostwire.jlibtorrent.Entry;
 import com.frostwire.jlibtorrent.swig.*;
+import com.torshare.db.Tables;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -13,6 +14,7 @@ import liquibase.resource.FileSystemResourceAccessor;
 import org.apache.commons.io.FileUtils;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.DBException;
+import org.javalite.activejdbc.LazyList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -404,6 +406,17 @@ public class Tools {
 							throw new RuntimeException("Failed to delete "+path, e);
 						}
 					}}));
+	}
+
+	public static String torrentsToCsv(LazyList<Tables.Torrent> torrents) {
+		StringBuilder sb = new StringBuilder();
+		for (Tables.Torrent t : torrents) {
+			sb.append(t.getString("info_hash") + ",");
+			sb.append(t.getString("name") + "\n");
+		}
+
+
+		return sb.toString();
 	}
 
 

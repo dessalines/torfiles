@@ -281,6 +281,11 @@ public class Endpoints {
             return torrents.toJson(false);
         });
 
+        get("/torshare.csv", (req, res) -> {
+            LazyList<Tables.Torrent> torrents = Tables.Torrent.findAll();
+            return Tools.torrentsToCsv(torrents);
+        });
+
     }
 
 
