@@ -7,6 +7,7 @@ import com.torshare.db.Tables;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
 import org.apache.commons.io.FileUtils;
+import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.LazyList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,10 +78,13 @@ public enum LibtorrentEngine {
 
         Tools.dbInit();
 
+
         LazyList<Tables.Torrent> torrents = Tables.Torrent.find("bencode is not null");
 
         for (Tables.Torrent t : torrents) {
+            new DB("default").openTransaction();
             byte[] data = t.getBytes("bencode");
+            new DB("default").commitTransaction();
             addTorrent(TorrentInfo.bdecode(data));
         }
 
