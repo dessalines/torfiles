@@ -69,10 +69,6 @@ public class WebService {
 
         LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
 
-        if (addTorrents) {
-            lte.addTorrentsOnStartup();
-        }
-
         staticFiles.externalLocation(uiDist.getAbsolutePath());
         staticFiles.expireTime(DataSources.EXPIRE_SECONDS);
 
@@ -85,6 +81,10 @@ public class WebService {
         Endpoints.download();
         Endpoints.export();
         Endpoints.exceptions();
+
+        if (addTorrents) {
+            lte.addTorrentsOnStartup();
+        }
 
     }
 

@@ -44,8 +44,8 @@ public enum LibtorrentEngine {
 
         s.addListener(alerts());
 
-        s.maxActiveDownloads(-1);
-        s.maxActiveSeeds(-1);
+//        s.maxActiveDownloads(-1);
+//        s.maxActiveSeeds(-1);
         s.downloadRateLimit(10000);
 
     }
@@ -84,7 +84,7 @@ public enum LibtorrentEngine {
                 limit,
                 "bencode is not null");
 
-        for (int c = 1; c < p.pageCount(); c++){
+        for (int c = 1; c < p.pageCount(); c++) {
             List<Tables.Torrent> torrents = p.getPage(c);
             for (Tables.Torrent t : torrents) {
                 byte[] data = t.getBytes("bencode");
