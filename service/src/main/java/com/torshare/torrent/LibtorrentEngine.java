@@ -9,6 +9,7 @@ import com.torshare.tools.Tools;
 import org.apache.commons.io.FileUtils;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.LazyList;
+import org.javalite.activejdbc.Paginator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,17 +79,17 @@ public enum LibtorrentEngine {
     public void addTorrentsOnStartup() throws IOException {
 
         Tools.dbInit();
+        Integer limit = 1000;
+        Paginator p = new Paginator(Tables.Torrent.class,
+                limit,
+                "bencode is not null");
 
-        try {
-            new DB("default").connection().setAutoCommit(false);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        LazyList<Tables.Torrent> torrents = Tables.Torrent.find("bencode is not null");
-
-        for (Tables.Torrent t : torrents) {
-            byte[] data = t.getBytes("bencode");
-            addTorrent(TorrentInfo.bdecode(data));
+        for (int c = 1; c < p.pageCount(); c++){
+            List<Tables.Torrent> torrents = p.getPage(c);
+            for (Tables.Torrent t : torrents) {
+                byte[] data = t.getBytes("bencode");
+                addTorrent(TorrentInfo.bdecode(data));
+            }
         }
 
         Tools.dbClose();
