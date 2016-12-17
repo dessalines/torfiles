@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -74,17 +75,15 @@ public enum LibtorrentEngine {
 
     }
 
-    public void addTorrentsOnStartup() throws IOException {
+    public void addTorrentsOnStartup() throws IOException, SQLException {
 
         Tools.dbInit();
 
-
+        new DB("default").connection().setAutoCommit(false);
         LazyList<Tables.Torrent> torrents = Tables.Torrent.find("bencode is not null");
 
         for (Tables.Torrent t : torrents) {
-            new DB("default").openTransaction();
             byte[] data = t.getBytes("bencode");
-            new DB("default").commitTransaction();
             addTorrent(TorrentInfo.bdecode(data));
         }
 
