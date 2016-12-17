@@ -75,11 +75,15 @@ public enum LibtorrentEngine {
 
     }
 
-    public void addTorrentsOnStartup() throws IOException, SQLException {
+    public void addTorrentsOnStartup() throws IOException {
 
         Tools.dbInit();
 
-        new DB("default").connection().setAutoCommit(false);
+        try {
+            new DB("default").connection().setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         LazyList<Tables.Torrent> torrents = Tables.Torrent.find("bencode is not null");
 
         for (Tables.Torrent t : torrents) {
