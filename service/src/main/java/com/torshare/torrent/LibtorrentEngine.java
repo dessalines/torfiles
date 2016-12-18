@@ -121,7 +121,8 @@ public enum LibtorrentEngine {
                 switch (type) {
                     case TORRENT_ADDED:
                         TorrentAddedAlert a = (TorrentAddedAlert) alert;
-//                        a.handle().resume();
+                        log.info("Resuming torrent: " + a.torrentName());
+                        a.handle().resume();
 //                        a.handle().setAutoManaged(false);
                         break;
 
@@ -146,7 +147,8 @@ public enum LibtorrentEngine {
                             Tools.dbInit();
                             Actions.saveSeeders(dhtReply.handle().infoHash().toString(), seeds, peers);
                             Tools.dbClose();
-                            dhtReply.handle().pause();
+//                            dhtReply.handle().pause();
+                            s.remove(dhtReply.handle());
                         }
 
                         break;
