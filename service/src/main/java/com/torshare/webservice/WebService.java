@@ -41,7 +41,7 @@ public class WebService {
     private Boolean liquibase = false;
 
     @Option(name="-add_torrents", usage="Add current torrents in the DB")
-    private Boolean addTorrents = false;
+    private Boolean addTorrents = true;
 
     public void doMain(String[] args) throws IOException {
 
