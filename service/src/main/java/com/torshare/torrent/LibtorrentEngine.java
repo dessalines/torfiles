@@ -161,11 +161,12 @@ public enum LibtorrentEngine {
                         try {
                             Tools.dbInit();
                             Actions.saveTorrentInfo(ti);
-                            Tools.dbClose();
                             addTorrent(ti);
+                            Tools.dbClose();
+
                         } catch (IOException e) {}
 
-                        mar.handle().resume();
+//                        mar.handle().resume();
 
 
                         break;
