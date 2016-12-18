@@ -82,7 +82,7 @@ public enum LibtorrentEngine {
         Integer limit = 1000;
         Paginator p = new Paginator(Tables.Torrent.class,
                 limit,
-                "bencode is not null");
+                "bencode is not null and peers is null");
 
         for (int c = 1; c < p.pageCount(); c++) {
             List<Tables.Torrent> torrents = p.getPage(c);
@@ -164,6 +164,8 @@ public enum LibtorrentEngine {
                             Tools.dbClose();
                             addTorrent(ti);
                         } catch (IOException e) {}
+
+                        mar.handle().resume();
 
 
                         break;
