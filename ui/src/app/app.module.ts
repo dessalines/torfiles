@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {
-  HomeComponent,
   NavbarComponent,
   FooterComponent,
   UploadComponent,
@@ -35,7 +34,6 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     NavbarComponent,
     FooterComponent,
     SearchComponent,

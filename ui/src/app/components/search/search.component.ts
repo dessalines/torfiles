@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import {SearchService} from '../../services';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { SearchService } from '../../services';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
-
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
 
 @Component({
 	selector: 'app-search',
@@ -16,7 +13,6 @@ import 'rxjs/add/operator/distinctUntilChanged';
 export class SearchComponent implements OnInit {
 
 	private searchTerm: string = '';
-	private searchChanged: Subject<string> = new Subject<string>();
 
 	private rows: Array<any> = [];
 
@@ -34,29 +30,28 @@ export class SearchComponent implements OnInit {
 	public length: number = 1;
 	public data: Array<any>;
 
-	constructor(private searchService: SearchService,
-		private sanitizer: DomSanitizer) {
-		this.setupSearch();
+	constructor(private route: ActivatedRoute,
+		private router: Router,
+		private sanitizer: DomSanitizer,
+		private searchService: SearchService) {
+
 	}
 
-	public ngOnInit(): void {
-		this.onChangeTable();
+	ngOnInit() {
+
+		this.route.params.subscribe(params => {
+
+			this.setSearchParams(params);
+			this.page = 1;
+			this.onChangeTable();
+		});
+
 	}
 
-	private setupSearch() {
-		this.searchChanged
-            .debounceTime(300) // wait 300ms after the last event before emitting last event
-            .distinctUntilChanged() // only emit if value is different from previous value
-            .subscribe(st => {
-            	this.searchTerm = st;
-            	this.onChangeTable();
-            });
+	private setSearchParams(params: any) {
+		this.searchTerm = (params['searchTerm']) ? params['searchTerm'] : '';
 	}
 
-	private newSearch(event) {
-		this.page = 1;
-		this.searchChanged.next(event);
-	}
 
 	public onChangeTable(page: any = { page: this.page, limit: this.limit }): any {
 
@@ -75,10 +70,10 @@ export class SearchComponent implements OnInit {
 		let orderByArray: Array<string> = [];
 
 		for (var key in sorting) {
-    		let val = sorting[key];
-    		if (val !== '') {
-    			orderByArray.push(key + '-' + val);
-    		}
+			let val = sorting[key];
+			if (val !== '') {
+				orderByArray.push(key + '-' + val);
+			}
 		}
 
 		return orderByArray;
@@ -88,14 +83,14 @@ export class SearchComponent implements OnInit {
 		let sort = this.sorting[column];
 		let classes: string;
 		switch (sort) {
-			case 'asc': 
-				classes =  'pull-right fa fa-fw fa-caret-up';
+			case 'asc':
+				classes = 'pull-right fa fa-fw fa-caret-up';
 				break;
-			case 'desc': 
-				classes =  'pull-right fa fa-fw fa-caret-down';
+			case 'desc':
+				classes = 'pull-right fa fa-fw fa-caret-down';
 				break;
 			case '':
-				classes =  '';
+				classes = '';
 				break;
 		}
 
