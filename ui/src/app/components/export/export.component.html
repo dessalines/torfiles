@@ -11,7 +11,7 @@
 <pre>POST /upload , file: 1 .torrent file</pre>
 <h1>Export</h1>
 <ul>
-  <li><a [href]="jsonDump()">Database JSON dump (magnet links, names, etc)</a></li>
-  <li><a [href]="csvDump()">Database CSV dump (info_hash, name)</a></li>
-  <li><a [href]="pgDump()">Postgres pg_dump</a></li>
+  <li><a [href]="jsonDump()" download>Database JSON dump (magnet links, names, etc)</a></li>
+  <li><a [href]="csvDump()" download >Database CSV dump (info_hash, name)</a></li>
+  <li><a [href]="pgDump()" download>Postgres pg_dump(includes all torrent files)</a></li>
 </ul>
