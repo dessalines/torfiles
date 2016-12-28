@@ -13,7 +13,7 @@ import { Tools } from '../../shared';
 })
 export class NavbarComponent implements OnInit {
 
-	private collapseNavbar: boolean = true;
+	private collapseNavbar: boolean = false;
 
 	private searchTerm: string = '';
 	private searchChanged: Subject<string> = new Subject<string>();
