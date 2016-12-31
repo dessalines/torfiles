@@ -38,6 +38,8 @@ public class Endpoints {
 
     public static Logger log = (Logger) LoggerFactory.getLogger(Endpoints.class);
 
+    private static Integer UPLOAD_THREAD_SIZE = 100;
+
     public static void status() {
 
         get("/hello", (req, res) -> "hello");
@@ -138,7 +140,7 @@ public class Endpoints {
 
             Integer torrentsAdded = 0;
 
-            ExecutorService executor = Executors.newFixedThreadPool(15);
+            ExecutorService executor = Executors.newFixedThreadPool(UPLOAD_THREAD_SIZE);
             for (int i = 0; i < lines.length; i++) {
                 String magnetLink = lines[i];
                 String infoHash = null;
@@ -150,14 +152,14 @@ public class Endpoints {
                 // Find a way to batch this
                 Tools.dbInit();
                 Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-
+                Tools.dbClose();
                 if (torrent != null) {
                     log.info("Torrent Already Added: " + infoHash);
                 } else {
                     Runnable worker = new FetchMagnetRunnable(magnetLink);
                     executor.execute(worker);
                 }
-                Tools.dbClose();
+
 
             }
             executor.shutdown();

@@ -19,9 +19,9 @@
         <td>{{row.peers}}</td>
         <td>
           <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)"
-            tooltip="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
+            title="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
           <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))"
-            tooltip="Download .torrent"><i class="fa fa-fw fa-download text-muted"></i></a>
+            title="Download .torrent"><i class="fa fa-fw fa-download text-muted"></i></a>
         </td>
       </tr>
     </tbody>

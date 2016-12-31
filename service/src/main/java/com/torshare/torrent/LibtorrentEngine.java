@@ -164,19 +164,6 @@ public enum LibtorrentEngine {
                     case METADATA_RECEIVED:
                         MetadataReceivedAlert mar = (MetadataReceivedAlert) alert;
                         log.info("metadata received for " + mar.handle().name());
-                        byte[] data = mar.torrentData();
-
-//                        TorrentInfo ti = TorrentInfo.bdecode(data);
-
-//                            Tools.dbInit();
-//                            Actions.saveTorrentInfo(ti);
-////                            addTorrent(ti);
-//                            Tools.dbClose();
-
-
-
-//                        mar.handle().resume();
-
 
                         break;
 
