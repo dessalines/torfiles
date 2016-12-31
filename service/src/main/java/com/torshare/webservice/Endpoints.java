@@ -38,7 +38,7 @@ public class Endpoints {
 
     public static Logger log = (Logger) LoggerFactory.getLogger(Endpoints.class);
 
-    private static Integer UPLOAD_THREAD_SIZE = 100;
+    private static Integer UPLOAD_THREAD_SIZE = 500;
 
     public static void status() {
 

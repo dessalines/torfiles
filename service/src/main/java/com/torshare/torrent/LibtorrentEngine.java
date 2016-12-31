@@ -46,7 +46,7 @@ public enum LibtorrentEngine {
 
 //        s.maxActiveDownloads(-1);
 //        s.maxActiveSeeds(-1);
-        s.downloadRateLimit(10000);
+//        s.downloadRateLimit(10000);
 
     }
 
