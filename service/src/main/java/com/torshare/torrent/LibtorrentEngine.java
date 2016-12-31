@@ -72,7 +72,7 @@ public enum LibtorrentEngine {
         byte[] data = s.fetchMagnet(uri, 90);
 
         if (data == null) {
-            throw new NoSuchElementException("Failed to retrieve the magnet:" + uri.toString());
+            log.info("Failed to retrieve the magnet:" + uri.toString());
         } else {
             TorrentInfo ti = TorrentInfo.bdecode(data);
             Tools.dbInit();
