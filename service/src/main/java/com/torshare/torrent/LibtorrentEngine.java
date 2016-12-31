@@ -71,15 +71,15 @@ public enum LibtorrentEngine {
         log.info("Fetching the magnet uri, please wait...");
         byte[] data = s.fetchMagnet(uri, 90);
 
-        if (data == null) {
-            log.info("Failed to retrieve the magnet:" + uri.toString());
-        } else {
-            TorrentInfo ti = TorrentInfo.bdecode(data);
-            Tools.dbInit();
-            Actions.saveTorrentInfo(ti);
-            Tools.dbClose();
-            addTorrent(ti);
-        }
+//        if (data == null) {
+//            log.info("Failed to retrieve the magnet:" + uri.toString());
+//        } else {
+//            TorrentInfo ti = TorrentInfo.bdecode(data);
+//            Tools.dbInit();
+//            Actions.saveTorrentInfo(ti);
+//            Tools.dbClose();
+//            addTorrent(ti);
+//        }
 
         return data;
 
@@ -164,6 +164,12 @@ public enum LibtorrentEngine {
                     case METADATA_RECEIVED:
                         MetadataReceivedAlert mar = (MetadataReceivedAlert) alert;
                         log.info("metadata received for " + mar.handle().name());
+
+                        TorrentInfo ti = TorrentInfo.bdecode(mar.torrentData());
+                        Tools.dbInit();
+                        Actions.saveTorrentInfo(ti);
+                        Tools.dbClose();
+                        addTorrent(ti);
 
                         break;
 
