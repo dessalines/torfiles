@@ -33,6 +33,8 @@ public enum LibtorrentEngine {
 
     private SessionManager s;
 
+    private static Long REMOVE_AFTER_TIME = TimeUnit.MINUTES.toMillis(10);
+
     LibtorrentEngine() {
 
         System.setProperty("jlibtorrent.jni.path", DataSources.LIBTORRENT_PATH);
@@ -85,23 +87,48 @@ public enum LibtorrentEngine {
 
     }
 
-    public void addTorrentsOnStartup() throws IOException {
+    public void scanForPeers() throws IOException {
 
         Tools.dbInit();
-        Integer limit = 1000;
-        Paginator p = new Paginator(Tables.Torrent.class,
-                limit,
-                "bencode is not null and peers is null");
+        Integer fetchLimit = 1000;
+        Integer addThreshold = 500;
 
-        for (int c = 1; c < p.pageCount(); c++) {
-            List<Tables.Torrent> torrents = p.getPage(c);
-            for (Tables.Torrent t : torrents) {
-                byte[] data = t.getBytes("bencode");
-                addTorrent(TorrentInfo.bdecode(data));
+
+        Paginator p = new Paginator(Tables.Torrent.class,
+                fetchLimit,
+                "bencode is not null")
+                .orderBy("peers asc nulls first");
+
+        int c = 1;
+        while (c < p.pageCount()) {
+
+            // Add the next batch if torrents are below
+            Long activeTorrents = s.swig().get_torrents().size();
+
+            log.info("Current torrents: " + activeTorrents);
+
+            if (activeTorrents < addThreshold) {
+                log.info("Adding next batch of torrents.");
+                List<Tables.Torrent> torrents = p.getPage(c++);
+                for (Tables.Torrent t : torrents) {
+                    byte[] data = t.getBytes("bencode");
+                    addTorrent(TorrentInfo.bdecode(data));
+                }
+
+            }
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
+
         Tools.dbClose();
+
+        // Run it again
+        scanForPeers();
     }
 
     private AlertListener alerts() {
@@ -114,7 +141,8 @@ public enum LibtorrentEngine {
                         AlertType.TORRENT_ADDED.swig(),
                         AlertType.TRACKER_REPLY.swig(),
                         AlertType.DHT_REPLY.swig(),
-                        AlertType.METADATA_RECEIVED.swig()
+                        AlertType.METADATA_RECEIVED.swig(),
+                        AlertType.STATS.swig()
                 };
 
             }
@@ -171,6 +199,13 @@ public enum LibtorrentEngine {
                         Tools.dbClose();
                         addTorrent(ti);
 
+                        break;
+                    case STATS:
+                        StatsAlert sa = (StatsAlert) alert;
+                        if (sa.handle().status().activeDuration() > REMOVE_AFTER_TIME) {
+                            log.debug("torrent has been active for: " + sa.handle().status().activeDuration() + ", removing");
+                            s.remove(sa.handle());
+                        }
                         break;
 
                 }

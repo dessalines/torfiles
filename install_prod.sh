@@ -6,4 +6,4 @@ cd ..
 
 # Building the back end
 cd service
-sh install.sh -ssl ~/keystore.jks
+sh install.sh -ssl ~/keystore.jks -peer_scanner

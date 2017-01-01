@@ -18,7 +18,6 @@ import spark.Spark;
 import java.io.File;
 import java.io.IOException;
 
-import static spark.Spark.init;
 import static spark.Spark.staticFiles;
 
 public class WebService {
@@ -40,8 +39,8 @@ public class WebService {
     @Option(name="-liquibase", usage="Run liquibase changesets")
     private Boolean liquibase = false;
 
-    @Option(name="-add_torrents", usage="Add current torrents in the DB")
-    private Boolean addTorrents = false;
+    @Option(name="-peer_scanner", usage="Scans for peers in batches")
+    private Boolean peerScanner = false;
 
     public void doMain(String[] args) throws IOException {
 
@@ -82,8 +81,8 @@ public class WebService {
         Endpoints.export();
         Endpoints.exceptions();
 
-        if (addTorrents) {
-            lte.addTorrentsOnStartup();
+        if (peerScanner) {
+            lte.scanForPeers();
         }
 
     }
