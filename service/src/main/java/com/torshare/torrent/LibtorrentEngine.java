@@ -34,6 +34,7 @@ public enum LibtorrentEngine {
     private SessionManager s;
 
     private static Long REMOVE_AFTER_TIME = TimeUnit.MINUTES.toMillis(10);
+    private static Long MAGNET_TIMEOUT = TimeUnit.MINUTES.toSeconds(5);
 
     LibtorrentEngine() {
 
@@ -71,7 +72,7 @@ public enum LibtorrentEngine {
     public byte[] fetchMagnetURI(String uri) {
 
         log.info("Fetching the magnet uri, please wait...");
-        byte[] data = s.fetchMagnet(uri, 90);
+        byte[] data = s.fetchMagnet(uri, MAGNET_TIMEOUT.intValue());
 
 //        if (data == null) {
 //            log.info("Failed to retrieve the magnet:" + uri.toString());
@@ -197,7 +198,8 @@ public enum LibtorrentEngine {
                         Tools.dbInit();
                         Actions.saveTorrentInfo(ti);
                         Tools.dbClose();
-                        addTorrent(ti);
+
+                        s.remove(mar.handle());
 
                         break;
                     case STATS:
