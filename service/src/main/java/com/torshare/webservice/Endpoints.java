@@ -275,7 +275,11 @@ public class Endpoints {
 
             writeToServletOS(file, raw.getOutputStream());
 
+            file.delete();
+
             return res.raw();
+
+
         });
 
         get("/torshare.json", (req, res) -> {
