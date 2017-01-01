@@ -10,7 +10,7 @@
       <a [href]="sanitizer.bypassSecurityTrustUrl(d.magnetLink)"
         tooltip="Magnet link" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-magnet"></i></a>
       <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(d.infoHash))"
-        tooltip="Download .torrent" [tooltipAppendToBody]="true"
+        tooltip="Download .torrent" [container]="body"
         class="btn btn-secondary btn-sm"><i class="fa fa-fw fa-download"></i></a>
     </div>
   </div>

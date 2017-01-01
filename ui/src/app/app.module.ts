@@ -28,7 +28,7 @@ import { AppRoutingModule } from './app-routing.module';
 import {
   PaginationModule,
   TooltipModule
-} from 'ng2-bootstrap/ng2-bootstrap';
+} from 'ng2-bootstrap';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 
 @NgModule({
@@ -48,8 +48,8 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    PaginationModule,
-    TooltipModule,
+    PaginationModule.forRoot(),
+    TooltipModule.forRoot(),
     FileUploadModule
   ],
   providers: [SearchService, TorrentDetailService, UploadService],
