@@ -91,8 +91,8 @@ public enum LibtorrentEngine {
     public void scanForPeers() throws IOException {
 
         Tools.dbInit();
-        Integer fetchLimit = 1000;
-        Integer addThreshold = 500;
+        Integer fetchLimit = 50;
+        Integer addThreshold = 20;
 
 
         Paginator p = new Paginator(Tables.Torrent.class,
