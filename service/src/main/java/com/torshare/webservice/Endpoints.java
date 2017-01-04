@@ -262,52 +262,37 @@ public class Endpoints {
 
         get("/torshare.pgdump", (req, res) -> {
 
-            File file = File.createTempFile("torshare_dump", ".pgdump");
-            file.deleteOnExit();
-
             ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "pg_dump torshare");
-            pb.redirectOutput(file);
+
             final Process process = pb.start();
+            writeToServletOS(process.getInputStream(), res.raw().getOutputStream());
             process.waitFor();
 
-            HttpServletResponse raw = res.raw();
-            res.header("Content-Length", String.valueOf(file.length()));
-
-            writeToServletOS(file, raw.getOutputStream());
-
-            file.delete();
-
             return res.raw();
-
-
         });
 
         get("/torshare.json", (req, res) -> {
-            LazyList<Tables.Torrent> torrents = Tables.Torrent.findAll();
+            LazyList<Tables.Torrent> torrents = Tables.Torrent.findBySQL("select info_hash, name from torrent");
             return torrents.toJson(false);
         });
 
         get("/torshare.csv", (req, res) -> {
-            LazyList<Tables.Torrent> torrents = Tables.Torrent.findAll();
+            LazyList<Tables.Torrent> torrents = Tables.Torrent.findBySQL("select info_hash, name from torrent");
             return Tools.torrentsToCsv(torrents);
         });
 
     }
 
-    private static void writeToServletOS(File file, OutputStream os) throws IOException {
-        FileInputStream in = null;
+    private static void writeToServletOS(InputStream is, OutputStream os) throws IOException {
 
-        in = new FileInputStream(file);
         byte[] buffer = new byte[1024];
         int bytesRead = 0;
 
-        while ((bytesRead = in.read(buffer)) != -1) {
+        while ((bytesRead = is.read(buffer)) != -1) {
             os.write(buffer, 0, bytesRead);
         }
 
-//                raw.getOutputStream().flush(); // might not be necessary
-
-        in.close();
+        is.close();
         os.flush();
         os.close();
 

@@ -83,6 +83,13 @@ public class WebServiceTest {
         assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
     }
 
+    @Test
+    public void csvDump() throws Exception {
+        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
+                "/torshare.csv", null);
+        assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
+    }
+
 
 
 
