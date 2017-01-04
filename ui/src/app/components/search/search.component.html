@@ -2,11 +2,11 @@
   <table class="table table-striped table-bordered">
     <thead>
       <tr>
-        <th (click)="toggleSort('name')">Name <span class="{{getSortingClass('name')}}"></span></th>
-        <th (click)="toggleSort('size_bytes')">Size <span class="{{getSortingClass('size_bytes')}}"></span></th>
-        <th (click)="toggleSort('age')">Age <span class="{{getSortingClass('age')}}"></span></th>
-        <th (click)="toggleSort('seeders')">Seeds <span class="{{getSortingClass('seeders')}}"></span></th>
-        <th (click)="toggleSort('peers')">Peers <span class="{{getSortingClass('peers')}}"></span></th>
+        <th (click)="toggleSort('name')" role="button">Name <span class="{{getSortingClass('name')}}"></span></th>
+        <th (click)="toggleSort('size_bytes')" role="button">Size <span class="{{getSortingClass('size_bytes')}}"></span></th>
+        <th (click)="toggleSort('age')" role="button">Age <span class="{{getSortingClass('age')}}"></span></th>
+        <th (click)="toggleSort('seeders')" role="button">Seeds <span class="{{getSortingClass('seeders')}}"></span></th>
+        <th (click)="toggleSort('peers')" role="button">Peers <span class="{{getSortingClass('peers')}}"></span></th>
         <th></th>
       </tr>
     </thead>
