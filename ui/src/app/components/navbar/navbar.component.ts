@@ -17,6 +17,7 @@ export class NavbarComponent implements OnInit {
 
 	private searchTerm: string = '';
 	private searchChanged: Subject<string> = new Subject<string>();
+	private loading: boolean = false;
 
 	constructor(private route: ActivatedRoute,
 		private router: Router) {
@@ -47,6 +48,7 @@ export class NavbarComponent implements OnInit {
 			.subscribe(st => {
 				this.searchTerm = st;
 				this.search();
+				this.loading = false;
 			});
 	}
 
@@ -55,6 +57,7 @@ export class NavbarComponent implements OnInit {
 	}
 
 	private newSearch(event) {
+		this.loading = true;
 		this.searchChanged.next(event);
 	}
 

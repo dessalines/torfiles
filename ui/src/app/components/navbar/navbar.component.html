@@ -13,7 +13,9 @@
                   name="search" type="text" class="form-control"
                   placeholder="Search for...">
                 <span class="input-group-btn">
-                  <button (click)="search()" class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+                  <button (click)="search()" class="btn btn-secondary" type="submit">
+                    <i class="fa" [class.fa-search]="!loading" [class.fa-circle-o-notch]="loading" [class.fa-spin]="loading"></i>
+                  </button>
                 </span>
               </div>
             </div>
