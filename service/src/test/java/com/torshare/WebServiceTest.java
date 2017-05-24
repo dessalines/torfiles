@@ -66,8 +66,6 @@ public class WebServiceTest {
 //        System.out.println(response.body);
         assertEquals(200, response.status);
         assertTrue(response.body.contains(ubuntuInfoHash));
-
-
     }
 
     @Test
