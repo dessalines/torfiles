@@ -28,6 +28,7 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class WebServiceTest {
 
+    String ubuntuInfoHash = "0403fb4728bd788fbcb67e87d6feb241ef38c75a";
 
     public static class TestContollerTestSparkApplication implements SparkApplication {
 
@@ -59,12 +60,12 @@ public class WebServiceTest {
                         "?limit=4" +
                         "&page=1" +
                         "&orderBy=name-desc" +
-                        "&q=comintern" +
+                        "&q=ubuntu" +
                         "&orderBy=seeders-desc" +
                         "", null);
 //        System.out.println(response.body);
         assertEquals(200, response.status);
-        assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
+        assertTrue(response.body.contains(ubuntuInfoHash));
 
 
     }
@@ -80,14 +81,14 @@ public class WebServiceTest {
     public void jsonDump() throws Exception {
         SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
                 "/torshare.json", null);
-        assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
+        assertTrue(response.body.contains(ubuntuInfoHash));
     }
 
     @Test
     public void csvDump() throws Exception {
         SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
                 "/torshare.csv", null);
-        assertTrue(response.body.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
+        assertTrue(response.body.contains(ubuntuInfoHash));
     }
 
 

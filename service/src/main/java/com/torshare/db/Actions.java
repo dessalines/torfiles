@@ -33,9 +33,7 @@ public class Actions {
                 "info_hash", ti.infoHash().toString(),
                 "name", ti.name(),
                 "size_bytes", ti.totalSize(),
-                "age", (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L): null,
-                "magnet_link", ti.makeMagnetUri(),
-                "bencode", ti.bencode());
+                "age", (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L): null);
 
         // Save the file info
         for (int i = 0; i < ti.files().numFiles(); i++) {

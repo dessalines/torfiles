@@ -7,8 +7,6 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!-- INCLUDEALL not working right now <includeAll path="src/main/resources/liquibase/changelogs"/>-->
-    <include file="src/main/resources/liquibase/changelogs/2016-11-30.1.sql"/>
-    <include file="src/main/resources/liquibase/changelogs/2016-12-08.1.sql"/>
     <include file="src/main/resources/liquibase/changelogs/2017-05-24.1.sql"/>
 
 </databaseChangeLog>

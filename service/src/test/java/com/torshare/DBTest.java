@@ -101,18 +101,6 @@ public class DBTest {
     }
 
     @Test
-    public void testBencode() throws Exception {
-
-        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", ubuntuInfoHash);
-
-        byte[] data = t.getBytes("bencode");
-
-        TorrentInfo ti_2 = TorrentInfo.bdecode(data);
-
-        assertEquals(ubuntuInfoHash, ti_2.infoHash().toString());
-    }
-
-    @Test
     public void testTorrentDetail() throws Exception {
         TorrentInfo ti = new TorrentInfo(trotskyTorrent);
         TorrentDetail td = TorrentDetail.create(ti, 0, 0);
@@ -136,8 +124,7 @@ public class DBTest {
     public void csvTest() throws Exception {
         LazyList<Tables.Torrent> ts = Tables.Torrent.findAll();
         String csv = Tools.torrentsToCsv(ts);
-//        System.out.println(csv);
-        assertTrue(csv.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
+        assertTrue(csv.contains(ubuntuInfoHash));
     }
 
     @Test
