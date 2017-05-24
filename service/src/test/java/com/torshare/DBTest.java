@@ -38,10 +38,10 @@ public class DBTest {
 
     File ubuntuTorrent = new File(DataSources.UBUNTU_TORRENT);
     File trotskyTorrent = new File(DataSources.TROTSKY_TORRENT);
-    File sigurTorrent = new File("/home/tyler/torrent_tmp/41ba53c4030899476479b4f525d56a08aefd8958.torrent");
+    String ubuntuInfoHash = "0403fb4728bd788fbcb67e87d6feb241ef38c75a";
+    String trotskyInfoHash = "d1f28f0c1b89ddd9a39205bef0be3715d117f91b";
     LibtorrentEngine lte;
-
-
+    
     @Before
     public void setUp() throws Exception {
         lte = LibtorrentEngine.INSTANCE;
@@ -55,9 +55,8 @@ public class DBTest {
 
     @Test
     public void readTorrent() throws Exception {
-
         TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
-        assertEquals("ubuntu-16.10-desktop-amd64.iso", ti.name());
+        assertEquals(ubuntuInfoHash, ti.infoHash().toString());
     }
 
 
@@ -71,15 +70,17 @@ public class DBTest {
     @Test
     public void testSaveTorrentInfo() throws Exception {
         TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
-
         Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
         if (t != null) t.delete();
-
         t = Actions.saveTorrentInfo(ti);
+        assertEquals(ubuntuInfoHash, t.getString("info_hash"));
 
-        assertEquals("ubuntu-16.10-desktop-amd64.iso", t.getString("name"));
+        ti = new TorrentInfo(trotskyTorrent);
+        t = Tables.Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
+        if (t != null) t.delete();
+        t = Actions.saveTorrentInfo(ti);
+        assertEquals(trotskyInfoHash, t.getString("info_hash"));
 
-        t.delete();
     }
 
 //    @Test
@@ -102,27 +103,13 @@ public class DBTest {
     @Test
     public void testBencode() throws Exception {
 
-
-        TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
-//        TorrentInfo ti = TorrentInfo.bdecode(Files.readAllBytes(sigurTorrent.toPath()));
-
-
-
-        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
-        if (t != null) t.delete();
-
-        t = Actions.saveTorrentInfo(ti);
+        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", ubuntuInfoHash);
 
         byte[] data = t.getBytes("bencode");
 
         TorrentInfo ti_2 = TorrentInfo.bdecode(data);
 
-
-//        System.out.println(ti.creationDate());
-//        System.out.println(new Timestamp(ti.creationDate()*1000L));
-        assertEquals("ubuntu-16.10-desktop-amd64.iso", ti_2.name());
-
-        t.delete();
+        assertEquals(ubuntuInfoHash, ti_2.infoHash().toString());
     }
 
     @Test
@@ -133,7 +120,7 @@ public class DBTest {
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines", td.getName());
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3",
                 td.getFiles().get(0));
-        assertEquals("d1f28f0c1b89ddd9a39205bef0be3715d117f91b", td.getInfoHash());
+        assertEquals(trotskyInfoHash, td.getInfoHash());
     }
 
     @Test
@@ -151,6 +138,15 @@ public class DBTest {
         String csv = Tools.torrentsToCsv(ts);
 //        System.out.println(csv);
         assertTrue(csv.contains("c6ca71741152a467c0dbaaa9802bedd69dee1714"));
+    }
+
+    @Test
+    public void fileTest() throws Exception {
+        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
+        LazyList<Tables.File> files = Tables.File.find("torrent_id = ?", t.getLongId());
+        Tables.File secondFile = files.get(1);
+        assertTrue(secondFile.getString("path").equals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 01 - Fascism -- What Is It.mp3"));
+        assertEquals(secondFile.getInteger("index_").intValue(), 1);
     }
 
 

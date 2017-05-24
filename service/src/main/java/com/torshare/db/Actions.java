@@ -37,7 +37,16 @@ public class Actions {
                 "magnet_link", ti.makeMagnetUri(),
                 "bencode", ti.bencode());
 
-        log.info("saving torrent: " + torrent.toJson(true));
+        // Save the file info
+        for (int i = 0; i < ti.files().numFiles(); i++) {
+            File.createIt(
+                    "torrent_id", torrent.getLongId(),
+                    "path", ti.files().filePath(i),
+                    "size_bytes", ti.files().fileSize(i),
+                    "index_", i);
+        }
+
+        log.debug("Saving torrent: " + torrent.toJson(true));
 
         return torrent;
 

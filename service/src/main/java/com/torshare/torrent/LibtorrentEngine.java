@@ -43,9 +43,9 @@ public enum LibtorrentEngine {
 
         s = new SessionManager();
 
-        dhtBootstrap();
-
-        s.addListener(alerts());
+//        dhtBootstrap();
+//
+//        s.addListener(alerts());
 
 //        s.maxActiveDownloads(-1);
 //        s.maxActiveSeeds(-1);

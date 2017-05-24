@@ -11,4 +11,7 @@ public class Tables {
     @Table("torrent")
     public static class Torrent extends Model {}
 
+    @Table("file")
+    public static class File extends Model {}
+
 }
