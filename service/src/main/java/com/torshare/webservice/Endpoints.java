@@ -89,15 +89,15 @@ public class Endpoints {
             String[] orderByParam = req.queryParamsValues("orderBy");
             String orderBy = Tools.buildOrderBy(orderByParam);
 
-            Paginator p = new Paginator(Tables.Torrent.class,
+            Paginator p = new Paginator(Tables.FileView.class,
                     limit,
-                    "name ilike ?",
+                    "path ilike ?",
                     nameTokens)
                     .orderBy(orderBy);
 
-            LazyList<Tables.Torrent> torrents = p.getPage(page);
+            LazyList<Tables.FileView> files = p.getPage(page);
 
-            return Tools.wrapPagedResults(torrents.toJson(false),
+            return Tools.wrapPagedResults(files.toJson(false),
                     p.getCount(),
                     page);
 

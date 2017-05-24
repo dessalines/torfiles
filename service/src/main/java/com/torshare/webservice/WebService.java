@@ -33,8 +33,6 @@ public class WebService {
     @Option(name="-ssl",usage="The location of the java keystore .jks file.")
     private File jks;
 
-    @Option(name="-docker",usage="Use the docker container")
-    private Boolean docker = false;
 
     @Option(name="-liquibase", usage="Run liquibase changesets")
     private Boolean liquibase = false;
@@ -55,11 +53,6 @@ public class WebService {
         if (jks != null) {
             Spark.secure(jks.getAbsolutePath(), "changeit", null,null);
             DataSources.SSL = true;
-        }
-
-        if (docker) {
-            DataSources.PROPERTIES.setProperty("jdbc.url", "jdbc:postgresql://db/flowchat");
-            DataSources.PROPERTIES.setProperty("jdbc.password", "test");
         }
 
         if (liquibase) {

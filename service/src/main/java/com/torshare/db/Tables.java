@@ -14,4 +14,7 @@ public class Tables {
     @Table("file")
     public static class File extends Model {}
 
+    @Table("file_view")
+    public static class FileView extends Model {}
+
 }

@@ -59,7 +59,7 @@ public class WebServiceTest {
                 "/search" +
                         "?limit=4" +
                         "&page=1" +
-                        "&orderBy=name-desc" +
+                        "&orderBy=path-desc" +
                         "&q=ubuntu" +
                         "&orderBy=seeders-desc" +
                         "", null);
