@@ -41,7 +41,7 @@ public class DBTest {
     String ubuntuInfoHash = "0403fb4728bd788fbcb67e87d6feb241ef38c75a";
     String trotskyInfoHash = "d1f28f0c1b89ddd9a39205bef0be3715d117f91b";
     LibtorrentEngine lte;
-    
+
     @Before
     public void setUp() throws Exception {
         lte = LibtorrentEngine.INSTANCE;

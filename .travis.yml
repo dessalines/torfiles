@@ -4,7 +4,8 @@ jdk:
 services:
 - postgresql
 before_install:
-- psql -c 'create database torshare;' -U postgres
+- psql -c "create user torshare with password 'asdf'" -U postgres
+- psql -c "create database torshare with owner torshare" -U postgres
 - cd service
 after_success:
 - cd ..
