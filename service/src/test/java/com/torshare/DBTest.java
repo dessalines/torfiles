@@ -100,7 +100,6 @@ public class DBTest {
         Tables.Torrent t = Actions.saveTorrentInfo(ti);
         assertEquals(trotskyInfoHash, t.getString("info_hash"));
 
-
         Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
         System.out.println(torrent.getLongId());
         LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId());

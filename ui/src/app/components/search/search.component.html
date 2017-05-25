@@ -15,7 +15,7 @@
       <td>{{row.seeders}}</td>
       <td>{{row.peers}}</td>
       <td>
-        <a [href]="sanitizer.bypassSecurityTrustUrl(row.magnet_link)" title="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
+        <a [href]="sanitizer.bypassSecurityTrustUrl(generateMagnetLink(row.info_hash, row.path, row.index_))" title="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
         <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(row.info_hash))" title="Download .torrent"><i class="fa fa-fw fa-download text-muted"></i></a>
       </td>
     </tr>

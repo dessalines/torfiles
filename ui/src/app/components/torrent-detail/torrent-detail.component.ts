@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TorrentDetailService } from '../../services';
+import { Tools } from '../../shared';
 import { environment } from '../../../environments/environment';
 
 
@@ -29,6 +30,10 @@ export class TorrentDetailComponent implements OnInit {
 
   private getDownloadLink(infoHash: string) {
     return environment.endpoint + 'torrent_download/' + infoHash + '.torrent';
+  }
+
+  public generateMagnetLink(name, infoHash, index = null) {
+    return Tools.generateMagnetLink(name, infoHash, index);
   }
 
 }

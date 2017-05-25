@@ -5,6 +5,8 @@ import { SearchService } from '../../services';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 
+import { Tools } from '../../shared';
+
 @Component({
 	selector: 'app-search',
 	templateUrl: './search.component.html',
@@ -125,6 +127,10 @@ export class SearchComponent implements OnInit {
 	}
 	public getTorrentName(path: string): string {
 		return path.split('/')[0];
+	}
+
+	public generateMagnetLink(name, infoHash, index) {
+		return Tools.generateMagnetLink(name, infoHash, index);
 	}
 }
 

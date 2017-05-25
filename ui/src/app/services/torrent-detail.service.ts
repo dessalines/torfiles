@@ -6,6 +6,8 @@ import 'rxjs/add/observable/throw';
 import { Http, Response } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { environment } from '../../environments/environment';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 
 @Injectable()
 export class TorrentDetailService {
@@ -14,7 +16,8 @@ export class TorrentDetailService {
         return environment.endpoint + 'torrent_detail/' + infoHash;
 	}
 
-	constructor(private http: Http) { }
+	constructor(private http: Http,
+		private sanitizer: DomSanitizer) { }
 
 	getTorrentDetails(infoHash: string): Observable<any> {
 

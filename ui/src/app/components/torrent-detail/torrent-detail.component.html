@@ -7,7 +7,7 @@
       <span class="text-danger"><i class="fa fa-fw fa-arrow-down"></i>Peers: {{d.peers}}</span>
     </div>
     <div class="col-sm-4 text-right">
-      <a [href]="sanitizer.bypassSecurityTrustUrl(d.magnetLink)" tooltip="Magnet link" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-magnet"></i></a>
+      <a [href]="sanitizer.bypassSecurityTrustUrl(generateMagnetLink(d.infoHash, d.name))" tooltip="Magnet link" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-magnet"></i></a>
       <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(d.infoHash))" tooltip="Download .torrent" container="body" class="btn btn-secondary btn-sm"><i class="fa fa-fw fa-download"></i></a>
     </div>
   </div>
@@ -37,12 +37,14 @@
           <tr>
             <th>File Path</th>
             <th>Size</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let file of d.files">
             <td class="path_column">{{file.path}}</td>
             <td>{{file.sizeBytes | fileSize: true}}</td>
+            <td><a [href]="sanitizer.bypassSecurityTrustUrl(generateMagnetLink(d.infoHash, d.name, file.index))" title="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a></td>
           </tr>
         </tbody>
       </table>
