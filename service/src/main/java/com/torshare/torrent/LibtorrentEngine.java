@@ -43,9 +43,9 @@ public enum LibtorrentEngine {
 
         s = new SessionManager();
 
-//        dhtBootstrap();
-//
-//        s.addListener(alerts());
+        dhtBootstrap();
+
+        s.addListener(alerts());
 
 //        s.maxActiveDownloads(-1);
 //        s.maxActiveSeeds(-1);
@@ -92,12 +92,11 @@ public enum LibtorrentEngine {
 
         Tools.dbInit();
         Integer fetchLimit = 50;
-        Integer addThreshold = 20;
 
 
         Paginator p = new Paginator(Tables.Torrent.class,
                 fetchLimit,
-                "bencode is not null")
+                "1=1")
                 .orderBy("peers asc nulls first");
 
         int c = 1;
@@ -108,15 +107,13 @@ public enum LibtorrentEngine {
 
             log.info("Current torrents: " + activeTorrents);
 
-            if (activeTorrents < addThreshold) {
-                log.info("Adding next batch of torrents.");
-                List<Tables.Torrent> torrents = p.getPage(c++);
-                for (Tables.Torrent t : torrents) {
-                    byte[] data = t.getBytes("bencode");
-                    addTorrent(TorrentInfo.bdecode(data));
-                }
-
+            log.info("Adding next batch of torrents.");
+            List<Tables.Torrent> torrents = p.getPage(c++);
+            for (Tables.Torrent t : torrents) {
+                byte[] data = t.getBytes("bencode");
+                addTorrent(TorrentInfo.bdecode(data));
             }
+
 
             try {
                 Thread.sleep(10000);
@@ -127,6 +124,12 @@ public enum LibtorrentEngine {
 
 
         Tools.dbClose();
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // Run it again
         scanForPeers();

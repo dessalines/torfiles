@@ -30,9 +30,11 @@ public class WebService {
     @Option(name="-ui_dist",usage="The location of the ui dist folder.")
     private File uiDist = new File("../ui/dist");
 
+    @Option(name="-torrents_dir",usage="Scans and watches a torrent directory, and adds them to the DB")
+    private File torrentsDir;
+
     @Option(name="-ssl",usage="The location of the java keystore .jks file.")
     private File jks;
-
 
     @Option(name="-liquibase", usage="Run liquibase changesets")
     private Boolean liquibase = false;
@@ -50,10 +52,7 @@ public class WebService {
         log.getLoggerContext().getLogger("org.eclipse.jetty").setLevel(Level.OFF);
         log.getLoggerContext().getLogger("spark.webserver").setLevel(Level.OFF);
 
-        if (jks != null) {
-            Spark.secure(jks.getAbsolutePath(), "changeit", null,null);
-            DataSources.SSL = true;
-        }
+
 
         if (liquibase) {
             Tools.runLiquibase();
@@ -61,9 +60,17 @@ public class WebService {
 
         LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
 
+        // Add torrents to DB
+        if (torrentsDir != null) {
+            Tools.scanAndWatchTorrentsDir(torrentsDir);
+        }
+
+        if (jks != null) {
+            Spark.secure(jks.getAbsolutePath(), "changeit", null,null);
+            DataSources.SSL = true;
+        }
         staticFiles.externalLocation(uiDist.getAbsolutePath());
         staticFiles.expireTime(DataSources.EXPIRE_SECONDS);
-
 
         // Set up endpoints
         Endpoints.status();
@@ -74,6 +81,7 @@ public class WebService {
         Endpoints.export();
         Endpoints.exceptions();
 
+        // Scan through torrent DB to pick up peer counts
         if (peerScanner) {
             lte.scanForPeers();
         }

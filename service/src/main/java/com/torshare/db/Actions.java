@@ -26,14 +26,14 @@ public class Actions {
         Torrent torrent = Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
 
         if (torrent != null) {
-            throw new NoSuchElementException("Torrent already exists: " + ti.infoHash().toString());
+            return torrent;
         }
 
         torrent = Torrent.createIt(
                 "info_hash", ti.infoHash().toString(),
                 "name", ti.name(),
                 "size_bytes", ti.totalSize(),
-                "age", (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L): null);
+                "age", (ti.creationDate() != 0) ? ti.creationDate() : new Timestamp(ti.creationDate()*1000L));
 
         // Save the file info
         for (int i = 0; i < ti.files().numFiles(); i++) {
@@ -58,9 +58,8 @@ public class Actions {
                 "peers", peers)
                 .saveIt();
 
-        log.info("Saving seeders for torrent: " + torrent.getString("name"));
+        log.debug("Saving seeders for torrent: " + torrent.getString("name"));
 
     }
-
 
 }
