@@ -67,11 +67,12 @@ public class DBTest {
         t = Actions.saveTorrentInfo(ti);
         assertEquals(ubuntuInfoHash, t.getString("info_hash"));
 
-        ti = new TorrentInfo(trotskyTorrent);
-        t = Tables.Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
-        if (t != null) t.delete();
-        t = Actions.saveTorrentInfo(ti);
-        assertEquals(trotskyInfoHash, t.getString("info_hash"));
+        TorrentInfo ti2 = new TorrentInfo(trotskyTorrent);
+        Tables.Torrent t2 = Tables.Torrent.findFirst("info_hash = ?", ti2.infoHash().toString());
+        if (t2 != null) t2.delete();
+        t2 = Actions.saveTorrentInfo(ti2);
+        assertEquals(trotskyInfoHash, t2.getString("info_hash"));
+
 
     }
 
@@ -95,7 +96,13 @@ public class DBTest {
     @Test
     public void testTorrentDetail() throws Exception {
 
+        TorrentInfo ti = new TorrentInfo(trotskyTorrent);
+        Tables.Torrent t = Actions.saveTorrentInfo(ti);
+        assertEquals(trotskyInfoHash, t.getString("info_hash"));
+
+
         Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
+        System.out.println(torrent.getLongId());
         LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId());
 
         TorrentDetail td = TorrentDetail.create(torrent, files);
