@@ -123,7 +123,8 @@ export class SearchComponent implements OnInit {
 	}
 
 	public getFileName(path: string): string {
-		return path.split('/').slice(-1)[0] ;
+		// return path.split('/').slice(-1)[0] ;
+		return path.replace(/\//g, '\\\n');
 	}
 	public getTorrentName(path: string): string {
 		return path.split('/')[0];

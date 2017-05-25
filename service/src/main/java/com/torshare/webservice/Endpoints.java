@@ -230,7 +230,7 @@ public class Endpoints {
         get("/torrent_detail/:info_hash", (req, res) -> {
             String infoHash = req.params(":info_hash");
             Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-            LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId());
+            LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId()).orderBy("path");
 
             TorrentDetail td = TorrentDetail.create(torrent, files);
 
