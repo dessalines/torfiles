@@ -102,12 +102,15 @@ public class DBTest {
 
     @Test
     public void testTorrentDetail() throws Exception {
-        TorrentInfo ti = new TorrentInfo(trotskyTorrent);
-        TorrentDetail td = TorrentDetail.create(ti, 0, 0);
 
+        Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
+        LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId());
+
+        TorrentDetail td = TorrentDetail.create(torrent, files);
+        
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines", td.getName());
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3",
-                td.getFiles().get(0));
+                td.getFiles().get(0).getPath());
         assertEquals(trotskyInfoHash, td.getInfoHash());
     }
 

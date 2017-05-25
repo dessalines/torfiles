@@ -17,7 +17,7 @@ export class SearchComponent implements OnInit {
 	private rows: Array<any> = [];
 
 	private sorting: any = {
-		'name': '',
+		'path': '',
 		'size_bytes': '',
 		'age': '',
 		'seeders': '',
@@ -118,6 +118,13 @@ export class SearchComponent implements OnInit {
 
 	private getDownloadLink(infoHash: string) {
 		return environment.endpoint + 'torrent_download/' + infoHash + '.torrent';
+	}
+
+	public getFileName(path: string): string {
+		return path.split('/').slice(-1)[0] ;
+	}
+	public getTorrentName(path: string): string {
+		return path.split('/')[0];
 	}
 }
 

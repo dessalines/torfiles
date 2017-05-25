@@ -8,6 +8,7 @@ import com.torshare.db.Tables;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
 import com.torshare.torrent.LibtorrentEngine;
+import com.torshare.types.FileDetail;
 import com.torshare.types.TorrentDetail;
 import org.eclipse.jetty.http.HttpStatus;
 import org.javalite.activejdbc.LazyList;
@@ -24,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -227,13 +230,9 @@ public class Endpoints {
         get("/torrent_detail/:info_hash", (req, res) -> {
             String infoHash = req.params(":info_hash");
             Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
+            LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId());
 
-            TorrentInfo ti = TorrentInfo.bdecode(torrent.getBytes("bencode"));
-
-            TorrentDetail td = TorrentDetail.create(
-                    ti,
-                    torrent.getInteger("seeders"),
-                    torrent.getInteger("peers"));
+            TorrentDetail td = TorrentDetail.create(torrent, files);
 
             return td.json();
 
