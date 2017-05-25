@@ -59,14 +59,6 @@ public class DBTest {
         assertEquals(ubuntuInfoHash, ti.infoHash().toString());
     }
 
-
-    @Test(expected=NoSuchElementException.class)
-    public void testAlreadyExists() throws Exception {
-        TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
-        Actions.saveTorrentInfo(ti);
-        Actions.saveTorrentInfo(ti);
-    }
-
     @Test
     public void testSaveTorrentInfo() throws Exception {
         TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
@@ -107,7 +99,7 @@ public class DBTest {
         LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId());
 
         TorrentDetail td = TorrentDetail.create(torrent, files);
-        
+
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines", td.getName());
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3",
                 td.getFiles().get(0).getPath());

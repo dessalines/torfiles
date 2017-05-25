@@ -20,7 +20,7 @@
           <div class="row">
             <div class="col-md-6">
               <p class="wrap"><b>Info Hash:</b> {{d.infoHash}}</p>
-              <p><b>Creation date:</b> {{d.creationDate*1000 | moment}}</p>
+              <p><b>Creation date:</b> {{d.creationDate | moment}} ago</p>
             </div>
             <div class="col-md-6">
               <p><b>Total Size:</b> {{d.sizeBytes | fileSize: true}}

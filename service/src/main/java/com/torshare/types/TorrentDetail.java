@@ -51,7 +51,7 @@ public class TorrentDetail implements JSONWriter {
 
         return new TorrentDetail(torrent.getString("name"),
                 torrent.getString("info_hash"),
-                torrent.getTimestamp("creation_date"),
+                torrent.getTimestamp("age"),
                 fileDetails,
                 torrent.getInteger("seeders"),
                 torrent.getInteger("peers"),

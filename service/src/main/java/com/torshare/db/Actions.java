@@ -29,11 +29,13 @@ public class Actions {
             return torrent;
         }
 
+        Timestamp age = (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L) : new Timestamp(System.currentTimeMillis());
+
         torrent = Torrent.createIt(
                 "info_hash", ti.infoHash().toString(),
                 "name", ti.name(),
                 "size_bytes", ti.totalSize(),
-                "age", (ti.creationDate() != 0) ? ti.creationDate() : new Timestamp(ti.creationDate()*1000L));
+                "age", age);
 
         // Save the file info
         for (int i = 0; i < ti.files().numFiles(); i++) {
