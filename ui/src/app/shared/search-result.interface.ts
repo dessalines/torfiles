@@ -1,7 +1,8 @@
 export interface SearchResult {
 	id: number;
 	info_hash: string;
-	name: string;
+	path: string;
+	index_: number;
 	age: number;
 	created: number;
 	peers: number;

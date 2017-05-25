@@ -28,7 +28,7 @@ import { AppRoutingModule } from './app-routing.module';
 import {
   PaginationModule,
   TooltipModule
-} from 'ng2-bootstrap';
+} from 'ngx-bootstrap';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 
 @NgModule({

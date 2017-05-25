@@ -1,10 +1,10 @@
-<nav class="navbar navbar-full">
-  <button (click)="toggleCollapseNavbar()" class="btn btn-sm btn-secondary hidden-md-up"
-    type="button">&#9776;</button>
-  <div [class.collapse]="collapseNavbar" class="collapse navbar-toggleable-sm">
-    <div>
-      <a class="navbar-brand" [routerLink]="['/']"><i class="fa fa-fw fa-archive"></i>&nbsp;TorShare</a>
-      <ul class="nav navbar-nav">
+<nav class="navbar navbar-toggleable-sm">
+  <a class="navbar-brand" [routerLink]="['/']"><i class="fa fa-fw fa-archive"></i>&nbsp;TorShare</a>
+  <button (click)="toggleCollapseNavbar()" class="navbar-toggler navbar-toggler-right" type="button">
+    <button class="btn btn-sm btn-secondary">&#9776;</button>
+  </button>
+  <div [class.collapse]="collapseNavbar" class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <form class="form-inline">
             <div class="form-group">
@@ -33,6 +33,5 @@
         </li>
       </ul>
     </div>
-  </div>
 </nav>
 <br>

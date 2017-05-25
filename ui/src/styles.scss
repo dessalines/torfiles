@@ -1,3 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import '../node_modules/font-awesome/css/font-awesome.css';
-@import './app/styles/_bootstrap.scss';
+
+@import './app/styles/variables';
+@import './app/styles/bootstrap';
+@import './app/styles/_bootswatch';
+@import './app/styles/extras.scss';
+@import '../node_modules/font-awesome/css/font-awesome.min.css';
