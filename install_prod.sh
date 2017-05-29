@@ -7,4 +7,4 @@ cd ..
 
 # Building the back end
 cd service
-sh install.sh -ssl ~/keystore.jks -peer_scanner
+sh install.sh -torrents_dir ../../p2pspider/torrents
