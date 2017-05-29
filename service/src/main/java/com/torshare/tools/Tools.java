@@ -253,6 +253,7 @@ public class Tools {
 
         LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
 
+        log.info("Scanning torrent dir: " torrentsDir.getAbsolutePath());
         try {
             File[] files = torrentsDir.listFiles(new FilenameFilter() {
                 @Override
@@ -263,10 +264,14 @@ public class Tools {
 
             Tools.dbInit();
             for (File f: files) {
-                    TorrentInfo ti = new TorrentInfo(f);
-                    Tables.Torrent t = Actions.saveTorrentInfo(ti);
-                    if (t.getInteger("peers") == null) {
+                    try {
+                        TorrentInfo ti = new TorrentInfo(f);
+                        Tables.Torrent t = Actions.saveTorrentInfo(ti);
+                        if (t.getInteger("peers") == null) {
 //                        lte.addTorrent(ti);
+                        }
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
                     }
             }
             Tools.dbClose();
