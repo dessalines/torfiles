@@ -253,7 +253,7 @@ public class Tools {
 
         LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
 
-        log.info("Scanning torrent dir: " torrentsDir.getAbsolutePath());
+        log.info("Scanning torrent dir: " + torrentsDir.getAbsolutePath());
         try {
             File[] files = torrentsDir.listFiles(new FilenameFilter() {
                 @Override
