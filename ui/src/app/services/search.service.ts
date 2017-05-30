@@ -37,10 +37,10 @@ export class SearchService {
 
 	constructor(private http: Http) { }
 
-	getSearchResults(q: string = 'all',
+	getSearchResults(q: string = '',
 		limit: number = 25,
 		page: number = 1,
-		orderBy: Array<string> = ['seeders-desc']): Observable<SearchResults> {
+		orderBy: Array<string> = ['peers-desc']): Observable<SearchResults> {
 
 		return this.http.get(this.searchUrl(q, limit, page, orderBy))
 			.map(r => r.json())
