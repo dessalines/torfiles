@@ -184,12 +184,13 @@ public enum LibtorrentEngine {
                         int peers = dhtReply.handle().status().listPeers();
                         int seeds = dhtReply.handle().status().listSeeds();
 
-                        if (!dhtReply.handle().name().startsWith("fetch_magnet___magnet") && peers != 0) {
+                        if (!dhtReply.handle().name().startsWith("fetch_magnet___magnet")) {
                             Tools.dbInit();
                             Actions.saveSeeders(dhtReply.handle().infoHash().toString(), seeds, peers);
                             Tools.dbClose();
 //                            dhtReply.handle().pause();
                             s.remove(dhtReply.handle());
+                            log.debug("Active torrents now: " + s.swig().get_torrents().size());
                         }
 
                         break;

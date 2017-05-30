@@ -268,7 +268,7 @@ public class Tools {
                         TorrentInfo ti = new TorrentInfo(f);
                         Tables.Torrent t = Actions.saveTorrentInfo(ti);
                         if (t.getInteger("peers") == null) {
-//                        lte.addTorrent(ti);
+                        lte.addTorrent(ti);
                         }
                     } catch (IllegalArgumentException e) {
                         e.printStackTrace();
@@ -290,7 +290,7 @@ public class Tools {
                                     TorrentInfo ti = new TorrentInfo(new File(torrentsDir, fileName));
                                     Tables.Torrent t = Actions.saveTorrentInfo(ti);
                                     if (t.getInteger("peers") == null) {
-//                                        lte.addTorrent(ti);
+                                        lte.addTorrent(ti);
                                     }
                                 Tools.dbClose();
 
