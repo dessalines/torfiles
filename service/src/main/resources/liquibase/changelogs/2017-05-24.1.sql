@@ -1,6 +1,7 @@
 --liquibase formatted sql
 --changeset tyler:1
 
+
 create table torrent (
     id bigserial primary key,
     info_hash varchar(40) not null unique,
@@ -26,8 +27,10 @@ create table file (
         on update cascade on delete cascade
 );
 
+CREATE EXTENSION pg_trgm;
+
+create index idx_file_path on file using gin (path gin_trgm_ops);
 create index idx_file_peers on file(peers);
-create index idx_file_path on file(path);
 create index idx_file_size on file(size_bytes);
 
 --rollback drop table file;
