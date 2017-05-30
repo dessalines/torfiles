@@ -6,6 +6,7 @@ package com.torshare.webservice;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import com.torshare.scheduled.ScheduledJobs;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
 import com.torshare.torrent.LibtorrentEngine;
@@ -30,17 +31,14 @@ public class WebService {
     @Option(name="-ui_dist",usage="The location of the ui dist folder.")
     private File uiDist = new File("../ui/dist");
 
-    @Option(name="-torrents_dir",usage="Scans and watches a torrent directory, and adds them to the DB")
-    private File torrentsDir;
+    @Option(name="-p2pspider",usage="The location of p2pspider, for getting torrents and peers")
+    private File p2pSpiderDir;
 
     @Option(name="-ssl",usage="The location of the java keystore .jks file.")
     private File jks;
 
     @Option(name="-liquibase", usage="Run liquibase changesets")
     private Boolean liquibase = false;
-
-    @Option(name="-peer_scanner", usage="Scans for peers in batches")
-    private Boolean peerScanner = false;
 
     public void doMain(String[] args) throws IOException {
 
@@ -52,8 +50,6 @@ public class WebService {
         log.getLoggerContext().getLogger("org.eclipse.jetty").setLevel(Level.OFF);
         log.getLoggerContext().getLogger("spark.webserver").setLevel(Level.OFF);
 
-
-
         if (liquibase) {
             Tools.runLiquibase();
         }
@@ -61,8 +57,10 @@ public class WebService {
         LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
 
         // Add torrents to DB
-        if (torrentsDir != null) {
-            Tools.scanAndWatchTorrentsDir(torrentsDir);
+        if (p2pSpiderDir != null) {
+            Tools.scanAndWatchTorrentsDir(new File(p2pSpiderDir, "torrents"));
+            DataSources.SQLITE_DB = new File(p2pSpiderDir, "peers.sqlite3");
+            ScheduledJobs.start();
         }
 
         if (jks != null) {
@@ -78,13 +76,7 @@ public class WebService {
         Endpoints.upload();
         Endpoints.detail();
         Endpoints.download();
-        Endpoints.export();
         Endpoints.exceptions();
-
-        // Scan through torrent DB to pick up peer counts
-        if (peerScanner) {
-            lte.scanForPeers();
-        }
 
     }
 

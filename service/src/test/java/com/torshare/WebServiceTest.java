@@ -3,21 +3,10 @@ package com.torshare;
 
 import com.despegar.sparkjava.test.SparkClient;
 import com.despegar.sparkjava.test.SparkServer;
-import com.frostwire.jlibtorrent.TorrentInfo;
-import com.torshare.db.Actions;
-import com.torshare.db.Tables;
-import com.torshare.tools.DataSources;
-import com.torshare.tools.Tools;
-import com.torshare.torrent.LibtorrentEngine;
 import com.torshare.webservice.WebService;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import spark.servlet.SparkApplication;
-
-import java.io.File;
-import java.util.NoSuchElementException;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;

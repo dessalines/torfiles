@@ -1,36 +1,25 @@
 package com.torshare.webservice;
 
 import ch.qos.logback.classic.Logger;
-import com.frostwire.jlibtorrent.Entry;
 import com.frostwire.jlibtorrent.TorrentInfo;
 import com.torshare.db.Actions;
 import com.torshare.db.Tables;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
-import com.torshare.torrent.LibtorrentEngine;
-import com.torshare.types.FileDetail;
 import com.torshare.types.TorrentDetail;
 import org.eclipse.jetty.http.HttpStatus;
 import org.javalite.activejdbc.LazyList;
-import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.Paginator;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static spark.Spark.*;
 
@@ -129,100 +118,10 @@ public class Endpoints {
 
             Actions.saveTorrentInfo(ti);
 
-            LibtorrentEngine.INSTANCE.addTorrent(ti);
-
             // Return the infoHash if it was successful
             return ti.infoHash().toString();
         });
 
-        post("/upload_magnet_links", (req, res) -> {
-            log.info(req.body());
-
-            LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
-            String lines[] = req.body().split("\\r?\\n");
-
-            Integer torrentsAdded = 0;
-
-            ExecutorService executor = Executors.newFixedThreadPool(UPLOAD_THREAD_SIZE);
-            for (int i = 0; i < lines.length; i++) {
-                String magnetLink = lines[i];
-                String infoHash = null;
-                try {
-                    infoHash = magnetLink.split("btih:")[1].substring(0, 40);
-                } catch (Exception e) {
-                }
-
-                // Find a way to batch this
-                Tools.dbInit();
-                Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-                Tools.dbClose();
-                if (torrent != null) {
-                    log.info("Torrent Already Added: " + infoHash);
-                } else {
-                    Runnable worker = new FetchMagnetRunnable(magnetLink);
-                    executor.execute(worker);
-                }
-
-
-            }
-            executor.shutdown();
-
-            executor.awaitTermination(24, TimeUnit.DAYS);
-
-
-            return "{\"message\":\"All Done\"}";
-
-        });
-
-        post("/upload_magnet_links_blocking", (req, res) -> {
-            log.info(req.body());
-
-            LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
-            String lines[] = req.body().split("\\r?\\n");
-
-            Integer torrentsAdded = 0;
-
-            for (int i = 0; i < lines.length; i++) {
-                String magnetLink = lines[i];
-                String infoHash = null;
-                try {
-                    infoHash = magnetLink.split("btih:")[1].substring(0, 40);
-
-
-                    // Find a way to batch this
-                    Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-                    if (torrent != null) {
-                        log.info("Torrent Already Added: " + infoHash);
-                    } else {
-                        lte.fetchMagnetURI(magnetLink);
-                        torrentsAdded++;
-                    }
-                } catch (Exception e) {
-                }
-
-            }
-
-            return "{\"message\":\"Torrents added: " + torrentsAdded + "\"}";
-
-        });
-
-    }
-
-    public static class FetchMagnetRunnable implements Runnable {
-        private final String magnetLink;
-
-        FetchMagnetRunnable(String magnetLink) {
-            this.magnetLink = magnetLink;
-        }
-
-        @Override
-        public void run() {
-            try {
-                LibtorrentEngine.INSTANCE.fetchMagnetURI(magnetLink);
-            } catch (NoSuchElementException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 
@@ -255,46 +154,5 @@ public class Endpoints {
             return res.raw();
         });
     }
-
-    public static void export() {
-
-        get("/torshare.pgdump", (req, res) -> {
-
-            ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "pg_dump torshare");
-
-            final Process process = pb.start();
-            writeToServletOS(process.getInputStream(), res.raw().getOutputStream());
-            process.waitFor();
-
-            return res.raw();
-        });
-
-        get("/torshare.json", (req, res) -> {
-            LazyList<Tables.Torrent> torrents = Tables.Torrent.findBySQL("select info_hash, name from torrent");
-            return torrents.toJson(false);
-        });
-
-        get("/torshare.csv", (req, res) -> {
-            LazyList<Tables.Torrent> torrents = Tables.Torrent.findBySQL("select info_hash, name from torrent");
-            return Tools.torrentsToCsv(torrents);
-        });
-
-    }
-
-    private static void writeToServletOS(InputStream is, OutputStream os) throws IOException {
-
-        byte[] buffer = new byte[1024];
-        int bytesRead = 0;
-
-        while ((bytesRead = is.read(buffer)) != -1) {
-            os.write(buffer, 0, bytesRead);
-        }
-
-        is.close();
-        os.flush();
-        os.close();
-
-    }
-
 
 }

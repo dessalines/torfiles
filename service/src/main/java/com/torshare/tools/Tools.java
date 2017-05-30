@@ -2,12 +2,9 @@ package com.torshare.tools;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.frostwire.jlibtorrent.Entry;
 import com.frostwire.jlibtorrent.TorrentInfo;
-import com.frostwire.jlibtorrent.swig.*;
 import com.torshare.db.Actions;
 import com.torshare.db.Tables;
-import com.torshare.torrent.LibtorrentEngine;
 import com.torshare.watchservice.DirectoryWatchService;
 import com.torshare.watchservice.SimpleDirectoryWatchService;
 import liquibase.Liquibase;
@@ -16,7 +13,6 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
-import org.apache.commons.io.FileUtils;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
@@ -33,9 +29,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.Arrays;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Properties;
 
 public class Tools {
 
@@ -63,7 +60,6 @@ public class Tools {
     public static final void dbClose() {
         new DB("default").close();
     }
-
 
     public static Properties loadProperties(String propertiesFileLocation) {
 
@@ -204,54 +200,8 @@ public class Tools {
         return sb.toString() + ", path asc";
     }
 
-    public static void recursiveDeleteOnShutdownHook(final Path path) {
-        Runtime.getRuntime().addShutdownHook(new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
-                                @Override
-                                public FileVisitResult visitFile(Path file,
-                                                                 @SuppressWarnings("unused") BasicFileAttributes attrs)
-                                        throws IOException {
-                                    Files.delete(file);
-                                    return FileVisitResult.CONTINUE;
-                                }
-
-                                @Override
-                                public FileVisitResult postVisitDirectory(Path dir, IOException e)
-                                        throws IOException {
-                                    if (e == null) {
-                                        Files.delete(dir);
-                                        return FileVisitResult.CONTINUE;
-                                    }
-                                    // directory iteration failed
-                                    throw e;
-                                }
-                            });
-                        } catch (IOException e) {
-                            throw new RuntimeException("Failed to delete " + path, e);
-                        }
-                    }
-                }));
-    }
-
-    public static String torrentsToCsv(LazyList<Tables.Torrent> torrents) {
-        StringBuilder sb = new StringBuilder();
-        for (Tables.Torrent t : torrents) {
-            sb.append(t.getString("info_hash") + ",");
-            sb.append(t.getString("name") + "\n");
-        }
-
-
-        return sb.toString();
-    }
-
 
     public static void scanAndWatchTorrentsDir(File torrentsDir) {
-
-        LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
 
         log.info("Scanning torrent dir: " + torrentsDir.getAbsolutePath());
         try {
@@ -267,9 +217,6 @@ public class Tools {
                     try {
                         TorrentInfo ti = new TorrentInfo(f);
                         Tables.Torrent t = Actions.saveTorrentInfo(ti);
-                        if (t.getInteger("peers") == null) {
-                        lte.addTorrent(ti);
-                        }
                     } catch (IllegalArgumentException e) {
                         e.printStackTrace();
                     }
@@ -289,9 +236,7 @@ public class Tools {
 
                                     TorrentInfo ti = new TorrentInfo(new File(torrentsDir, fileName));
                                     Tables.Torrent t = Actions.saveTorrentInfo(ti);
-                                    if (t.getInteger("peers") == null) {
-                                        lte.addTorrent(ti);
-                                    }
+
                                 Tools.dbClose();
 
                             } catch (InterruptedException | IllegalArgumentException e) {

@@ -1,14 +1,10 @@
 package com.torshare.tools;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.Properties;
 
 public class DataSources {
 
@@ -31,5 +27,7 @@ public class DataSources {
     public static final String UBUNTU_TORRENT = CODE_DIR + "/src/main/resources/ubuntu-16.10-desktop-amd64.iso.torrent";
 
     public static final String TROTSKY_TORRENT = CODE_DIR + "/src/main/resources/trotsky_fascism.torrent";
+
+    public static File SQLITE_DB;
 
 }
