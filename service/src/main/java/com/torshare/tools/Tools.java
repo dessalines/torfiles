@@ -189,7 +189,7 @@ public class Tools {
     public static String buildOrderBy(String[] orderBy) {
 
         if (orderBy == null) {
-            return "peers desc nulls last, path asc";
+            return "peers desc nulls last";
         }
 
         StringBuilder sb = new StringBuilder();
@@ -198,10 +198,10 @@ public class Tools {
             String[] split = cOrderBy.split("-");
             sb.append(sep);
             sb.append(split[0] + " " + split[1]);
-            sep = ",";
+            sep = " nulls last,";
         }
 
-        return sb.toString() + " nulls last, path asc";
+        return sb.toString() + " path asc";
     }
 
     public static void recursiveDeleteOnShutdownHook(final Path path) {

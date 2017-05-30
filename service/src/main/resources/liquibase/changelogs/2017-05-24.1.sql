@@ -30,8 +30,8 @@ create table file (
 CREATE EXTENSION if not exists pg_trgm;
 
 create index idx_file_path on file using gin (path gin_trgm_ops);
-create index idx_file_peers on file(peers);
-create index idx_file_size on file(size_bytes);
+create index idx_file_peers on file(peers desc nulls last);
+create index idx_file_size on file(size_bytes desc nulls last);
 
 --rollback drop table file;
 
