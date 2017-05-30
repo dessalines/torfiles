@@ -55,10 +55,9 @@ public class Actions {
     public static void saveSeeders(String infoHash, int seeders, int peers) {
         Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
 
-        torrent.set(
-                "seeders", (seeders !=0) ? seeders: null,
-                "peers", peers)
-                .saveIt();
+        torrent.set("peers", peers).saveIt();
+
+        File.update("peers = ?", "torrent_id = ?", peers, torrent.getLongId());
 
         log.debug("Saving seeders for torrent: " + torrent.getString("name"));
 
