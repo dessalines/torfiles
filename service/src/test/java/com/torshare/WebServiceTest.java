@@ -61,7 +61,34 @@ public class WebServiceTest {
                         "&page=1" +
                         "&orderBy=path-desc" +
                         "&q=ubuntu" +
-                        "&orderBy=seeders-desc" +
+                        "&orderBy=peers-desc" +
+                        "", null);
+//        System.out.println(response.body);
+        assertEquals(200, response.status);
+        assertTrue(response.body.contains(ubuntuInfoHash));
+    }
+
+    @Test
+    public void searchResults2() throws Exception {
+        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
+                "/search" +
+                        "?limit=4" +
+                        "&page=1" +
+                        "&q=ubuntu" +
+                        "&orderBy=peers-desc" +
+                        "", null);
+//        System.out.println(response.body);
+        assertEquals(200, response.status);
+        assertTrue(response.body.contains(ubuntuInfoHash));
+    }
+
+    @Test
+    public void searchResults3() throws Exception {
+        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
+                "/search" +
+                        "?limit=4" +
+                        "&page=1" +
+                        "&q=ubuntu" +
                         "", null);
 //        System.out.println(response.body);
         assertEquals(200, response.status);
