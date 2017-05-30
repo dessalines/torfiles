@@ -26,9 +26,9 @@ create table file (
         on update cascade on delete cascade
 );
 
-create index idx_file_path_peers on file(peers);
-create index idx_file_path_peers on file(path);
-create index idx_file_path_peers on file(size_bytes);
+create index idx_file_peers on file(peers);
+create index idx_file_path on file(path);
+create index idx_file_size on file(size_bytes);
 
 --rollback drop table file;
 
