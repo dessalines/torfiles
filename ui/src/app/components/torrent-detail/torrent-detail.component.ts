@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
 })
 export class TorrentDetailComponent implements OnInit {
 
-  private d: any;
+  public d: any;
 
   constructor(private torrentDetailService: TorrentDetailService,
     private route: ActivatedRoute,
@@ -28,7 +28,7 @@ export class TorrentDetailComponent implements OnInit {
     });
   }
 
-  private getDownloadLink(infoHash: string) {
+  public getDownloadLink(infoHash: string) {
     return environment.endpoint + 'torrent_download/' + infoHash + '.torrent';
   }
 

@@ -14,11 +14,11 @@ import { Tools } from '../../shared';
 })
 export class SearchComponent implements OnInit {
 
-	private searchTerm: string = '';
+	public searchTerm: string = '';
 
-	private rows: Array<any> = [];
+	public rows: Array<any> = [];
 
-	private sorting: any = {
+	public sorting: any = {
 		'path': '',
 		'size_bytes': '',
 		'age': '',
@@ -31,6 +31,7 @@ export class SearchComponent implements OnInit {
 	public maxPaginators: number = 5;
 	public length: number = 1;
 	public data: Array<any>;
+	public numPages: number;
 
 	constructor(private route: ActivatedRoute,
 		private router: Router,
@@ -50,7 +51,7 @@ export class SearchComponent implements OnInit {
 
 	}
 
-	private setSearchParams(params: any) {
+	public setSearchParams(params: any) {
 		this.searchTerm = (params['searchTerm']) ? params['searchTerm'] : '';
 	}
 
@@ -68,7 +69,7 @@ export class SearchComponent implements OnInit {
 	}
 
 
-	private buildOrderByArray(sorting: any): Array<string> {
+	public buildOrderByArray(sorting: any): Array<string> {
 		let orderByArray: Array<string> = [];
 
 		for (var key in sorting) {
@@ -81,7 +82,7 @@ export class SearchComponent implements OnInit {
 		return orderByArray;
 	}
 
-	private getSortingClass(column: string): string {
+	public getSortingClass(column: string): string {
 		let sort = this.sorting[column];
 		let classes: string;
 		switch (sort) {
@@ -99,7 +100,7 @@ export class SearchComponent implements OnInit {
 		return classes;
 	}
 
-	private toggleSort(column: string) {
+	public toggleSort(column: string) {
 		let sort = this.sorting[column];
 
 		switch (sort) {
@@ -118,7 +119,7 @@ export class SearchComponent implements OnInit {
 		this.onChangeTable();
 	}
 
-	private getDownloadLink(infoHash: string) {
+	public getDownloadLink(infoHash: string) {
 		return environment.endpoint + 'torrent_download/' + infoHash + '.torrent';
 	}
 

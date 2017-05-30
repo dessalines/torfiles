@@ -13,11 +13,11 @@ import { Tools } from '../../shared';
 })
 export class NavbarComponent implements OnInit {
 
-	private collapseNavbar: boolean = false;
+	public collapseNavbar: boolean = false;
 
-	private searchTerm: string = '';
-	private searchChanged: Subject<string> = new Subject<string>();
-	private loading: boolean = false;
+	public searchTerm: string = '';
+	public searchChanged: Subject<string> = new Subject<string>();
+	public loading: boolean = false;
 
 	constructor(private route: ActivatedRoute,
 		private router: Router) {
@@ -33,7 +33,7 @@ export class NavbarComponent implements OnInit {
 		});
 	}
 
-	private setValuesByUrlEvent(event) {
+	public setValuesByUrlEvent(event) {
 		let searchTerm = Tools.getParameterByName('searchTerm', event.url);
 
 		if (searchTerm !== null) {
@@ -41,7 +41,7 @@ export class NavbarComponent implements OnInit {
 		}
 	}
 
-	private setupSearch() {
+	public setupSearch() {
 		this.searchChanged
 			.debounceTime(300) // wait 300ms after the last event before emitting last event
 			.distinctUntilChanged() // only emit if value is different from previous value
@@ -52,11 +52,11 @@ export class NavbarComponent implements OnInit {
 			});
 	}
 
-	private search() {
+	public search() {
 		this.router.navigate(['/search', {searchTerm: this.searchTerm}]);
 	}
 
-	private newSearch(event) {
+	public newSearch(event) {
 		this.loading = true;
 		this.searchChanged.next(event);
 	}

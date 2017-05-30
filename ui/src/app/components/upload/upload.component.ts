@@ -12,9 +12,9 @@ const URL = environment.endpoint + 'upload';
 })
 export class UploadComponent implements OnInit {
 
-	private magnetTextArea: string;
-	private magnetUploadMessage: string;
-	private magnetUploading: boolean = false;
+	public magnetTextArea: string;
+	public magnetUploadMessage: string;
+	public magnetUploading: boolean = false;
 
 	public uploader: FileUploader = new FileUploader({ url: URL });
 	public hasBaseDropZoneOver: boolean = false;
