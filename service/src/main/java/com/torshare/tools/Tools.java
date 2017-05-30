@@ -286,6 +286,7 @@ public class Tools {
                                 Thread.sleep(100);
                                 log.info(fileName);
                                 Tools.dbInit();
+
                                     TorrentInfo ti = new TorrentInfo(new File(torrentsDir, fileName));
                                     Tables.Torrent t = Actions.saveTorrentInfo(ti);
                                     if (t.getInteger("peers") == null) {
@@ -293,7 +294,7 @@ public class Tools {
                                     }
                                 Tools.dbClose();
 
-                            } catch (InterruptedException e) {
+                            } catch (InterruptedException | IllegalArgumentException e) {
                                 e.printStackTrace();
                             }
 
