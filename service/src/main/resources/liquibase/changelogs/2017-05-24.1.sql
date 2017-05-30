@@ -27,7 +27,7 @@ create table file (
         on update cascade on delete cascade
 );
 
-CREATE EXTENSION pg_trgm;
+CREATE EXTENSION if not exists pg_trgm;
 
 create index idx_file_path on file using gin (path gin_trgm_ops);
 create index idx_file_peers on file(peers);
