@@ -6,6 +6,7 @@ services:
 before_install:
 - psql -c "create user torshare with password 'asdf'" -U postgres
 - psql -c "create database torshare with owner torshare" -U postgres
+- psql -c "create extension pg_trgm" -U postgres
 - cd service
 after_success:
 - cd ..
