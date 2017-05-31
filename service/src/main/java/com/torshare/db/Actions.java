@@ -49,7 +49,7 @@ public class Actions {
     }
 
     public static void savePeers(String infoHash, int peers) {
-        Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
+        Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
 
         if (torrent != null) {
             torrent.set("peers", peers).saveIt();
