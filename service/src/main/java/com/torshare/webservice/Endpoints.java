@@ -81,16 +81,15 @@ public class Endpoints {
             String[] orderByParam = req.queryParamsValues("orderBy");
             String orderBy = Tools.buildOrderBy(orderByParam);
 
-            Paginator p = new Paginator(Tables.FileView.class,
-                    limit,
-                    "path ilike ?",
-                    nameTokens)
+            Integer offset = (page - 1) * limit;
+
+            LazyList<Tables.FileView> files = Tables.FileView.find("path ilike ?", nameTokens)
+                    .limit(limit)
+                    .offset(offset)
                     .orderBy(orderBy);
 
-            LazyList<Tables.FileView> files = p.getPage(page);
-
             return Tools.wrapPagedResults(files.toJson(false),
-                    p.getCount(),
+                    999L,
                     page);
 
         });
