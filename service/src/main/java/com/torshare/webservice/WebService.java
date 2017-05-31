@@ -56,13 +56,6 @@ public class WebService {
 
         LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
 
-        // Add torrents to DB
-        if (p2pSpiderDir != null) {
-            Tools.scanAndWatchTorrentsDir(new File(p2pSpiderDir, "torrents"));
-            DataSources.SQLITE_DB = new File(p2pSpiderDir, "peers.sqlite3");
-            ScheduledJobs.start();
-        }
-
         if (jks != null) {
             Spark.secure(jks.getAbsolutePath(), "changeit", null,null);
             DataSources.SSL = true;
@@ -77,6 +70,13 @@ public class WebService {
         Endpoints.detail();
         Endpoints.download();
         Endpoints.exceptions();
+
+        // Add torrents to DB
+        if (p2pSpiderDir != null) {
+            Tools.scanAndWatchTorrentsDir(new File(p2pSpiderDir, "torrents"));
+            DataSources.SQLITE_DB = new File(p2pSpiderDir, "peers.sqlite3");
+            ScheduledJobs.start();
+        }
 
     }
 
