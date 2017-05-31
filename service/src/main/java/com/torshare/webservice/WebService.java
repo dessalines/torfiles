@@ -68,7 +68,6 @@ public class WebService {
         Endpoints.search();
         Endpoints.upload();
         Endpoints.detail();
-        Endpoints.download();
         Endpoints.exceptions();
 
         // Add torrents to DB
