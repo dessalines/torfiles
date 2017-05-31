@@ -49,6 +49,7 @@ public class Actions {
     }
 
     public static void savePeers(String infoHash, int peers) {
+        // TODO only update ones with null peers for now
         Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
 
         if (torrent != null) {
