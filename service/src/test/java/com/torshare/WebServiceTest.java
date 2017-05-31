@@ -84,28 +84,4 @@ public class WebServiceTest {
         assertTrue(response.body.contains(ubuntuInfoHash));
     }
 
-    @Test
-    public void pgDump() throws Exception {
-        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
-                "/torshare.pgdump", null);
-        assertTrue(response.body.contains("info_hash character varying(40) NOT NULL"));
-    }
-
-    @Test
-    public void jsonDump() throws Exception {
-        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
-                "/torshare.json", null);
-        assertTrue(response.body.contains(ubuntuInfoHash));
-    }
-
-    @Test
-    public void csvDump() throws Exception {
-        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
-                "/torshare.csv", null);
-        assertTrue(response.body.contains(ubuntuInfoHash));
-    }
-
-
-
-
 }

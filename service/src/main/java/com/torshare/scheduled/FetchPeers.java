@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tyler on 5/30/17.
@@ -45,19 +47,24 @@ public class FetchPeers implements Job {
         log.info("Fetching peers...");
         String sql = "select infohash, count(*) from peers group by infohash";
 
+        Map<String, Integer> peerMap = new HashMap<>();
+
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             // loop through the result set
-            Tools.dbInit();
             while (rs.next()) {
-                Actions.savePeers(rs.getString("infohash"), rs.getInt("count(*)"));
+                peerMap.put(rs.getString("infohash"), rs.getInt("count(*)"));
             }
-            Tools.dbClose();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        Tools.dbInit();
+        peerMap.entrySet().stream().forEach(e -> Actions.savePeers(e.getKey(), e.getValue()));
+        Tools.dbClose();
+
 
         log.info("Done fetching peers.");
     }
