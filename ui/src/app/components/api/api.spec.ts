@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ExportComponent } from './export.component';
+import { APIComponent } from './api.component';
 
 describe('ExportComponent', () => {
-  let component: ExportComponent;
-  let fixture: ComponentFixture<ExportComponent>;
+  let component: APIComponent;
+  let fixture: ComponentFixture<APIComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExportComponent ]
+      declarations: [ APIComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExportComponent);
+    fixture = TestBed.createComponent(APIComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

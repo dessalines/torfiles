@@ -6,6 +6,5 @@ export interface SearchResult {
 	age: number;
 	created: number;
 	peers: number;
-	seeders: number;
 	size_bytes: number;
 }

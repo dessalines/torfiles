@@ -32,7 +32,7 @@ public class ScheduledJobs {
             Trigger trigger = newTrigger()
                     .startNow()
                     .withSchedule(simpleSchedule()
-                            .withIntervalInMinutes(15)
+                            .withIntervalInHours(2)
                             .repeatForever())
                     .build();
 

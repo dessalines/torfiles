@@ -12,6 +12,8 @@ create table torrent (
     created timestamp default current_timestamp
 );
 
+create index idx_torrent on torrent(info_hash);
+
 --rollback drop table torrent cascade;
 
 create table file (
@@ -29,9 +31,15 @@ create table file (
 
 create extension if not exists pg_trgm;
 
-create index idx_file_path on file using gist (path gist_trgm_ops);
-create index idx_file_peers on file(peers desc nulls last);
-create index idx_file_size on file(size_bytes desc nulls last);
+create index idx_file_torrent_id on file(torrent_id);
+create index idx_file_path_tri on file using gin (path gin_trgm_ops);
+create index idx_file_path on file(path nulls last);
+create index idx_file_path_desc on file(path desc nulls last);
+create index idx_file_peers on file(peers nulls last);
+create index idx_file_peers_desc on file(peers desc nulls last);
+create index idx_file_size on file(size_bytes nulls last);
+create index idx_file_size_desc on file(size_bytes desc nulls last);
+
 
 --rollback drop table file;
 

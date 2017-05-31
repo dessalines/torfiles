@@ -1,22 +1,9 @@
 <div class="row">
   <div class="col-md-3">
     <h3>Select Torrents</h3>
-    <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-      (fileOver)="fileOverBase($event)" [uploader]="uploader"
-      class="card card-block text-muted text-xs-center my-drop-zone">
-      <input name="uploaded_file" type="file" ng2FileSelect
-        [uploader]="uploader" multiple accept=".torrent, application/x-bittorrent"
-      />
+    <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader" class="card card-block text-muted text-xs-center my-drop-zone">
+      <input name="uploaded_file" type="file" ng2FileSelect [uploader]="uploader" multiple accept=".torrent, application/x-bittorrent" />
     </div>
-    <h3>Magnet Links</h3>
-    <textarea class="form-control" rows="5" [(ngModel)]="magnetTextArea"
-      placeholder="one per line.."></textarea>
-    <br>
-    <button (click)="uploadMagnets()" class="btn btn-block btn-secondary">
-      <i *ngIf="magnetUploading" class="fa fa-fw fa-circle-o-notch fa-spin"></i>
-      <span *ngIf="!magnetUploading">Upload magnets</span>
-    </button>
-    <p *ngIf="magnetUploadMessage" class="text-warning">{{magnetUploadMessage}}</p>
   </div>
   <div class="col-md-9" style="margin-bottom: 40px">
     <h3>Uploads <small>files: {{ uploader?.queue?.length }}</small></h3>
@@ -33,17 +20,14 @@
           <td *ngIf="!item.isSuccess"><strong>{{ item?.file?.name }}</strong></td>
           <td *ngIf="item.isSuccess"><a [routerLink]="['/torrent', item._xhr.responseText]">{{ item?.file?.name }}</a></td>
           <td nowrap>
-            <button type="button" class="btn btn-success btn-sm"
-              (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-              <span class="fa fa-fw fa-upload"></span>              Upload
+            <button type="button" class="btn btn-success btn-sm" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+              <span class="fa fa-fw fa-upload"></span> Upload
             </button>
-            <button type="button" class="btn btn-warning btn-sm"
-              (click)="item.cancel()" [disabled]="!item.isUploading">
-              <span class="fa fa-fw fa-ban"></span>              Cancel
+            <button type="button" class="btn btn-warning btn-sm" (click)="item.cancel()" [disabled]="!item.isUploading">
+              <span class="fa fa-fw fa-ban"></span> Cancel
             </button>
-            <button type="button" class="btn btn-danger btn-sm"
-              (click)="item.remove()">
-              <span class="fa fa-fw fa-trash"></span>              Remove
+            <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
+              <span class="fa fa-fw fa-trash"></span> Remove
             </button>
           </td>
           <td class="text-center">
@@ -57,23 +41,19 @@
     <div>
       <div>
         Progress:
-        <progress class="progress" value="{{uploader.progress}}"
-          max="100"></progress>
+        <div class="progress mb-3">
+          <div class="progress-bar w-{{uploader.progress}}"></div>
+        </div>
       </div>
-      <button type="button" class="btn btn-success btn-s"
-        (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-        <span class="fa fa-fw fa-upload"></span> Upload
-        all
+
+      <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+        <span class="fa fa-fw fa-upload"></span> Upload all
       </button>
-      <button type="button" class="btn btn-warning btn-s"
-        (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-        <span class="fa fa-fw fa-ban"></span> Cancel
-        all
+      <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+        <span class="fa fa-fw fa-ban"></span> Cancel all
       </button>
-      <button type="button" class="btn btn-danger btn-s"
-        (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-        <span class="fa fa-fw fa-trash"></span> Remove
-        all
+      <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+        <span class="fa fa-fw fa-trash"></span> Remove all
       </button>
     </div>
   </div>

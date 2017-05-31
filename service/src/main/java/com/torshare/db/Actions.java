@@ -34,6 +34,7 @@ public class Actions {
 
         // Save the file info
         for (int i = 0; i < ti.files().numFiles(); i++) {
+
             File.createIt(
                     "torrent_id", torrent.getLongId(),
                     "path", ti.files().filePath(i),

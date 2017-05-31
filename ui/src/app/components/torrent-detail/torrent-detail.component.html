@@ -3,12 +3,13 @@
   <hr>
   <div class="row">
     <div class="col-sm-8">
-      <span class="text-success"><i class="fa fa-fw fa-arrow-up"></i>Seeders: {{d.seeders}}</span>
-      <span class="text-danger"><i class="fa fa-fw fa-arrow-down"></i>Peers: {{d.peers}}</span>
+      <span [ngClass]="d.peers | peerHealth">Peers: 
+        <span *ngIf="d.peers">{{d.peers}}</span>
+        <span *ngIf="!d.peers">??</span>
+      </span>
     </div>
     <div class="col-sm-4 text-right">
       <a [href]="sanitizer.bypassSecurityTrustUrl(generateMagnetLink(d.infoHash, d.name))" tooltip="Magnet link" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-magnet"></i></a>
-      <a download [href]="sanitizer.bypassSecurityTrustUrl(getDownloadLink(d.infoHash))" tooltip="Download .torrent" container="body" class="btn btn-secondary btn-sm"><i class="fa fa-fw fa-download"></i></a>
     </div>
   </div>
   <br>
@@ -23,8 +24,7 @@
               <p><b>Creation date:</b> {{d.creationDate | moment}} ago</p>
             </div>
             <div class="col-md-6">
-              <p><b>Total Size:</b> {{d.sizeBytes | fileSize: true}}
-              </p>
+              <p><b>Total Size:</b>{{d.sizeBytes | fileSize: true}}</p>
               <p><b># of Files:</b> {{d.files.length}}</p>
             </div>
           </div>
@@ -43,7 +43,7 @@
         <tbody>
           <tr *ngFor="let file of d.files">
             <td class="path_column">{{file.path}}</td>
-            <td>{{file.sizeBytes | fileSize: true}}</td>
+            <td><pre>{{file.sizeBytes | fileSize: true}}</pre></td>
             <td><a [href]="sanitizer.bypassSecurityTrustUrl(generateMagnetLink(d.infoHash, d.name, file.index))" title="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a></td>
           </tr>
         </tbody>

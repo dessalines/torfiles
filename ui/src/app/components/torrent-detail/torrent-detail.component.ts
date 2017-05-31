@@ -28,10 +28,6 @@ export class TorrentDetailComponent implements OnInit {
     });
   }
 
-  public getDownloadLink(infoHash: string) {
-    return environment.endpoint + 'torrent_download/' + infoHash + '.torrent';
-  }
-
   public generateMagnetLink(name, infoHash, index = null) {
     return Tools.generateMagnetLink(name, infoHash, index);
   }

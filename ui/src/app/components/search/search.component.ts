@@ -22,7 +22,6 @@ export class SearchComponent implements OnInit {
 		'path': '',
 		'size_bytes': '',
 		'age': '',
-		'seeders': '',
 		'peers': ''
 	};
 
@@ -117,10 +116,6 @@ export class SearchComponent implements OnInit {
 
 		this.page = 1;
 		this.onChangeTable();
-	}
-
-	public getDownloadLink(infoHash: string) {
-		return environment.endpoint + 'torrent_download/' + infoHash + '.torrent';
 	}
 
 	public getFileName(path: string): string {
