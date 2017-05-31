@@ -185,7 +185,7 @@ public class Tools {
     public static String buildOrderBy(String[] orderBy) {
 
         if (orderBy == null) {
-            return "peers desc nulls last, path asc";
+            return "peers desc nulls last";
         }
 
         StringBuilder sb = new StringBuilder();
@@ -197,7 +197,7 @@ public class Tools {
             sep = ",";
         }
 
-        return sb.toString() + ", path asc";
+        return sb.toString();
     }
 
 
