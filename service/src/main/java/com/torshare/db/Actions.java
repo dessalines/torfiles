@@ -2,6 +2,7 @@ package com.torshare.db;
 
 import ch.qos.logback.classic.Logger;
 import com.frostwire.jlibtorrent.TorrentInfo;
+import org.javalite.activejdbc.DB;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
@@ -18,11 +19,15 @@ public class Actions {
 
     public static Torrent saveTorrentInfo(TorrentInfo ti) {
 
+
+
         Torrent torrent = Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
 
         if (torrent != null) {
             return torrent;
         }
+
+        new DB("default").openTransaction();
 
         Timestamp age = (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L) : new Timestamp(System.currentTimeMillis());
 
@@ -40,6 +45,8 @@ public class Actions {
                     "size_bytes", ti.files().fileSize(i),
                     "index_", i);
         }
+
+        new DB("default").commitTransaction();
 
         log.debug("Saving torrent: " + torrent.toJson(true));
 
