@@ -49,7 +49,7 @@ public class WebServiceTest {
                         "?limit=4" +
                         "&page=1" +
                         "&orderBy=path-desc" +
-                        "&q=ubuntu" +
+                        "&q=ubuntu-16.10-desktop-amd64.iso" +
                         "&orderBy=peers-desc" +
                         "", null);
 //        System.out.println(response.body);
@@ -63,7 +63,7 @@ public class WebServiceTest {
                 "/search" +
                         "?limit=4" +
                         "&page=1" +
-                        "&q=ubuntu" +
+                        "&q=ubuntu-16.10-desktop-amd64.iso" +
                         "&orderBy=peers-desc" +
                         "", null);
 //        System.out.println(response.body);
@@ -77,7 +77,7 @@ public class WebServiceTest {
                 "/search" +
                         "?limit=4" +
                         "&page=1" +
-                        "&q=ubuntu" +
+                        "&q=ubuntu-16.10-desktop-amd64.iso" +
                         "", null);
 //        System.out.println(response.body);
         assertEquals(200, response.status);
