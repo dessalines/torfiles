@@ -13,6 +13,7 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
+import org.apache.commons.io.IOUtils;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.DBException;
 import org.javalite.activejdbc.LazyList;
@@ -186,9 +187,8 @@ public class Tools {
         try {
             InputStream is = new BufferedInputStream(new FileInputStream(f));
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
             int nRead;
-            byte[] data = new byte[4096];
+            byte[] data = new byte[16384];
 
             while ((nRead = is.read(data, 0, data.length)) != -1) {
                 buffer.write(data, 0, nRead);

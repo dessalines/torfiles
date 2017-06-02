@@ -46,7 +46,7 @@ public class FetchPeers implements Job {
     public void fetchPeers() {
 
         log.info("Fetching peers...");
-        String sql = "select infohash, count(*) from peers group by infohash";
+        String sql = "select infohash, count(*) from peers group by infohash order by count(*) desc";
 
         Map<String, Integer> peerMap = new HashMap<>();
 
