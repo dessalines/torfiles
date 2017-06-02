@@ -56,6 +56,7 @@ public class FetchPeers implements Job {
 
             // loop through the result set
             while (rs.next()) {
+                log.debug(rs.getString("infohash"));
                 peerMap.put(rs.getString("infohash"), rs.getInt("count(*)"));
             }
         } catch (SQLException e) {
