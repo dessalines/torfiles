@@ -39,6 +39,7 @@ public class Actions {
 
         // Save the file info
         for (int i = 0; i < ti.files().numFiles(); i++) {
+
             File.createIt(
                     "torrent_id", torrent.getLongId(),
                     "path", ti.files().filePath(i),
@@ -55,7 +56,8 @@ public class Actions {
     }
 
     public static void savePeers(String infoHash, int peers) {
-        Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
+        // TODO only update ones with null peers for now
+        Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
 
         if (torrent != null) {
             torrent.set("peers", peers).saveIt();

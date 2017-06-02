@@ -12,10 +12,6 @@ const URL = environment.endpoint + 'upload';
 })
 export class UploadComponent implements OnInit {
 
-	public magnetTextArea: string;
-	public magnetUploadMessage: string;
-	public magnetUploading: boolean = false;
-
 	public uploader: FileUploader = new FileUploader({ url: URL });
 	public hasBaseDropZoneOver: boolean = false;
 
@@ -30,24 +26,5 @@ export class UploadComponent implements OnInit {
 		this.uploader.onCompleteItem = (file => {
 		});
 	}
-
-	uploadMagnets() {
-
-		console.log(this.magnetTextArea);
-
-		this.magnetUploading = true;
-		this.uploadService.uploadMagnetLinks(this.magnetTextArea).subscribe(
-			d => {
-				this.magnetUploadMessage = d.message;
-				this.magnetUploading = false;
-			}, error => {
-				this.magnetUploadMessage = error;
-				this.magnetUploading = false;
-			});
-	}
-
-
-
-
 
 }

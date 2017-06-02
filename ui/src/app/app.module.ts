@@ -10,12 +10,13 @@ import {
   UploadComponent,
   TorrentDetailComponent,
   SearchComponent,
-  ExportComponent
+  APIComponent
 } from './components';
 
 import {
   MomentPipe,
-  FileSizePipe
+  FileSizePipe,
+  PeerHealthPipe
 } from './pipes';
 
 import {
@@ -41,7 +42,8 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
     FileSizePipe,
     MomentPipe,
     TorrentDetailComponent,
-    ExportComponent,
+    APIComponent,
+    PeerHealthPipe,
   ],
   imports: [
     BrowserModule,

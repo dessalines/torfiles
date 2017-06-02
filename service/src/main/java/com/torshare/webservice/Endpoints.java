@@ -138,20 +138,4 @@ public class Endpoints {
 
     }
 
-    public static void download() {
-
-        get("/torrent_download/:info_hash", (req, res) -> {
-
-            String infoHash = req.params(":info_hash").split(".torrent")[0];
-            Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-
-            HttpServletResponse raw = res.raw();
-            raw.getOutputStream().write(torrent.getBytes("bencode"));
-            raw.getOutputStream().flush();
-            raw.getOutputStream().close();
-
-            return res.raw();
-        });
-    }
-
 }

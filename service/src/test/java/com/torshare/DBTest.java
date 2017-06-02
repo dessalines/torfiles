@@ -71,12 +71,12 @@ public class DBTest {
 
         Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
         System.out.println(torrent.getLongId());
-        LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId());
+        LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId()).orderBy("path");
 
         TorrentDetail td = TorrentDetail.create(torrent, files);
 
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines", td.getName());
-        assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3",
+        assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/cover.jpg",
                 td.getFiles().get(0).getPath());
         assertEquals(trotskyInfoHash, td.getInfoHash());
     }
@@ -93,10 +93,10 @@ public class DBTest {
     @Test
     public void fileTest() throws Exception {
         Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
-        LazyList<Tables.File> files = Tables.File.find("torrent_id = ?", t.getLongId());
+        LazyList<Tables.File> files = Tables.File.find("torrent_id = ?", t.getLongId()).orderBy("path");
         Tables.File secondFile = files.get(1);
-        assertTrue(secondFile.getString("path").equals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 01 - Fascism -- What Is It.mp3"));
-        assertEquals(secondFile.getInteger("index_").intValue(), 1);
+        assertEquals(secondFile.getString("path"), "Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3");
+        assertEquals(secondFile.getInteger("index_").intValue(), 0);
     }
 
 
