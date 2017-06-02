@@ -184,7 +184,7 @@ public class Tools {
 
     public static byte[] readFileBytes(File f) {
         try {
-            InputStream is = new FileInputStream(f);
+            InputStream is = new BufferedInputStream(new FileInputStream(f));
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
             int nRead;
