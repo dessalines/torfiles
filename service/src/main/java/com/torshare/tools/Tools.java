@@ -236,7 +236,7 @@ public class Tools {
             });
 
             Tools.dbInit();
-            new DB("default").openTransaction();
+//            new DB("default").openTransaction();
             for (File f: files) {
                     try {
 //                        byte[] bytes = java.nio.file.Files.readAllBytes(f.toPath());
@@ -247,7 +247,7 @@ public class Tools {
                         e.printStackTrace();
                     }
             }
-            new DB("default").commitTransaction();
+//            new DB("default").commitTransaction();
             Tools.dbClose();
 
 

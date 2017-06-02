@@ -64,9 +64,9 @@ public class FetchPeers implements Job {
         }
 
         Tools.dbInit();
-        new DB("default").openTransaction();
+//        new DB("default").openTransaction();
         peerMap.entrySet().stream().forEach(e -> Actions.savePeers(e.getKey(), e.getValue()));
-        new DB("default").commitTransaction();
+//        new DB("default").commitTransaction();
         Tools.dbClose();
 
 
