@@ -182,6 +182,29 @@ public class Tools {
         return sb.toString();
     }
 
+    public static byte[] readFileBytes(File f) {
+        try {
+            InputStream is = new FileInputStream(f);
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            int nRead;
+            byte[] data = new byte[4096];
+
+            while ((nRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            buffer.flush();
+
+            return buffer.toByteArray();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static String buildOrderBy(String[] orderBy) {
 
         if (orderBy == null) {
@@ -216,7 +239,8 @@ public class Tools {
             new DB("default").openTransaction();
             for (File f: files) {
                     try {
-                        byte[] bytes = java.nio.file.Files.readAllBytes(f.toPath());
+//                        byte[] bytes = java.nio.file.Files.readAllBytes(f.toPath());
+                        byte[] bytes = readFileBytes(f);
                         TorrentInfo ti = TorrentInfo.bdecode(bytes);
                         Actions.saveTorrentInfo(ti);
                     } catch (IllegalArgumentException e) {
