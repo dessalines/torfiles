@@ -5,6 +5,7 @@ import com.torshare.db.Actions;
 import com.torshare.db.Tables;
 import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
+import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 import org.quartz.Job;
@@ -62,7 +63,9 @@ public class FetchPeers implements Job {
         }
 
         Tools.dbInit();
+        new DB("default").openTransaction();
         peerMap.entrySet().stream().forEach(e -> Actions.savePeers(e.getKey(), e.getValue()));
+        new DB("default").commitTransaction();
         Tools.dbClose();
 
 

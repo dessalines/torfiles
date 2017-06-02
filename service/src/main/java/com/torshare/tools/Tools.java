@@ -213,6 +213,7 @@ public class Tools {
             });
 
             Tools.dbInit();
+            new DB("default").openTransaction();
             for (File f: files) {
                     try {
                         TorrentInfo ti = new TorrentInfo(f);
@@ -221,6 +222,7 @@ public class Tools {
                         e.printStackTrace();
                     }
             }
+            new DB("default").commitTransaction();
             Tools.dbClose();
 
 
