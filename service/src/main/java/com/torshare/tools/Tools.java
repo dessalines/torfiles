@@ -216,8 +216,9 @@ public class Tools {
             new DB("default").openTransaction();
             for (File f: files) {
                     try {
-                        TorrentInfo ti = new TorrentInfo(f);
-                        Tables.Torrent t = Actions.saveTorrentInfo(ti);
+                        byte[] bytes = java.nio.file.Files.readAllBytes(f.toPath());
+                        TorrentInfo ti = TorrentInfo.bdecode(bytes);
+                        Actions.saveTorrentInfo(ti);
                     } catch (IllegalArgumentException e) {
                         e.printStackTrace();
                     }
