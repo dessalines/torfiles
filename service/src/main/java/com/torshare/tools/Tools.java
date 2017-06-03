@@ -239,10 +239,7 @@ public class Tools {
 //            new DB("default").openTransaction();
             for (File f: files) {
                     try {
-//                        byte[] bytes = java.nio.file.Files.readAllBytes(f.toPath());
-                        byte[] bytes = readFileBytes(f);
-                        TorrentInfo ti = TorrentInfo.bdecode(bytes);
-                        Actions.saveTorrentInfo(ti);
+                        Actions.saveTorrentInfo(f);
                     } catch (IllegalArgumentException e) {
                         e.printStackTrace();
                     }
@@ -260,10 +257,7 @@ public class Tools {
                                 Thread.sleep(100);
                                 log.info(fileName);
                                 Tools.dbInit();
-
-                                    TorrentInfo ti = new TorrentInfo(new File(torrentsDir, fileName));
-                                    Tables.Torrent t = Actions.saveTorrentInfo(ti);
-
+                                    Tables.Torrent t = Actions.saveTorrentInfo(new File(torrentsDir, fileName));
                                 Tools.dbClose();
 
                             } catch (InterruptedException | IllegalArgumentException e) {

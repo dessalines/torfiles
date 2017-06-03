@@ -46,16 +46,14 @@ public class DBTest {
 
     @Test
     public void testSaveTorrentInfo() throws Exception {
-        TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
-        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
+        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", ubuntuInfoHash);
         if (t != null) t.delete();
-        t = Actions.saveTorrentInfo(ti);
+        t = Actions.saveTorrentInfo(ubuntuTorrent);
         assertEquals(ubuntuInfoHash, t.getString("info_hash"));
 
-        TorrentInfo ti2 = new TorrentInfo(trotskyTorrent);
-        Tables.Torrent t2 = Tables.Torrent.findFirst("info_hash = ?", ti2.infoHash().toString());
+        Tables.Torrent t2 = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
         if (t2 != null) t2.delete();
-        t2 = Actions.saveTorrentInfo(ti2);
+        t2 = Actions.saveTorrentInfo(trotskyTorrent);
         assertEquals(trotskyInfoHash, t2.getString("info_hash"));
 
 
@@ -65,8 +63,9 @@ public class DBTest {
     @Test
     public void testTorrentDetail() throws Exception {
 
-        TorrentInfo ti = new TorrentInfo(trotskyTorrent);
-        Tables.Torrent t = Actions.saveTorrentInfo(ti);
+        Tables.Torrent t2 = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
+        if (t2 != null) t2.delete();
+        Tables.Torrent t = Actions.saveTorrentInfo(trotskyTorrent);
         assertEquals(trotskyInfoHash, t.getString("info_hash"));
 
         Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);

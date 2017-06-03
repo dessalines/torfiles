@@ -113,12 +113,10 @@ public class Endpoints {
 
             log.info(tempFile.getAbsolutePath());
 
-            TorrentInfo ti = new TorrentInfo(tempFile);
-
-            Actions.saveTorrentInfo(ti);
+            Tables.Torrent t = Actions.saveTorrentInfo(tempFile);
 
             // Return the infoHash if it was successful
-            return ti.infoHash().toString();
+            return t.getString("info_hash");
         });
 
     }

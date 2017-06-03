@@ -2,9 +2,11 @@ package com.torshare.db;
 
 import ch.qos.logback.classic.Logger;
 import com.frostwire.jlibtorrent.TorrentInfo;
+import com.torshare.tools.Tools;
 import org.javalite.activejdbc.DB;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
 import java.sql.Timestamp;
 
 import static com.torshare.db.Tables.File;
@@ -17,13 +19,17 @@ public class Actions {
 
     public static Logger log = (Logger) LoggerFactory.getLogger(Actions.class);
 
-    public static Torrent saveTorrentInfo(TorrentInfo ti) {
 
-        Torrent torrent = Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
+    public static Torrent saveTorrentInfo(java.io.File torrentFile) {
+
+        Torrent torrent = Torrent.findFirst("info_hash = ?", torrentFile.getName().split(".torrent")[0]);
 
         if (torrent != null) {
             return torrent;
         }
+
+        byte[] bytes = Tools.readFileBytes(torrentFile);
+        TorrentInfo ti = TorrentInfo.bdecode(bytes);
 
         Timestamp age = (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L) : new Timestamp(System.currentTimeMillis());
 
