@@ -35,6 +35,7 @@ public class Actions {
 
         Timestamp age = (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L) : new Timestamp(System.currentTimeMillis());
 
+        new DB("default").openTransaction();
         torrent = Torrent.createIt(
                 "info_hash", ti.infoHash().toString(),
                 "name", ti.name(),
@@ -50,6 +51,7 @@ public class Actions {
                     "size_bytes", ti.files().fileSize(i),
                     "index_", i);
         }
+        new DB("default").commitTransaction();
 
         log.debug("Saving torrent: " + torrent.toJson(true));
 
@@ -62,9 +64,11 @@ public class Actions {
         Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
 
         if (torrent != null) {
+            new DB("default").openTransaction();
             torrent.set("peers", peers).saveIt();
 
             File.update("peers = ?", "torrent_id = ?", peers, torrent.getLongId());
+            new DB("default").commitTransaction();
 
             log.debug("Saving peers for torrent: " + torrent.getString("name"));
         }
