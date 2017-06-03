@@ -240,7 +240,7 @@ public class Tools {
             for (File f: files) {
                     try {
                         Actions.saveTorrentInfo(f);
-                    } catch (IllegalArgumentException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
             }
@@ -260,7 +260,7 @@ public class Tools {
                                     Tables.Torrent t = Actions.saveTorrentInfo(new File(torrentsDir, fileName));
                                 Tools.dbClose();
 
-                            } catch (InterruptedException | IllegalArgumentException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
