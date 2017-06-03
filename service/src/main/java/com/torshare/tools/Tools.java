@@ -238,11 +238,7 @@ public class Tools {
             Tools.dbInit();
 //            new DB("default").openTransaction();
             for (File f: files) {
-                    try {
-                        Actions.saveTorrentInfo(f);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                Actions.saveTorrentInfo(f);
             }
 //            new DB("default").commitTransaction();
             Tools.dbClose();
@@ -260,7 +256,7 @@ public class Tools {
                                     Tables.Torrent t = Actions.saveTorrentInfo(new File(torrentsDir, fileName));
                                 Tools.dbClose();
 
-                            } catch (Exception e) {
+                            } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
 

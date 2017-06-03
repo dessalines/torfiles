@@ -22,38 +22,44 @@ public class Actions {
 
     public static Torrent saveTorrentInfo(java.io.File torrentFile) {
 
-        String infoHash = torrentFile.getName().split(".torrent")[0];
-        log.debug("Trying to save torrent: " + infoHash);
-        Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
+        try {
+            new DB("default").openTransaction();
 
-        if (torrent != null) {
-            return torrent;
+            String infoHash = torrentFile.getName().split(".torrent")[0];
+            log.debug("Trying to save torrent: " + infoHash);
+            Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
+
+            if (torrent != null) {
+                return torrent;
+            }
+
+            byte[] bytes = Tools.readFileBytes(torrentFile);
+            TorrentInfo ti = TorrentInfo.bdecode(bytes);
+
+            Timestamp age = (ti.creationDate() != 0) ? new Timestamp(ti.creationDate() * 1000L) : new Timestamp(System.currentTimeMillis());
+
+            torrent = Torrent.createIt(
+                    "info_hash", ti.infoHash().toString(),
+                    "name", ti.name(),
+                    "size_bytes", ti.totalSize(),
+                    "age", age);
+
+            // Save the file info
+            for (int i = 0; i < ti.files().numFiles(); i++) {
+
+                File.createIt(
+                        "torrent_id", torrent.getLongId(),
+                        "path", ti.files().filePath(i),
+                        "size_bytes", ti.files().fileSize(i),
+                        "index_", i);
+            }
+
+            log.debug("Saving torrent: " + torrent.toJson(true));
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            new DB("default").commitTransaction();
         }
-
-        byte[] bytes = Tools.readFileBytes(torrentFile);
-        TorrentInfo ti = TorrentInfo.bdecode(bytes);
-
-        Timestamp age = (ti.creationDate() != 0) ? new Timestamp(ti.creationDate()*1000L) : new Timestamp(System.currentTimeMillis());
-
-        new DB("default").openTransaction();
-        torrent = Torrent.createIt(
-                "info_hash", ti.infoHash().toString(),
-                "name", ti.name(),
-                "size_bytes", ti.totalSize(),
-                "age", age);
-
-        // Save the file info
-        for (int i = 0; i < ti.files().numFiles(); i++) {
-
-            File.createIt(
-                    "torrent_id", torrent.getLongId(),
-                    "path", ti.files().filePath(i),
-                    "size_bytes", ti.files().fileSize(i),
-                    "index_", i);
-        }
-        new DB("default").commitTransaction();
-
-        log.debug("Saving torrent: " + torrent.toJson(true));
 
         return torrent;
 
