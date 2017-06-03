@@ -22,7 +22,9 @@ public class Actions {
 
     public static Torrent saveTorrentInfo(java.io.File torrentFile) {
 
-        Torrent torrent = Torrent.findFirst("info_hash = ?", torrentFile.getName().split(".torrent")[0]);
+        String infoHash = torrentFile.getName().split(".torrent")[0];
+        log.debug("Trying to save torrent: " + infoHash);
+        Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
 
         if (torrent != null) {
             return torrent;
