@@ -55,28 +55,39 @@ public class Actions {
             }
 
             log.debug("Saving torrent: " + torrent.toJson(true));
+
+            return torrent;
+
         } catch(Exception e) {
             e.printStackTrace();
+            return null;
         } finally {
             new DB("default").commitTransaction();
         }
 
-        return torrent;
+
 
     }
 
     public static void savePeers(String infoHash, int peers) {
-        // TODO only update ones with null peers for now
-        Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
-
-        if (torrent != null) {
+        try {
             new DB("default").openTransaction();
-            torrent.set("peers", peers).saveIt();
+            // TODO only update ones with null peers for now
+            Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
 
-            File.update("peers = ?", "torrent_id = ?", peers, torrent.getLongId());
+            if (torrent != null) {
+
+                torrent.set("peers", peers).saveIt();
+
+                File.update("peers = ?", "torrent_id = ?", peers, torrent.getLongId());
+
+
+                log.debug("Saving peers for torrent: " + torrent.getString("name"));
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
             new DB("default").commitTransaction();
-
-            log.debug("Saving peers for torrent: " + torrent.getString("name"));
         }
 
 
