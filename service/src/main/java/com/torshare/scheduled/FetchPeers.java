@@ -55,6 +55,7 @@ public class FetchPeers implements Job {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             // loop through the result set
+            log.debug("Building peer map...");
             while (rs.next()) {
                 log.debug(rs.getString("infohash"));
                 peerMap.put(rs.getString("infohash"), rs.getInt("count(*)"));

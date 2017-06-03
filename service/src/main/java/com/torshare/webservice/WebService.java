@@ -40,6 +40,9 @@ public class WebService {
     @Option(name="-liquibase", usage="Run liquibase changesets")
     private Boolean liquibase = false;
 
+    @Option(name="-peers", usage="Fetch the peers from the sqlite DB")
+    private Boolean peerFetch = false;
+
     public void doMain(String[] args) throws IOException {
 
         if (args != null) {
@@ -73,6 +76,10 @@ public class WebService {
         // Add torrents to DB
         if (p2pSpiderDir != null) {
             Tools.scanAndWatchTorrentsDir(new File(p2pSpiderDir, "torrents"));
+
+        }
+
+        if (peerFetch) {
             DataSources.SQLITE_DB = new File(p2pSpiderDir, "peers.sqlite3");
             ScheduledJobs.start();
         }
