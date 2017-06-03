@@ -34,7 +34,6 @@ public class FetchPeers implements Job {
         String url = "jdbc:sqlite:" + DataSources.SQLITE_DB.getAbsolutePath();
         Connection conn = null;
         try {
-            Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(url);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -76,6 +75,11 @@ public class FetchPeers implements Job {
 
     @Override
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         fetchPeers();
     }
 
