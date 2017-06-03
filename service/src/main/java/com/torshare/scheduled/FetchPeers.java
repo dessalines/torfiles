@@ -48,28 +48,21 @@ public class FetchPeers implements Job {
         log.info("Fetching peers...");
         String sql = "select infohash, count(*) from peers group by infohash order by count(*) desc";
 
-        Map<String, Integer> peerMap = new HashMap<>();
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
+            Tools.dbInit();
 
             // loop through the result set
-            log.debug("Building peer map...");
             while (rs.next()) {
-                log.debug(rs.getString("infohash"));
-                peerMap.put(rs.getString("infohash"), rs.getInt("count(*)"));
+                Actions.savePeers(rs.getString("infohash"), rs.getInt("count(*)"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Tools.dbClose();
         }
-
-        Tools.dbInit();
-//        new DB("default").openTransaction();
-        peerMap.entrySet().stream().forEach(e -> Actions.savePeers(e.getKey(), e.getValue()));
-//        new DB("default").commitTransaction();
-        Tools.dbClose();
-
 
         log.info("Done fetching peers.");
     }

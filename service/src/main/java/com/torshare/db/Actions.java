@@ -74,15 +74,13 @@ public class Actions {
             new DB("default").openTransaction();
 
             log.debug("Trying to save peers: " + infoHash);
+
             // TODO only update ones with null peers for now
             Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
 
             if (torrent != null) {
 
                 torrent.set("peers", peers).saveIt();
-
-                File.update("peers = ?", "torrent_id = ?", peers, torrent.getLongId());
-
 
                 log.debug("Saving peers for torrent: " + torrent.getString("name"));
             }
