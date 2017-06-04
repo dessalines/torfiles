@@ -119,8 +119,16 @@ export class SearchComponent implements OnInit {
 	}
 
 	public getFileName(path: string): string {
-		// return path.split('/').slice(-1)[0] ;
-		return path.replace(/\//g, '\\\n');
+		let lines = path.split('/');
+		let out: string = lines[0];
+
+		for (let i = 1; i < lines.length; i++) {
+			let tabs = Array(i + 1).join('  ');
+			out += '\n' + tabs + '└─ ' + lines[i];
+		}
+
+		return out;
+
 	}
 	public getTorrentName(path: string): string {
 		return path.split('/')[0];
