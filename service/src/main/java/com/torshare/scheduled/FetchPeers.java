@@ -48,21 +48,24 @@ public class FetchPeers implements Job {
         log.info("Fetching peers...");
         String sql = "select infohash, count(*) from peers group by infohash order by count(*) desc";
 
+        // Build a peerMap so as not to lock sqlite3 reads
+        Map<String, Integer> peerMap = new HashMap<>();
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            Tools.dbInit();
 
             // loop through the result set
             while (rs.next()) {
-                Actions.savePeers(rs.getString("infohash"), rs.getInt("count(*)"));
+                peerMap.put(rs.getString("infohash"), rs.getInt("count(*)"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            Tools.dbClose();
         }
+
+        Tools.dbInit();
+        peerMap.entrySet().forEach(e -> Actions.savePeers(e.getKey(), e.getValue()));
+        Tools.dbClose();
 
         log.info("Done fetching peers.");
     }
