@@ -26,7 +26,7 @@ public class Actions {
             new DB("default").openTransaction();
 
             String infoHash = torrentFile.getName().split(".torrent")[0];
-            log.debug("Trying to save torrent: " + infoHash);
+//            log.debug("Trying to save torrent: " + infoHash);
             Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
 
             if (torrent != null) {
@@ -73,7 +73,7 @@ public class Actions {
         try {
             new DB("default").openTransaction();
 
-            log.debug("Trying to save peers: " + infoHash);
+//            log.debug("Trying to save peers: " + infoHash);
 
             Torrent torrent = Torrent.findFirst("info_hash = ? and peers != ?", infoHash, peers);
 
