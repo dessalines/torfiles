@@ -75,8 +75,7 @@ public class Actions {
 
             log.debug("Trying to save peers: " + infoHash);
 
-            // TODO only update ones with null peers for now
-            Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
+            Torrent torrent = Torrent.findFirst("info_hash = ? and peers != ?", infoHash, peers);
 
             if (torrent != null) {
 

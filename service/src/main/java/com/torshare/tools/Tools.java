@@ -226,23 +226,7 @@ public class Tools {
 
     public static void scanAndWatchTorrentsDir(File torrentsDir) {
 
-        log.info("Scanning torrent dir: " + torrentsDir.getAbsolutePath());
         try {
-            File[] files = torrentsDir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.endsWith(".torrent");
-                }
-            });
-
-            Tools.dbInit();
-//            new DB("default").openTransaction();
-            for (File f: files) {
-                Actions.saveTorrentInfo(f);
-            }
-//            new DB("default").commitTransaction();
-            Tools.dbClose();
-
 
             DirectoryWatchService watchService = new SimpleDirectoryWatchService();
             watchService.register(
@@ -275,6 +259,21 @@ public class Tools {
             );
 
             watchService.start();
+
+            log.info("Watching and scanning torrent dir: " + torrentsDir.getAbsolutePath());
+
+            File[] files = torrentsDir.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.endsWith(".torrent");
+                }
+            });
+
+            Tools.dbInit();
+            for (File f: files) {
+                Actions.saveTorrentInfo(f);
+            }
+            Tools.dbClose();
 
 
         } catch (IOException e) {
