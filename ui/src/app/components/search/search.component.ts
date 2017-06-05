@@ -29,8 +29,8 @@ export class SearchComponent implements OnInit {
 	public limit: number = 25;
 	public maxPaginators: number = 5;
 	public length: number = 1;
-	public data: Array<any>;
 	public numPages: number;
+	public loading: boolean = false;
 
 	constructor(private route: ActivatedRoute,
 		private router: Router,
@@ -56,7 +56,7 @@ export class SearchComponent implements OnInit {
 
 
 	public onChangeTable(page: any = { page: this.page, limit: this.limit }): any {
-
+		this.loading = true;
 		this.page = page.page;
 
 		let orderBy: Array<string> = this.buildOrderByArray(this.sorting);
@@ -64,6 +64,7 @@ export class SearchComponent implements OnInit {
 		this.searchService.getSearchResults(this.searchTerm, this.limit, this.page, orderBy).subscribe(d => {
 			this.rows = d.results;
 			this.length = d.count;
+			this.loading = false;
 		});
 	}
 
