@@ -57,6 +57,7 @@ export class SearchComponent implements OnInit {
 
 	public onChangeTable(page: any = { page: this.page, limit: this.limit }): any {
 		this.loading = true;
+		this.rows = null;
 		this.page = page.page;
 
 		let orderBy: Array<string> = this.buildOrderByArray(this.sorting);
