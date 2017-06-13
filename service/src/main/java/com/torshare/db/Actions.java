@@ -54,7 +54,7 @@ public class Actions {
                         "index_", i);
             }
 
-            log.debug("Saving torrent: " + torrent.toJson(true));
+            log.debug("Saving torrent: " + torrent.getString("name"));
 
             return torrent;
 
@@ -75,7 +75,7 @@ public class Actions {
 
 //            log.debug("Trying to save peers: " + infoHash);
 
-            Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
+            Torrent torrent = Torrent.findFirst("info_hash = ? and (peers is null or peers != ?)", infoHash, peers);
 
             if (torrent != null) {
 
