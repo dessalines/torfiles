@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -46,10 +47,10 @@ public class FetchPeers implements Job {
     public void fetchPeers() {
 
         log.info("Fetching peers...");
-        String sql = "select infohash, count(*) from peers group by infohash order by count(*) desc";
+        String sql = "select infohash, count(*) from peers group by infohash order by infohash asc";
 
         // Build a peerMap so as not to lock sqlite3 reads
-        Map<String, Integer> peerMap = new HashMap<>();
+        Map<String, Integer> peerMap = new LinkedHashMap<>();
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
