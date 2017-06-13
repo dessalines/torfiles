@@ -73,7 +73,7 @@ public class Actions {
         try {
             new DB("default").openTransaction();
 
-            log.debug("Trying to save peers: " + infoHash);
+//            log.debug("Trying to save peers: " + infoHash);
 
             Torrent torrent = Torrent.findFirst("info_hash = ? and peers is null", infoHash);
 
