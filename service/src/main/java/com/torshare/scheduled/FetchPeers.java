@@ -56,7 +56,6 @@ public class FetchPeers implements Job {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             // loop through the result set
-            log.debug("Building peer map...");
             while (rs.next()) {
                 peerMap.put(rs.getString("infohash"), rs.getInt("count(*)"));
             }
@@ -64,7 +63,6 @@ public class FetchPeers implements Job {
             e.printStackTrace();
         }
 
-        log.debug("Opening connect to save peers");
         Tools.dbInit();
         peerMap.entrySet().forEach(e -> Actions.savePeers(e.getKey(), e.getValue()));
         Tools.dbClose();
