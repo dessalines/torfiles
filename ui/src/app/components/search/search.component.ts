@@ -4,8 +4,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { SearchService } from '../../services';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import { Subscription } from 'rxjs/Subscription';
 
-import { Tools } from '../../shared';
+import { Tools, SearchResults } from '../../shared';
 
 @Component({
 	selector: 'app-search',
@@ -24,6 +25,8 @@ export class SearchComponent implements OnInit {
 		'age': '',
 		'peers': ''
 	};
+
+	public searchSub: Subscription;
 
 	public page: number = 1;
 	public limit: number = 25;
@@ -62,7 +65,12 @@ export class SearchComponent implements OnInit {
 
 		let orderBy: Array<string> = this.buildOrderByArray(this.sorting);
 
-		this.searchService.getSearchResults(this.searchTerm, this.limit, this.page, orderBy).subscribe(d => {
+		// Stops the last search
+		if (this.searchSub) {
+			this.searchSub.unsubscribe();
+		}
+
+		this.searchSub = this.searchService.getSearchResults(this.searchTerm, this.limit, this.page, orderBy).subscribe(d => {
 			this.rows = d.results;
 			this.length = d.count;
 			this.loading = false;
