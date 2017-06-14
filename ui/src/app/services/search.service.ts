@@ -15,17 +15,12 @@ export class SearchService {
 
 	private searchUrl(q: string,
 		limit,
-		page: number,
-		orderBy: Array<string>
+		page: number
 	): string {
 
         let url: string = environment.endpoint + 'search?' + 
 			'limit=' + limit +
 			'&page=' + page;
-
-		for (let cOrderBy of orderBy) {
-			url += '&orderBy=' + cOrderBy;
-		}
 
         if (q) {
             url += '&q=' + q;
@@ -39,10 +34,9 @@ export class SearchService {
 
 	getSearchResults(q: string = '',
 		limit: number = 25,
-		page: number = 1,
-		orderBy: Array<string> = ['peers-desc']): Observable<SearchResults> {
+		page: number = 1): Observable<SearchResults> {
 
-		return this.http.get(this.searchUrl(q, limit, page, orderBy))
+		return this.http.get(this.searchUrl(q, limit, page))
 			.map(r => r.json())
 			.catch(this.handleError);
 	}
