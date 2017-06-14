@@ -81,8 +81,6 @@ public class Actions {
 
                 torrent.set("peers", peers).saveIt();
 
-                File.update("peers = ?", "torrent_id = ?", peers, torrent.getLongId());
-
                 log.debug("Saving peers for torrent: " + torrent.getString("name"));
             }
         } catch(Exception e) {

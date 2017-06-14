@@ -205,25 +205,6 @@ public class Tools {
         return null;
     }
 
-    public static String buildOrderBy(String[] orderBy) {
-
-        if (orderBy == null) {
-            return "peers desc nulls last";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        String sep = "";
-        for (String cOrderBy : orderBy) {
-            String[] split = cOrderBy.split("-");
-            sb.append(sep);
-            sb.append(split[0] + " " + split[1] + " nulls last");
-            sep = ",";
-        }
-
-        return sb.toString();
-    }
-
-
     public static void scanAndWatchTorrentsDir(File torrentsDir) {
 
         try {

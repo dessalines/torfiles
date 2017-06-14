@@ -63,70 +63,18 @@ export class SearchComponent implements OnInit {
 		this.rows = null;
 		this.page = page.page;
 
-		let orderBy: Array<string> = this.buildOrderByArray(this.sorting);
-
 		// Stops the last search
 		if (this.searchSub) {
 			this.searchSub.unsubscribe();
 		}
 
-		this.searchSub = this.searchService.getSearchResults(this.searchTerm, this.limit, this.page, orderBy).subscribe(d => {
+		this.searchSub = this.searchService.getSearchResults(this.searchTerm, this.limit, this.page).subscribe(d => {
 			this.rows = d.results;
 			this.length = d.count;
 			this.loading = false;
 		});
 	}
 
-
-	public buildOrderByArray(sorting: any): Array<string> {
-		let orderByArray: Array<string> = [];
-
-		for (var key in sorting) {
-			let val = sorting[key];
-			if (val !== '') {
-				orderByArray.push(key + '-' + val);
-			}
-		}
-
-		return orderByArray;
-	}
-
-	public getSortingClass(column: string): string {
-		let sort = this.sorting[column];
-		let classes: string;
-		switch (sort) {
-			case 'asc':
-				classes = 'pull-right fa fa-fw fa-caret-up';
-				break;
-			case 'desc':
-				classes = 'pull-right fa fa-fw fa-caret-down';
-				break;
-			case '':
-				classes = '';
-				break;
-		}
-
-		return classes;
-	}
-
-	public toggleSort(column: string) {
-		let sort = this.sorting[column];
-
-		switch (sort) {
-			case 'asc':
-				this.sorting[column] = 'desc';
-				break;
-			case 'desc':
-				this.sorting[column] = '';
-				break;
-			case '':
-				this.sorting[column] = 'asc';
-				break;
-		}
-
-		this.page = 1;
-		this.onChangeTable();
-	}
 
 	public getFileName(path: string): string {
 		let lines = path.split('/');

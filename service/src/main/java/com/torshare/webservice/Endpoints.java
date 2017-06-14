@@ -78,15 +78,11 @@ public class Endpoints {
             String pageParam = req.queryParams("page");
             Integer page = (pageParam != null) ? Integer.valueOf(pageParam) : 1;
 
-            String[] orderByParam = req.queryParamsValues("orderBy");
-            String orderBy = Tools.buildOrderBy(orderByParam);
-
             Integer offset = (page - 1) * limit;
 
             LazyList<Tables.FileView> files = Tables.FileView.find("path ilike ?", nameTokens)
                     .limit(limit)
-                    .offset(offset)
-                    .orderBy(orderBy);
+                    .offset(offset);
 
             return Tools.wrapPagedResults(files.toJson(false),
                     999L,

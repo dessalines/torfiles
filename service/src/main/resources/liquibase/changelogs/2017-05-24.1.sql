@@ -1,6 +1,7 @@
 --liquibase formatted sql
 --changeset tyler:1
 
+create extension if not exists pg_trgm;
 
 create table torrent (
     id bigserial primary key,
@@ -22,32 +23,28 @@ create table file (
     path varchar(2048) not null,
     size_bytes bigint not null,
     index_ integer not null,
-    peers integer,
     created timestamp default current_timestamp,
     constraint fk1_torrent foreign key (torrent_id)
         references torrent (id)
         on update cascade on delete cascade
 );
 
-create extension if not exists pg_trgm;
-
 create index idx_file_torrent_id on file(torrent_id);
-create index idx_file_path_tri on file using gin (path gin_trgm_ops);
-create index idx_file_path on file(path nulls last);
-create index idx_file_path_desc on file(path desc nulls last);
-create index idx_file_peers on file(peers nulls last);
-create index idx_file_peers_desc on file(peers desc nulls last);
-create index idx_file_size on file(size_bytes nulls last);
-create index idx_file_size_desc on file(size_bytes desc nulls last);
-
 
 --rollback drop table file;
 
-create view file_view as
-select file.*,
-t.info_hash
+create materialized view file_view as
+select
+    file.id,
+    file.path,file.size_bytes,
+    file.index_,
+    file.created,
+    t.info_hash,
+    t.peers
 from file
-inner join torrent as t on t.id = file.torrent_id;
+inner join torrent as t on t.id = file.torrent_id
+order by peers desc nulls last, size_bytes desc;
 
---rollback drop view file_view;
+create index idx_file_view_path_tri on file_view using gin (path gin_trgm_ops);
 
+--rollback drop materialized view file_view;
