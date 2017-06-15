@@ -1,16 +1,15 @@
-package com.torshare.db;
+package com.torfiles.db;
 
 import ch.qos.logback.classic.Logger;
 import com.frostwire.jlibtorrent.TorrentInfo;
-import com.torshare.tools.Tools;
+import com.torfiles.tools.Tools;
 import org.javalite.activejdbc.DB;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
 import java.sql.Timestamp;
 
-import static com.torshare.db.Tables.File;
-import static com.torshare.db.Tables.Torrent;
+import static com.torfiles.db.Tables.File;
+import static com.torfiles.db.Tables.Torrent;
 
 /**
  * Created by tyler on 11/30/16.

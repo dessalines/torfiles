@@ -1,9 +1,9 @@
-package com.torshare;
+package com.torfiles;
 
 
 import com.despegar.sparkjava.test.SparkClient;
 import com.despegar.sparkjava.test.SparkServer;
-import com.torshare.webservice.WebService;
+import com.torfiles.webservice.WebService;
 import org.junit.ClassRule;
 import org.junit.Test;
 import spark.servlet.SparkApplication;
@@ -16,8 +16,6 @@ import static junit.framework.TestCase.assertNotNull;
  * Created by tyler on 11/30/16.
  */
 public class WebServiceTest {
-
-    String ubuntuInfoHash = "0403fb4728bd788fbcb67e87d6feb241ef38c75a";
 
     public static class TestContollerTestSparkApplication implements SparkApplication {
 
@@ -48,40 +46,11 @@ public class WebServiceTest {
                 "/search" +
                         "?limit=4" +
                         "&page=1" +
-                        "&orderBy=path-desc" +
-                        "&q=ubuntu-16.10-desktop-amd64.iso" +
-                        "&orderBy=peers-desc" +
+                        "&q=" +
                         "", null);
-//        System.out.println(response.body);
+        System.out.println(response.body);
         assertEquals(200, response.status);
-        assertTrue(response.body.contains(ubuntuInfoHash));
-    }
-
-    @Test
-    public void searchResults2() throws Exception {
-        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
-                "/search" +
-                        "?limit=4" +
-                        "&page=1" +
-                        "&q=ubuntu-16.10-desktop-amd64.iso" +
-                        "&orderBy=peers-desc" +
-                        "", null);
-//        System.out.println(response.body);
-        assertEquals(200, response.status);
-        assertTrue(response.body.contains(ubuntuInfoHash));
-    }
-
-    @Test
-    public void searchResults3() throws Exception {
-        SparkClient.UrlResponse response = testServer.getClient().doMethod("GET",
-                "/search" +
-                        "?limit=4" +
-                        "&page=1" +
-                        "&q=ubuntu-16.10-desktop-amd64.iso" +
-                        "", null);
-//        System.out.println(response.body);
-        assertEquals(200, response.status);
-        assertTrue(response.body.contains(ubuntuInfoHash));
+        assertTrue(response.body.contains("results"));
     }
 
 }

@@ -1,1 +1,1 @@
-java -jar target/torshare.jar "$@"
+java -jar target/torfiles.jar "$@"

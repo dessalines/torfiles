@@ -1,20 +1,19 @@
-[TorShare](http://torshare.ml) &mdash; An open-source torrent search service. 
+[TorFiles](http://torfiles.ml) &mdash; An open-source search engine for finding files within torrents. 
 ==========
 ![](http://img.shields.io/version/0.0.1.png?color=green)
-[![Build Status](https://travis-ci.org/dessalines/torshare.svg?branch=master)](https://travis-ci.org/dessalines/torshare)
+[![Build Status](https://travis-ci.org/dessalines/torfiles.svg?branch=master)](https://travis-ci.org/dessalines/torfiles)
 
 <!---
-	Torshare: an open-source torrent caching service.
+	TorFiles: An open-source search engine for finding files within torrents.
 -->
 
-[TorShare](http://torshare.ml) is an open-source, self-hostable service for storing, sharing, and searching for torrents.
+[TorFiles](http://torfiles.ml) is an open-source, self-hostable service for storing, sharing, and searching for all files within torrents.
 
 It features:
-- A clean search interface, that searches for all torrent files. 
-- Uses [p2pspider](https://github.com/fanpei91/p2pspider) to crawl the DHT network, to build a library of torrents and their peer counts. 
+- A clean search interface, that searches every file of every torrent, sorting automatically by peers and size.
+- Uses the DHT crawler [p2pspider](https://github.com/dessalines/p2pspider) to build a library of torrents and their peer counts. 
 - Torrent batch uploader, for uploading of all your torrents at once.
-- A details page with the torrent metadata.
-
+- A page that provides periodic backups of the DHT crawler. 
 
 Tech used:
 - [Java Spark](https://github.com/perwendel/spark), [Bootstrap v4](https://github.com/twbs/bootstrap), [Angular4](https://github.com/angular/angular), [Angular-cli](https://github.com/angular/angular-cli), [ng2-bootstrap](http://valor-software.com/ng2-bootstrap/), [ActiveJDBC](http://javalite.io/activejdbc), [Liquibase](http://www.liquibase.org/), [Postgres](https://www.postgresql.org/), 
@@ -30,31 +29,31 @@ Tech used:
 - Node + npm, [nvm](https://github.com/creationix/nvm) is the preferred installation method.
 - Postgres 9.3 or higher
 
-### Download TorShare
-`git clone https://github.com/dessalines/torshare`
+### Download TorFiles
+`git clone https://github.com/dessalines/torfiles`
 
 ### Setup a postgres database
-`psql -c 'create user torshare with password "xxxx" superuser;" -U postgres`
-`psql -c 'create database torshare;' -U postgres`
+`psql -c 'create user torfiles with password "xxxx" superuser;" -U postgres`
+`psql -c 'create database torfiles;' -U postgres`
 
 [Here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04) are some instructions to get your DB up and running.
 
 #### Edit your `pom.xml` file to point to your database
 
 ```sh
-cd torshare
+cd torfiles
 vim service/pom.xml
 ```
 
 Edit it to point to your own database:
 ```xml
 <!--The Database location and login, here's a sample-->
-<jdbc.url>jdbc:postgresql://127.0.0.1/torshare</jdbc.url>
-<jdbc.username>torshare</jdbc.username>
+<jdbc.url>jdbc:postgresql://127.0.0.1/torfiles</jdbc.url>
+<jdbc.username>torfiles</jdbc.username>
 <jdbc.password>xxxx</jdbc.password
 ```
 
-### Install Torshare
+### Install TorFiles
 
 Local testing:
 
@@ -84,4 +83,4 @@ This will start running `p2pspider`, which crawls the DHT to download torrents a
 ==========
 
 ## Bugs and feature requests
-Have a bug or a feature request? If your issue isn't [already listed](https://github.com/dessalines/torshare/issues/), then open a [new issue here](https://github.com/dessalines/torshare/issues/new).
+Have a bug or a feature request? If your issue isn't [already listed](https://github.com/dessalines/torfiles/issues/), then open a [new issue here](https://github.com/dessalines/torfiles/issues/new).

@@ -1,22 +1,19 @@
-package com.torshare.tools;
+package com.torfiles.tools;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.frostwire.jlibtorrent.TorrentInfo;
-import com.torshare.db.Actions;
-import com.torshare.db.Tables;
-import com.torshare.watchservice.DirectoryWatchService;
-import com.torshare.watchservice.SimpleDirectoryWatchService;
+import com.torfiles.db.Actions;
+import com.torfiles.db.Tables;
+import com.torfiles.watchservice.DirectoryWatchService;
+import com.torfiles.watchservice.SimpleDirectoryWatchService;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
-import org.apache.commons.io.IOUtils;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.DBException;
-import org.javalite.activejdbc.LazyList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +22,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

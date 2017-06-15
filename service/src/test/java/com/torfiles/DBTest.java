@@ -1,12 +1,12 @@
-package com.torshare;
+package com.torfiles;
 
 import com.frostwire.jlibtorrent.TorrentInfo;
-import com.torshare.db.Actions;
-import com.torshare.db.Tables;
-import com.torshare.tools.DataSources;
-import com.torshare.tools.Tools;
-import com.torshare.torrent.LibtorrentEngine;
-import com.torshare.types.TorrentDetail;
+import com.torfiles.db.Actions;
+import com.torfiles.db.Tables;
+import com.torfiles.tools.DataSources;
+import com.torfiles.tools.Tools;
+import com.torfiles.torrent.LibtorrentEngine;
+import com.torfiles.types.TorrentDetail;
 import org.javalite.activejdbc.LazyList;
 import org.junit.After;
 import org.junit.Before;
@@ -55,7 +55,6 @@ public class DBTest {
         if (t2 != null) t2.delete();
         t2 = Actions.saveTorrentInfo(trotskyTorrent);
         assertEquals(trotskyInfoHash, t2.getString("info_hash"));
-
 
     }
 

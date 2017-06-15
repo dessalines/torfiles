@@ -1,25 +1,18 @@
-package com.torshare.webservice;
+package com.torfiles.webservice;
 
 import ch.qos.logback.classic.Logger;
-import com.frostwire.jlibtorrent.TorrentInfo;
-import com.torshare.db.Actions;
-import com.torshare.db.Tables;
-import com.torshare.tools.DataSources;
-import com.torshare.tools.Tools;
-import com.torshare.types.TorrentDetail;
+import com.torfiles.db.Actions;
+import com.torfiles.db.Tables;
+import com.torfiles.tools.DataSources;
+import com.torfiles.tools.Tools;
+import com.torfiles.types.TorrentDetail;
 import org.eclipse.jetty.http.HttpStatus;
-import org.javalite.activejdbc.Base;
-import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.LazyList;
-import org.javalite.activejdbc.Paginator;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 

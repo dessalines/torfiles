@@ -1,21 +1,15 @@
-package com.torshare.scheduled;
+package com.torfiles.scheduled;
 
 import ch.qos.logback.classic.Logger;
-import com.torshare.db.Actions;
-import com.torshare.db.Tables;
-import com.torshare.tools.DataSources;
-import com.torshare.tools.Tools;
-import org.javalite.activejdbc.DB;
-import org.javalite.activejdbc.LazyList;
-import org.javalite.activejdbc.Model;
+import com.torfiles.db.Actions;
+import com.torfiles.tools.DataSources;
+import com.torfiles.tools.Tools;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

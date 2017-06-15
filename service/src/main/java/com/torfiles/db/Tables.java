@@ -1,7 +1,6 @@
-package com.torshare.db;
+package com.torfiles.db;
 
 import org.javalite.activejdbc.Model;
-import org.javalite.activejdbc.annotations.DbName;
 import org.javalite.activejdbc.annotations.Table;
 
 /**

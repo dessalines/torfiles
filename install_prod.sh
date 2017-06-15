@@ -1,5 +1,5 @@
 # Building the front end
-pkill -f torshare.jar
+pkill -f torfiles.jar
 cd ui
 yarn
 ng build -prod -aot

@@ -1,4 +1,4 @@
-package com.torshare.scheduled;
+package com.torfiles.scheduled;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -25,11 +25,11 @@ public class ScheduledJobs {
             // and start it off
             scheduler.start();
 
-            JobDetail job = newJob(FetchPeers.class)
+            JobDetail peerFetchJob = newJob(FetchPeers.class)
                     .build();
 
             // Trigger the job to run now, and then repeat every x minutes
-            Trigger trigger = newTrigger()
+            Trigger peerFetchTrigger = newTrigger()
                     .startNow()
                     .withSchedule(simpleSchedule()
                             .withIntervalInHours(4)
@@ -37,7 +37,21 @@ public class ScheduledJobs {
                     .build();
 
             // Tell quartz to schedule the job using our trigger
-            scheduler.scheduleJob(job, trigger);
+            scheduler.scheduleJob(peerFetchJob, peerFetchTrigger);
+
+            JobDetail refreshViewJob = newJob(RefreshView.class)
+                    .build();
+
+            // Trigger the job to run now, and then repeat every x minutes
+            Trigger refreshViewTrigger = newTrigger()
+                    .startNow()
+                    .withSchedule(simpleSchedule()
+                            .withIntervalInHours(8)
+                            .repeatForever())
+                    .build();
+
+            // Tell quartz to schedule the job using our trigger
+            scheduler.scheduleJob(refreshViewJob, refreshViewTrigger);
 
         } catch (SchedulerException se) {
             se.printStackTrace();

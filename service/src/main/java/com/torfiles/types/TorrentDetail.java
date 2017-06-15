@@ -1,6 +1,6 @@
-package com.torshare.types;
+package com.torfiles.types;
 
-import com.torshare.db.Tables;
+import com.torfiles.db.Tables;
 import org.javalite.activejdbc.LazyList;
 
 import java.sql.Timestamp;

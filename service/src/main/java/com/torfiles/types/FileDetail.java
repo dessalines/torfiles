@@ -1,4 +1,4 @@
-package com.torshare.types;
+package com.torfiles.types;
 
 /**
  * Created by tyler on 5/25/17.

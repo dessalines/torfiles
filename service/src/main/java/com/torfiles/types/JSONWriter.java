@@ -1,7 +1,7 @@
-package com.torshare.types;
+package com.torfiles.types;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.torshare.tools.Tools;
+import com.torfiles.tools.Tools;
 
 /**
  * Created by tyler on 12/4/16.

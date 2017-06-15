@@ -52,4 +52,4 @@ create unique index idx_file_view_id on file_view (id);
 
 refresh materialized view file_view;
 
---rollback drop materialized view file_view;
+--rollback drop materialized view if exists file_view;

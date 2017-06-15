@@ -1,4 +1,4 @@
-package com.torshare.watchservice;
+package com.torfiles.watchservice;
 
 /**
  * Interface definition for services.
