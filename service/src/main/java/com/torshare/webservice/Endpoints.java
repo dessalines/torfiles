@@ -8,6 +8,8 @@ import com.torshare.tools.DataSources;
 import com.torshare.tools.Tools;
 import com.torshare.types.TorrentDetail;
 import org.eclipse.jetty.http.HttpStatus;
+import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Paginator;
 import org.slf4j.LoggerFactory;
@@ -87,7 +89,6 @@ public class Endpoints {
             return Tools.wrapPagedResults(files.toJson(false),
                     999L,
                     page);
-
         });
     }
 

@@ -36,15 +36,20 @@ create index idx_file_torrent_id on file(torrent_id);
 create materialized view file_view as
 select
     file.id,
-    file.path,file.size_bytes,
+    file.path,
+    file.size_bytes,
     file.index_,
     file.created,
     t.info_hash,
     t.peers
 from file
 inner join torrent as t on t.id = file.torrent_id
-order by peers desc nulls last, size_bytes desc;
+order by peers desc nulls last, size_bytes desc
+with no data;
 
 create index idx_file_view_path_tri on file_view using gin (path gin_trgm_ops);
+create unique index idx_file_view_id on file_view (id);
+
+refresh materialized view file_view;
 
 --rollback drop materialized view file_view;
