@@ -47,3 +47,7 @@ inner join torrent as t on t.id = file.torrent_id
 order by peers desc nulls last, size_bytes desc;
 
 --rollback drop view if exists file_view;
+
+create table file_fast as select * from file_view;
+
+--rollback drop table if exists file_fast;
