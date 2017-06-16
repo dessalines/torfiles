@@ -39,11 +39,11 @@ public class ScheduledJobs {
             // Tell quartz to schedule the job using our trigger
             scheduler.scheduleJob(peerFetchJob, peerFetchTrigger);
 
-            JobDetail refreshViewJob = newJob(RefreshView.class)
+            JobDetail refreshFastTableJob = newJob(RefreshFastTable.class)
                     .build();
 
             // Trigger the job to run now, and then repeat every x minutes
-            Trigger refreshViewTrigger = newTrigger()
+            Trigger refreshFastTableTrigger = newTrigger()
                     .startNow()
                     .withSchedule(simpleSchedule()
                             .withIntervalInHours(8)
@@ -51,7 +51,7 @@ public class ScheduledJobs {
                     .build();
 
             // Tell quartz to schedule the job using our trigger
-            scheduler.scheduleJob(refreshViewJob, refreshViewTrigger);
+            scheduler.scheduleJob(refreshFastTableJob, refreshFastTableTrigger);
 
         } catch (SchedulerException se) {
             se.printStackTrace();

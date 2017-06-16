@@ -75,7 +75,7 @@ public class Endpoints {
 
             Integer offset = (page - 1) * limit;
 
-            LazyList<Tables.FileView> files = Tables.FileView.find("path ilike ?", nameTokens)
+            LazyList<Tables.FileFast> files = Tables.FileFast.find("path ilike ?", nameTokens)
                     .limit(limit)
                     .offset(offset);
 
