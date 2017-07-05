@@ -12,6 +12,7 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
+import org.apache.commons.io.FileUtils;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.DBException;
 import org.slf4j.Logger;
@@ -26,10 +27,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Properties;
+import java.util.*;
 
 public class Tools {
 
@@ -239,19 +237,12 @@ public class Tools {
 
             log.info("Watching and scanning torrent dir: " + torrentsDir.getAbsolutePath());
 
-            File[] files = torrentsDir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.endsWith(".torrent");
-                }
-            });
-
             Tools.dbInit();
-            for (File f: files) {
-                Actions.saveTorrentInfo(f);
+            Iterator<File> it = FileUtils.iterateFiles(torrentsDir, new String[]{".torrent"}, false);
+            while (it.hasNext()) {
+                Actions.saveTorrentInfo(it.next());
             }
             Tools.dbClose();
-
 
         } catch (IOException e) {
             e.printStackTrace();
