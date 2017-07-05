@@ -238,9 +238,12 @@ public class Tools {
             log.info("Watching and scanning torrent dir: " + torrentsDir.getAbsolutePath());
 
             Tools.dbInit();
-            Iterator<File> it = FileUtils.iterateFiles(torrentsDir, new String[]{".torrent"}, false);
+            Iterator<File> it = FileUtils.iterateFiles(torrentsDir, null, false);
             while (it.hasNext()) {
-                Actions.saveTorrentInfo(it.next());
+                File f = it.next();
+                if (f.getAbsolutePath().endsWith(".torrent")) {
+                    Actions.saveTorrentInfo(f);
+                }
             }
             Tools.dbClose();
 
