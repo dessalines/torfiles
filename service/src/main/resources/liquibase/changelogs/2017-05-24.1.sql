@@ -9,13 +9,23 @@ create table torrent (
     name varchar(2048) not null,
     size_bytes bigint not null,
     age timestamp not null,
-    peers integer,
+    bencode bytea not null,
     created timestamp default current_timestamp
 );
 
 create index idx_torrent on torrent(info_hash);
 
 --rollback drop table torrent cascade;
+
+create table torrent_peer (
+    id bigserial primary key,
+    info_hash varchar(40) not null,
+    peer_address varchar(16),
+    created timestamp default current_timestamp,
+    unique (info_hash, peer_address)
+);
+
+--rollback drop table torrent_peer
 
 create table file (
     id bigserial primary key,
@@ -35,15 +45,17 @@ create index idx_file_torrent_id on file(torrent_id);
 
 create view file_view as
 select
-    file.id,
+    f.id,
     t.info_hash,
-    file.path,
-    t.peers,
-    file.size_bytes,
-    file.index_,
-    file.created
-from file
-inner join torrent as t on t.id = file.torrent_id
+    f.path,
+    count(tp.peer_address) as peers,
+    f.size_bytes,
+    f.index_,
+    f.created
+from file as f
+inner join torrent as t on t.id = f.torrent_id
+inner join torrent_peer as tp on t.info_hash = tp.info_hash
+group by f.id, t.info_hash, f.path, f.size_bytes, f.index_, f.created
 order by peers desc nulls last, size_bytes desc;
 
 --rollback drop view if exists file_view;
