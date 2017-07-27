@@ -25,20 +25,6 @@ public class ScheduledJobs {
             // and start it off
             scheduler.start();
 
-            JobDetail peerFetchJob = newJob(FetchPeers.class)
-                    .build();
-
-            // Trigger the job to run now, and then repeat every x minutes
-            Trigger peerFetchTrigger = newTrigger()
-                    .startNow()
-                    .withSchedule(simpleSchedule()
-                            .withIntervalInHours(4)
-                            .repeatForever())
-                    .build();
-
-            // Tell quartz to schedule the job using our trigger
-            scheduler.scheduleJob(peerFetchJob, peerFetchTrigger);
-
             JobDetail refreshFastTableJob = newJob(RefreshFastTable.class)
                     .build();
 

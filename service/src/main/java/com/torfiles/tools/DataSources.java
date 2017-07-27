@@ -28,6 +28,4 @@ public class DataSources {
 
     public static final String TROTSKY_TORRENT = CODE_DIR + "/src/main/resources/trotsky_fascism.torrent";
 
-    public static File SQLITE_DB;
-
 }

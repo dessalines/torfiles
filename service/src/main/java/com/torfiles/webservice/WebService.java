@@ -31,9 +31,6 @@ public class WebService {
     @Option(name="-ui_dist",usage="The location of the ui dist folder.")
     private File uiDist = new File("../ui/dist");
 
-    @Option(name="-p2pspider",usage="The location of p2pspider, for getting torrents and peers")
-    private File p2pSpiderDir;
-
     @Option(name="-ssl",usage="The location of the java keystore .jks file.")
     private File jks;
 
@@ -71,11 +68,7 @@ public class WebService {
         Endpoints.exceptions();
 
         // Add torrents to DB
-        if (p2pSpiderDir != null) {
-            DataSources.SQLITE_DB = new File(p2pSpiderDir, "peers.sqlite3");
-            ScheduledJobs.start();
-            Tools.scanAndWatchTorrentsDir(new File(p2pSpiderDir, "torrents"));
-        }
+        ScheduledJobs.start();
 
     }
 

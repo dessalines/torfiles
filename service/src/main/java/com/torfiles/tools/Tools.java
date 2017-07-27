@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.torfiles.db.Actions;
 import com.torfiles.db.Tables;
-import com.torfiles.watchservice.DirectoryWatchService;
-import com.torfiles.watchservice.SimpleDirectoryWatchService;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -197,59 +195,6 @@ public class Tools {
         }
 
         return null;
-    }
-
-    public static void scanAndWatchTorrentsDir(File torrentsDir) {
-
-        try {
-
-            DirectoryWatchService watchService = new SimpleDirectoryWatchService();
-            watchService.register(
-                    new DirectoryWatchService.OnFileChangeListener() {
-                        @Override
-                        public void onFileCreate(String fileName) {
-                            try {
-                                Thread.sleep(100);
-                                log.info(fileName);
-                                Tools.dbInit();
-                                    Tables.Torrent t = Actions.saveTorrentInfo(new File(torrentsDir, fileName));
-                                Tools.dbClose();
-
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                        @Override
-                        public void onFileModify(String filePath) {
-                        }
-
-                        @Override
-                        public void onFileDelete(String filePath) {
-                        }
-                    },
-                    torrentsDir.getPath(), // Directory to watch
-                    "*.torrent"
-            );
-
-            watchService.start();
-
-            log.info("Watching and scanning torrent dir: " + torrentsDir.getAbsolutePath());
-
-            Tools.dbInit();
-            Iterator<File> it = FileUtils.iterateFiles(torrentsDir, null, false);
-            while (it.hasNext()) {
-                File f = it.next();
-                if (f.getAbsolutePath().endsWith(".torrent")) {
-                    Actions.saveTorrentInfo(f);
-                }
-            }
-            Tools.dbClose();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 

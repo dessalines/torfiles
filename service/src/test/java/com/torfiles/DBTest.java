@@ -68,7 +68,7 @@ public class DBTest {
         assertEquals(trotskyInfoHash, t.getString("info_hash"));
 
         Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
-        LazyList<Tables.File> files = Tables.File.where("torrent_id = ?", torrent.getLongId()).orderBy("index_");
+        LazyList<Tables.File> files = Tables.File.where("info_hash = ?", trotskyInfoHash).orderBy("index_");
 
         TorrentDetail td = TorrentDetail.create(torrent, files);
 
@@ -90,7 +90,7 @@ public class DBTest {
     @Test
     public void fileTest() throws Exception {
         Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
-        LazyList<Tables.File> files = Tables.File.find("torrent_id = ?", t.getLongId()).orderBy("index_");
+        LazyList<Tables.File> files = Tables.File.find("info_hash = ?", trotskyInfoHash).orderBy("index_");
         Tables.File secondFile = files.get(0);
         assertEquals(secondFile.getString("path"), "Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3");
         assertEquals(secondFile.getInteger("index_").intValue(), 0);

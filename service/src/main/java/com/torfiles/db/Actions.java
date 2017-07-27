@@ -40,14 +40,13 @@ public class Actions {
             torrent = Torrent.createIt(
                     "info_hash", ti.infoHash().toString(),
                     "name", ti.name(),
-                    "size_bytes", ti.totalSize(),
-                    "age", age);
+                    "size_bytes", ti.totalSize());
 
             // Save the file info
             for (int i = 0; i < ti.files().numFiles(); i++) {
 
                 File.createIt(
-                        "torrent_id", torrent.getLongId(),
+                        "info_hash", ti.infoHash().toString(),
                         "path", ti.files().filePath(i),
                         "size_bytes", ti.files().fileSize(i),
                         "index_", i);
