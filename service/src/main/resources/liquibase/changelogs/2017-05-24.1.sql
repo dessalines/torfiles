@@ -45,16 +45,15 @@ create table file (
 create view file_view as
 select
     f.id,
-    t.info_hash,
+    f.info_hash,
     f.path,
     count(tp.peer_address) as peers,
     f.size_bytes,
     f.index_,
     f.created
 from file as f
-inner join torrent as t on t.info_hash = f.info_hash
-inner join torrent_peer as tp on t.info_hash = tp.info_hash
-group by f.id, t.info_hash, f.path, f.size_bytes, f.index_, f.created
+inner join torrent_peer as tp on f.info_hash = tp.info_hash
+group by f.id, f.info_hash, f.path, f.size_bytes, f.index_, f.created
 order by peers desc nulls last, size_bytes desc;
 
 --rollback drop view if exists file_view;
