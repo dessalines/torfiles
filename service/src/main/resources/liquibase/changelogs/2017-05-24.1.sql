@@ -8,7 +8,6 @@ create table torrent (
     info_hash varchar(40) not null unique,
     name varchar(2048) not null,
     size_bytes bigint not null,
-    age timestamp not null,
     bencode bytea not null,
     created timestamp default current_timestamp
 );
