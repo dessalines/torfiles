@@ -4,8 +4,7 @@
 create extension if not exists pg_trgm;
 
 create table torrent (
-    id bigserial primary key,
-    info_hash varchar(40) not null unique,
+    info_hash varchar(40) primary key,
     name varchar(2048) not null,
     size_bytes bigint not null,
     bencode bytea not null,
@@ -21,24 +20,25 @@ create table torrent_peer (
     info_hash varchar(40) not null,
     peer_address varchar(16),
     created timestamp default current_timestamp,
-    unique (info_hash, peer_address)
+    unique (info_hash, peer_address),
+    constraint fk1_torrent foreign key (info_hash)
+        references torrent (info_hash)
+        on update cascade on delete cascade
 );
 
 --rollback drop table torrent_peer
 
 create table file (
     id bigserial primary key,
-    torrent_id bigint not null,
+    info_hash varchar(40) not null,
     path varchar(2048) not null,
     size_bytes bigint not null,
     index_ integer not null,
     created timestamp default current_timestamp,
-    constraint fk1_torrent foreign key (torrent_id)
-        references torrent (id)
+    constraint fk1_torrent foreign key (info_hash)
+        references torrent (info_hash)
         on update cascade on delete cascade
 );
-
-create index idx_file_torrent_id on file(torrent_id);
 
 --rollback drop table file;
 
@@ -52,7 +52,7 @@ select
     f.index_,
     f.created
 from file as f
-inner join torrent as t on t.id = f.torrent_id
+inner join torrent as t on t.info_hash = f.info_hash
 inner join torrent_peer as tp on t.info_hash = tp.info_hash
 group by f.id, t.info_hash, f.path, f.size_bytes, f.index_, f.created
 order by peers desc nulls last, size_bytes desc;
