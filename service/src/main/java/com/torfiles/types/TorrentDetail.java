@@ -14,7 +14,7 @@ public class TorrentDetail implements JSONWriter {
     private String name, infoHash;
     private Timestamp creationDate;
     private List<FileDetail> files;
-    private Integer peers;
+    private Long peers;
     private Long sizeBytes;
 
 
@@ -22,7 +22,7 @@ public class TorrentDetail implements JSONWriter {
                           String infoHash,
                           Timestamp creationDate,
                           List<FileDetail> files,
-                          Integer peers,
+                          Long peers,
                           Long sizeBytes) {
         this.name = name;
         this.infoHash = infoHash;
@@ -36,7 +36,8 @@ public class TorrentDetail implements JSONWriter {
 
     public static TorrentDetail create(
             Tables.Torrent torrent,
-            LazyList<Tables.File> files) {
+            LazyList<Tables.File> files,
+            Long peers) {
 
         List<FileDetail> fileDetails = new ArrayList<>();
         for (Tables.File f : files) {
@@ -49,9 +50,9 @@ public class TorrentDetail implements JSONWriter {
 
         return new TorrentDetail(torrent.getString("name"),
                 torrent.getString("info_hash"),
-                torrent.getTimestamp("age"),
+                torrent.getTimestamp("created"),
                 fileDetails,
-                torrent.getInteger("peers"),
+                peers,
                 torrent.getLong("size_bytes"));
     }
 
@@ -72,7 +73,7 @@ public class TorrentDetail implements JSONWriter {
     }
 
 
-    public Integer getPeers() {
+    public Long getPeers() {
         return peers;
     }
 

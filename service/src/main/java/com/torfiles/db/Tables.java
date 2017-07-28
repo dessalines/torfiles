@@ -17,4 +17,7 @@ public class Tables {
     @Table("file_fast")
     public static class FileFast extends Model {}
 
+    @Table("torrent_peer")
+    public static class TorrentPeer extends Model {}
+
 }
