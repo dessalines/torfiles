@@ -163,16 +163,14 @@ public class Tools {
 
     public static String tokenizeNameQuery(String nameQuery) {
         if (nameQuery == null) {
-            return "%";
+            return null;
         }
+
         String[] words = nameQuery.split("\\s+");
 
-        StringBuilder sb = new StringBuilder();
-        for (String cWord : words) {
-            sb.append("%" + cWord + "%");
-        }
+        String joined = String.join(" & ", words);
 
-        return sb.toString();
+        return joined;
     }
 
     public static byte[] readFileBytes(File f) {
