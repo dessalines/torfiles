@@ -34,7 +34,7 @@ Tech used:
 
 ### Setup a postgres database
 `psql -c 'create user torfiles with password "xxxx" superuser;" -U postgres`
-`psql -c 'create database torfiles;' -U postgres`
+`psql -c 'create database torfiles with owner torfiles;' -U postgres`
 
 [Here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04) are some instructions to get your DB up and running.
 
