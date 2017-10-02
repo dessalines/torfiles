@@ -7,4 +7,4 @@ cd ..
 
 # Building the back end
 cd service
-sh install.sh -p2pspider ../../p2pspider/
+sh install.sh
