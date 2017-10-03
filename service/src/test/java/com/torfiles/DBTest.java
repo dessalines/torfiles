@@ -44,40 +44,6 @@ public class DBTest {
         assertEquals(ubuntuInfoHash, ti.infoHash().toString());
     }
 
-    @Test
-    public void testSaveTorrentInfo() throws Exception {
-        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", ubuntuInfoHash);
-        if (t != null) t.delete();
-        t = Actions.saveTorrentInfo(ubuntuTorrent);
-        assertEquals(ubuntuInfoHash, t.getString("info_hash"));
-
-        Tables.Torrent t2 = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
-        if (t2 != null) t2.delete();
-        t2 = Actions.saveTorrentInfo(trotskyTorrent);
-        assertEquals(trotskyInfoHash, t2.getString("info_hash"));
-
-    }
-
-
-    @Test
-    public void testTorrentDetail() throws Exception {
-
-        Tables.Torrent t2 = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
-        if (t2 != null) t2.delete();
-        Tables.Torrent t = Actions.saveTorrentInfo(trotskyTorrent);
-        assertEquals(trotskyInfoHash, t.getString("info_hash"));
-
-        Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
-        LazyList<Tables.File> files = Tables.File.where("info_hash = ?", trotskyInfoHash).orderBy("index_");
-        Long peers = Tables.TorrentPeer.count("info_hash = ?", trotskyInfoHash);
-
-        TorrentDetail td = TorrentDetail.create(torrent, files, peers);
-
-        assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines", td.getName());
-        assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3",
-                td.getFiles().get(0).getPath());
-        assertEquals(trotskyInfoHash, td.getInfoHash());
-    }
 
     @Test
     public void infoHashParse() throws Exception {
@@ -87,16 +53,5 @@ public class DBTest {
 
         assertEquals(infoHash, "aebe4853b4b7679c61a8377bd63b8833e41b4c6d");
     }
-
-    @Test
-    public void fileTest() throws Exception {
-        Tables.Torrent t = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
-        LazyList<Tables.File> files = Tables.File.find("info_hash = ?", trotskyInfoHash).orderBy("index_");
-        Tables.File secondFile = files.get(0);
-        assertEquals(secondFile.getString("path"), "Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3");
-        assertEquals(secondFile.getInteger("index_").intValue(), 0);
-    }
-
-
 
 }

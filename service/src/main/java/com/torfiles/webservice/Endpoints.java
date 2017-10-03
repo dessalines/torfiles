@@ -116,11 +116,11 @@ public class Endpoints {
     public static void detail() {
         get("/torrent_detail/:info_hash", (req, res) -> {
             String infoHash = req.params(":info_hash");
-            Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-            LazyList<Tables.File> files = Tables.File.where("info_hash = ?", infoHash).orderBy("path");
-            Long peers = Tables.TorrentPeer.count("info_hash = ?", infoHash);
 
-            TorrentDetail td = TorrentDetail.create(torrent, files, peers);
+            Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
+            LazyList<Tables.FileFast> files = Tables.FileFast.find("info_hash = ?", infoHash).orderBy("path");
+
+            TorrentDetail td = TorrentDetail.create(torrent, files);
 
             return td.json();
 
