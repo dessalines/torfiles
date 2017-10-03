@@ -30,6 +30,7 @@ public class RefreshFastTable implements Job {
                 "alter table file_fast_temp ADD COLUMN text_search tsvector;" +
                 "update file_fast_temp set text_search = to_tsvector(regexp_replace(path, '[^\\w]+', ' ', 'gi'));" +
                 "create index idx_file_fast_temp_path_" + UUID.randomUUID().toString().substring(0,5) + " on file_fast_temp USING GIN (text_search);" +
+                "create index idx_file_fast_infohash_" + UUID.randomUUID().toString().substring(0,5) + " on file_fast_temp (info_hash);" +
                 "drop table if exists file_fast;" +
                 "alter table file_fast_temp rename to file_fast;";
 
