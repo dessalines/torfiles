@@ -68,7 +68,7 @@ public class WebService {
         Endpoints.exceptions();
 
         // Add torrents to DB
-        ScheduledJobs.start();
+//        ScheduledJobs.start();
 
     }
 

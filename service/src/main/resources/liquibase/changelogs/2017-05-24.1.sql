@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset tyler:1
+--changeset tyler:1 splitStatements:false
 
 create extension if not exists pg_trgm;
 
@@ -26,7 +26,7 @@ create table torrent_peer (
         on update cascade on delete cascade
 );
 
---rollback drop table torrent_peer
+--rollback drop table torrent_peer cascade;
 
 create table file (
     id bigserial primary key,
@@ -34,6 +34,7 @@ create table file (
     path varchar(2048) not null,
     size_bytes bigint not null,
     index_ integer not null,
+    text_search tsvector default null,
     created timestamp default current_timestamp,
     constraint fk1_torrent foreign key (info_hash)
         references torrent (info_hash)
@@ -42,7 +43,7 @@ create table file (
 
 --rollback drop table file;
 
-create view file_view as
+create materialized view file_view as
 select
     f.id,
     f.info_hash,
@@ -50,14 +51,37 @@ select
     count(tp.peer_address) as peers,
     f.size_bytes,
     f.index_,
+    f.text_search,
     f.created
 from file as f
 inner join torrent_peer as tp on f.info_hash = tp.info_hash
-group by f.id, f.info_hash, f.path, f.size_bytes, f.index_, f.created
-order by peers desc nulls last, size_bytes desc;
+group by f.id, f.info_hash, f.path, f.size_bytes, f.index_, f.text_search, f.created;
 
 --rollback drop view if exists file_view;
 
-create table file_fast as select * from file_view;
 
---rollback drop table if exists file_fast;
+create index idx_file_info_hash on file_view(info_hash, path);
+create index idx_file_text_search on file_view using gin (text_search);
+
+CREATE FUNCTION file_vector_update() RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        new.search_vector = to_tsvector(NEW.path);
+    END IF;
+    IF TG_OP = 'UPDATE' THEN
+        IF NEW.name <> OLD.name THEN
+            new.search_vector = to_tsvector(NEW.path);
+        END IF;
+    END IF;
+    RETURN NEW;
+END
+$$ LANGUAGE 'plpgsql';
+
+--rollback drop function file_vector_update();
+
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON file
+FOR EACH ROW EXECUTE PROCEDURE file_vector_update();
+
+--rollback drop trigger if exists tsvectorupdate on file;
+

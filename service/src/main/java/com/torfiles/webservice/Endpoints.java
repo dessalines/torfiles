@@ -75,10 +75,21 @@ public class Endpoints {
 
             Integer offset = (page - 1) * limit;
 
+            LazyList<Tables.FileView> files = (nameTokens != null) ?
 
-            LazyList<Tables.FileFast> files = (nameTokens != null) ?
-                    Tables.FileFast.find("text_search @@ to_tsquery(?)", nameTokens).limit(limit).offset(offset) :
-                    Tables.FileFast.findAll().limit(limit).offset(offset);
+                    Tables.FileView.findBySQL(
+//                            "select a.* from (" +
+//                            "    select * " +
+//                            "    from file_view " +
+//                            "    where text_search @@ to_tsquery('" + nameTokens + "')" +
+//                            "    limit 200" +
+//                            ") as a order by peers desc limit " + limit + " offset " + offset) :
+                            "with cte as ( select * from file_view " +
+                                    "where text_search @@ to_tsquery('" + nameTokens + "') " +
+                                    "limit 100) " +
+                                    "select * from cte " +
+                                    "order by peers desc limit " + limit + " offset " + offset) :
+                    Tables.FileView.findAll().limit(limit).offset(offset);
 
             return Tools.wrapPagedResults(files.toJson(false),
                     999L,
