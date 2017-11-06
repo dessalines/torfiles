@@ -28,7 +28,7 @@ public class RefreshFastTable implements Job {
         String sql =
                 "create table file_fast_temp as select * from file_view;" +
                 "alter table file_fast_temp ADD COLUMN text_search tsvector;" +
-                "update file_fast_temp set text_search = to_tsvector(path);" +
+//                 "update file_fast_temp set text_search = to_tsvector(regexp_replace(NEW.path, '_|\.|\/|-',' ', 'g')) " +
                 "create index idx_file_fast_temp_path_" + UUID.randomUUID().toString().substring(0,5) + " on file_fast_temp USING GIN (text_search);" +
                 "drop table if exists file_fast;" +
                 "alter table file_fast_temp rename to file_fast;";

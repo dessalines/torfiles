@@ -128,8 +128,8 @@ public class Endpoints {
         get("/torrent_detail/:info_hash", (req, res) -> {
             String infoHash = req.params(":info_hash");
             Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-            LazyList<Tables.File> files = Tables.File.where("info_hash = ?", infoHash).orderBy("path");
-            Long peers = Tables.TorrentPeer.count("info_hash = ?", infoHash);
+            LazyList<Tables.File> files = Tables.FileView.where("info_hash = ?", infoHash).orderBy("path");
+            Long peers = files.get(0).getLong("peers");
 
             TorrentDetail td = TorrentDetail.create(torrent, files, peers);
 

@@ -59,18 +59,18 @@ group by f.id, f.info_hash, f.path, f.size_bytes, f.index_, f.text_search, f.cre
 
 --rollback drop view if exists file_view;
 
-
+create unique index idx_file_id on file_view(id);
 create index idx_file_info_hash on file_view(info_hash, path);
 create index idx_file_text_search on file_view using gin (text_search);
 
 CREATE FUNCTION file_vector_update() RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
-        new.search_vector = to_tsvector(NEW.path);
+        new.search_vector = to_tsvector(regexp_replace(NEW.path, '[_\.\/-]',' ', 'g'));
     END IF;
     IF TG_OP = 'UPDATE' THEN
         IF NEW.name <> OLD.name THEN
-            new.search_vector = to_tsvector(NEW.path);
+            new.search_vector = to_tsvector(regexp_replace(NEW.path, '[_\.\/-]',' ', 'g'));
         END IF;
     END IF;
     RETURN NEW;
