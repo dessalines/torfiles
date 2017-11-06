@@ -68,10 +68,10 @@ public class DBTest {
         assertEquals(trotskyInfoHash, t.getString("info_hash"));
 
         Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", trotskyInfoHash);
-        LazyList<Tables.File> files = Tables.File.where("info_hash = ?", trotskyInfoHash).orderBy("index_");
+        LazyList<Tables.FileView> files = Tables.FileView.where("info_hash = ?", trotskyInfoHash).orderBy("index_");
         Long peers = Tables.TorrentPeer.count("info_hash = ?", trotskyInfoHash);
 
-        TorrentDetail td = TorrentDetail.create(torrent, files, peers);
+        TorrentDetail td = TorrentDetail.create(torrent, files);
 
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines", td.getName());
         assertEquals("Trotsky - Fascism - What it is and How to Fight it [audiobook] by dessalines/Trotsky - Fascism - What it is and How to Fight it - 00 - 1969 Introduction.mp3",
