@@ -36,17 +36,18 @@ public class TorrentDetail implements JSONWriter {
 
     public static TorrentDetail create(
             Tables.Torrent torrent,
-            LazyList<Tables.File> files,
-            Long peers) {
+            LazyList<Tables.FileView> files) {
 
         List<FileDetail> fileDetails = new ArrayList<>();
-        for (Tables.File f : files) {
+        for (Tables.FileView f : files) {
             fileDetails.add(
                     FileDetail.create(
                             f.getString("path"),
                             f.getLong("size_bytes"),
                             f.getInteger("index_")));
         }
+
+        Long peers = files.get(0).getLong("peers");
 
         return new TorrentDetail(torrent.getString("name"),
                 torrent.getString("info_hash"),
