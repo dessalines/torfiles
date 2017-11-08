@@ -31,5 +31,13 @@ export class TorrentDetailComponent implements OnInit {
   public generateMagnetLink(name, infoHash, index = null) {
     return Tools.generateMagnetLink(name, infoHash, index);
   }
+  
+  public getFileName(path: string): string {
+    return Tools.getFileName(path);
+  }
+  
+  public getTorrentName(path: string): string {
+    return Tools.getTorrentName(path);
+  }
 
 }

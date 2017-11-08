@@ -3,6 +3,13 @@
 }
 
 .path_column {
-  max-width: 400px;
+  // max-width: 800px;
+  // text-overflow: ellipsis;
+  // white-space: wrap;
+  //     overflow: hidden;
+  white-space: -o-pre-wrap;
   word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
 }

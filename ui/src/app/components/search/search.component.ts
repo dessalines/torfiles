@@ -87,25 +87,16 @@ export class SearchComponent implements OnInit {
 		});
 	}
 
-
-	public getFileName(path: string): string {
-		let lines = path.split('/');
-		let out: string = lines[0];
-
-		for (let i = 1; i < lines.length; i++) {
-			let tabs = Array(i + 1).join('  ');
-			out += '\n' + tabs + '└─ ' + lines[i];
-		}
-
-		return out;
-
-	}
-	public getTorrentName(path: string): string {
-		return path.split('/')[0];
-	}
-
 	public generateMagnetLink(name, infoHash, index) {
 		return Tools.generateMagnetLink(name, infoHash, index);
+	}
+
+	public getFileName(path: string): string {
+		return Tools.getFileName(path);
+	}
+	
+	public getTorrentName(path: string): string {
+		return Tools.getTorrentName(path);
 	}
 }
 
