@@ -63,12 +63,11 @@ public class WebService {
         // Set up endpoints
         Endpoints.status();
         Endpoints.search();
-        Endpoints.upload();
         Endpoints.detail();
         Endpoints.exceptions();
 
         // Add torrents to DB
-//        ScheduledJobs.start();
+        ScheduledJobs.start();
 
     }
 

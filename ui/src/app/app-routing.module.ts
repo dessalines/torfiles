@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
 	SearchComponent,
-	UploadComponent,
 	TorrentDetailComponent,
 	APIComponent
 } from './components';
@@ -11,7 +10,6 @@ import {
 const routes: Routes = [
 	{ path: '', redirectTo: '/search', pathMatch: 'full' },
 	{ path: 'search', component: SearchComponent },
-	{ path: 'upload', component: UploadComponent },
 	{ path: 'api', component: APIComponent },
 	{ path: 'torrent/:info_hash', component: TorrentDetailComponent }
 ];

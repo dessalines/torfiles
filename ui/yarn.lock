@@ -662,12 +662,17 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap@4.0.0-alpha.6:
-  version "4.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-alpha.6.tgz#4f54dd33ac0deac3b28407bc2df7ec608869c9c8"
+bootstrap@^4.0.0-beta.2, bootstrap@~4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
+
+bootswatch@^4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/bootswatch/-/bootswatch-4.0.0-beta.2.tgz#e8a2947fd882b839cb18cb8e9bb2ad682b4f2710"
   dependencies:
+    bootstrap "~4.0.0-beta.2"
     jquery ">=1.9.1"
-    tether "^1.4.0"
+    popper.js "^1.11.0"
 
 boxen@^1.2.1:
   version "1.2.2"
@@ -3703,9 +3708,9 @@ ng2-file-upload@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ng2-file-upload/-/ng2-file-upload-1.2.1.tgz#5563c5dfd6f43fbfbe815c206e343464a0a6a197"
 
-ngx-bootstrap@^1.6.6:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-1.9.3.tgz#28e75d14fb1beaee609383d7694de4eb3ba03b26"
+ngx-bootstrap@^2.0.0-beta.8:
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.0-beta.8.tgz#3209c818e89a4b4ea88c7c45fc53cebf000c0699"
 
 no-case@^2.2.0:
   version "2.3.2"
@@ -4176,6 +4181,10 @@ pkg-dir@^2.0.0:
   resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-2.0.0.tgz#f6d5d1109e19d63edf428e0bd57e12777615334b"
   dependencies:
     find-up "^2.1.0"
+
+popper.js@^1.11.0:
+  version "1.12.6"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.6.tgz#91e12a97b07815258b76915d64044e8ac053d426"
 
 portfinder@^1.0.9, portfinder@~1.0.12:
   version "1.0.13"

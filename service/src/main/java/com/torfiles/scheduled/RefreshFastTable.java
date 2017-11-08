@@ -21,34 +21,28 @@ public class RefreshFastTable implements Job {
     public static Logger log = (Logger) LoggerFactory.getLogger(RefreshFastTable.class);
 
 
-    private void refreshFastTable() {
+    private void refreshView() {
         Tools.dbInit();
 
-        log.debug("Refreshing fast table...");
+        log.debug("Refreshing view...");
         String sql =
-                "create table file_fast_temp as select * from file_view;" +
-                "alter table file_fast_temp ADD COLUMN text_search tsvector;" +
-//                 "update file_fast_temp set text_search = to_tsvector(regexp_replace(NEW.path, '_|\.|\/|-',' ', 'g')) " +
-                "create index idx_file_fast_temp_path_" + UUID.randomUUID().toString().substring(0,5) + " on file_fast_temp USING GIN (text_search);" +
-                "drop table if exists file_fast;" +
-                "alter table file_fast_temp rename to file_fast;";
+                "refresh materialized view concurrently file_view;";
 
         try {
             Connection conn = new DB("default").connection();
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
-//            conn.commit();
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         Tools.dbClose();
 
-        log.debug("Done refreshing fast table.");
+        log.debug("Done refreshing view.");
     }
 
     @Override
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
-        refreshFastTable();
+        refreshView();
     }
 }

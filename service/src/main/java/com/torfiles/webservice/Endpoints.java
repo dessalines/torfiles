@@ -78,17 +78,10 @@ public class Endpoints {
             LazyList<Tables.FileView> files = (nameTokens != null) ?
 
                     Tables.FileView.findBySQL(
-//                            "select a.* from (" +
-//                            "    select * " +
-//                            "    from file_view " +
-//                            "    where text_search @@ to_tsquery('" + nameTokens + "')" +
-//                            "    limit 200" +
-//                            ") as a order by peers desc limit " + limit + " offset " + offset) :
                             "with cte as ( select * from file_view " +
-                                    "where text_search @@ to_tsquery('" + nameTokens + "') " +
-                                    "limit 100) " +
+                                    "where text_search @@ to_tsquery('" + nameTokens + "')) " +
                                     "select * from cte " +
-                                    "order by peers desc limit " + limit + " offset " + offset) :
+                                    "order by peers desc, size_bytes desc limit " + limit + " offset " + offset) :
                     Tables.FileView.findAll().limit(limit).offset(offset);
 
             return Tools.wrapPagedResults(files.toJson(false),
@@ -96,33 +89,6 @@ public class Endpoints {
                     page);
         });
     }
-
-    public static void upload() {
-
-        options("/upload", (req, res) -> "OKAY");
-
-        post("/upload", (req, res) -> {
-
-            File tempFile = File.createTempFile("temp_file", ".torrent");
-            tempFile.deleteOnExit();
-
-            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-
-            try (InputStream is = req.raw().getPart("file").getInputStream()) {
-                // Use the input stream to create a file
-                Files.copy(is, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            }
-
-            log.info(tempFile.getAbsolutePath());
-
-            Tables.Torrent t = Actions.saveTorrentInfo(tempFile);
-
-            // Return the infoHash if it was successful
-            return t.getString("info_hash");
-        });
-
-    }
-
 
     public static void detail() {
         get("/torrent_detail/:info_hash", (req, res) -> {
