@@ -1,9 +1,9 @@
-<table class="table">
+<table class="table table-responsive">
   <thead>
     <tr>
       <th>File</th>
-      <th>Size</th>
-      <th>Peers</th>
+      <th class="text-right">Size</th>
+      <th class="text-right">Peers</th>
       <th></th>
     </tr>
   </thead>
@@ -11,8 +11,8 @@
     <tr *ngFor="let row of rows">
       <td class="path_column"><a [routerLink]="['/torrent', row.info_hash]" tooltip="Torrent: {{getTorrentName(row.path)}}">{{getFileName(row.path)}}</a></td>
       <td align="right"><pre>{{row.size_bytes | fileSize: true}}</pre></td>
-      <td align="center" [ngClass]="row.peers | peerHealth">{{row.peers}}</td>
-      <td align="center">
+      <td align="right" [ngClass]="row.peers | peerHealth">{{row.peers}}</td>
+      <td align="right">
         <a tooltip="Magnet link" [href]="sanitizer.bypassSecurityTrustUrl(generateMagnetLink(row.info_hash, row.path, row.index_))" title="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
       </td>
     </tr>
@@ -30,4 +30,4 @@
 </table>
 <pagination class="pagination-sm" [(ngModel)]="page" [totalItems]="length" [itemsPerPage]="limit" [maxSize]="maxPaginators" [boundaryLinks]="true" [rotate]="false" (pageChanged)="onChangeTable($event)" (numPages)="numPages = $event">
 </pagination>
-<div>Indexing 73k torrents, 23M files</div>
+<div>Indexing {{torrentCount.toLocaleString()}} torrents, {{fileCount.toLocaleString()}} files</div>

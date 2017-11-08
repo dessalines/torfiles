@@ -14,10 +14,16 @@ public class Tables {
     @Table("file")
     public static class File extends Model {}
 
+    @Table("file_view")
+    public static class FileView extends Model {}
+
     @Table("file_fast")
     public static class FileFast extends Model {}
 
     @Table("torrent_peer")
     public static class TorrentPeer extends Model {}
+
+    @Table("table_count_view")
+    public static class TableCountView extends Model {}
 
 }

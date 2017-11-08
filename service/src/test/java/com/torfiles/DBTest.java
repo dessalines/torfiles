@@ -1,31 +1,17 @@
 package com.torfiles;
 
-import com.frostwire.jlibtorrent.TorrentInfo;
-import com.torfiles.db.Actions;
-import com.torfiles.db.Tables;
-import com.torfiles.tools.DataSources;
 import com.torfiles.tools.Tools;
 import com.torfiles.torrent.LibtorrentEngine;
-import com.torfiles.types.TorrentDetail;
-import org.javalite.activejdbc.LazyList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by tyler on 12/4/16.
  */
 public class DBTest {
-
-    File ubuntuTorrent = new File(DataSources.UBUNTU_TORRENT);
-    File trotskyTorrent = new File(DataSources.TROTSKY_TORRENT);
-    String ubuntuInfoHash = "0403fb4728bd788fbcb67e87d6feb241ef38c75a";
-    String trotskyInfoHash = "d1f28f0c1b89ddd9a39205bef0be3715d117f91b";
 
     @Before
     public void setUp() throws Exception {
@@ -37,13 +23,6 @@ public class DBTest {
     public void tearDown() throws Exception {
         Tools.dbClose();
     }
-
-    @Test
-    public void readTorrent() throws Exception {
-        TorrentInfo ti = new TorrentInfo(ubuntuTorrent);
-        assertEquals(ubuntuInfoHash, ti.infoHash().toString());
-    }
-
 
     @Test
     public void infoHashParse() throws Exception {

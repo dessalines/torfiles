@@ -25,14 +25,16 @@ public class Endpoints {
 
     public static Logger log = (Logger) LoggerFactory.getLogger(Endpoints.class);
 
-    private static Integer UPLOAD_THREAD_SIZE = 500;
-
     public static void status() {
 
         get("/hello", (req, res) -> "hello");
 
         get("/version", (req, res) -> {
             return "{\"version\":\"" + DataSources.PROPERTIES.getProperty("version") + "\"}";
+        });
+
+        get("/table_counts", (req, res) -> {
+            return Tables.TableCountView.findAll().toJson(false);
         });
 
         before((req, res) -> {
@@ -75,50 +77,28 @@ public class Endpoints {
 
             Integer offset = (page - 1) * limit;
 
+            LazyList<Tables.FileView> files = (nameTokens != null) ?
 
-            LazyList<Tables.FileFast> files = (nameTokens != null) ?
-                    Tables.FileFast.find("text_search @@ to_tsquery(?)", nameTokens).limit(limit).offset(offset) :
-                    Tables.FileFast.findAll().limit(limit).offset(offset);
+                    Tables.FileView.findBySQL(
+                            "with cte as ( select * from file_view " +
+                                    "where text_search @@ to_tsquery('" + nameTokens + "')) " +
+                                    "select * from cte " +
+                                    "order by peers desc, size_bytes desc limit " + limit + " offset " + offset) :
+                    Tables.FileView.findAll().limit(limit).offset(offset);
 
             return Tools.wrapPagedResults(files.toJson(false),
                     999L,
                     page);
         });
-    }
 
-    public static void upload() {
-
-        options("/upload", (req, res) -> "OKAY");
-
-        post("/upload", (req, res) -> {
-
-            File tempFile = File.createTempFile("temp_file", ".torrent");
-            tempFile.deleteOnExit();
-
-            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-
-            try (InputStream is = req.raw().getPart("file").getInputStream()) {
-                // Use the input stream to create a file
-                Files.copy(is, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            }
-
-            log.info(tempFile.getAbsolutePath());
-
-            Tables.Torrent t = Actions.saveTorrentInfo(tempFile);
-
-            // Return the infoHash if it was successful
-            return t.getString("info_hash");
-        });
-
-    }
-
+   }
 
     public static void detail() {
         get("/torrent_detail/:info_hash", (req, res) -> {
             String infoHash = req.params(":info_hash");
 
             Tables.Torrent torrent = Tables.Torrent.findFirst("info_hash = ?", infoHash);
-            LazyList<Tables.FileFast> files = Tables.FileFast.find("info_hash = ?", infoHash).orderBy("path");
+            LazyList<Tables.FileView> files = Tables.FileView.where("info_hash = ?", infoHash).orderBy("path");
 
             TorrentDetail td = TorrentDetail.create(torrent, files);
 

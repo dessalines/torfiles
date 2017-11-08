@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import {
   NavbarComponent,
   FooterComponent,
-  UploadComponent,
   TorrentDetailComponent,
   SearchComponent,
   APIComponent
@@ -22,7 +21,6 @@ import {
 import {
   SearchService,
   TorrentDetailService,
-  UploadService
 } from './services';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -38,7 +36,6 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
     NavbarComponent,
     FooterComponent,
     SearchComponent,
-    UploadComponent,
     FileSizePipe,
     MomentPipe,
     TorrentDetailComponent,
@@ -54,7 +51,7 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
     TooltipModule.forRoot(),
     FileUploadModule
   ],
-  providers: [SearchService, TorrentDetailService, UploadService],
+  providers: [SearchService, TorrentDetailService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -35,10 +35,15 @@ export class SearchComponent implements OnInit {
 	public numPages: number;
 	public loading: boolean = false;
 
+	public torrentCount: number;
+	public fileCount: number;
+
 	constructor(private route: ActivatedRoute,
 		private router: Router,
 		private sanitizer: DomSanitizer,
 		private searchService: SearchService) {
+
+		this.getTableCounts();
 
 	}
 
@@ -51,6 +56,13 @@ export class SearchComponent implements OnInit {
 			this.onChangeTable();
 		});
 
+	}
+
+	getTableCounts() {
+		this.searchService.getTableCounts().subscribe(d => {
+			this.torrentCount = d[1].count_;
+			this.fileCount = d[0].count_;
+		});
 	}
 
 	public setSearchParams(params: any) {
