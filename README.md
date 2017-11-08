@@ -37,8 +37,8 @@ Tech used:
 
 ### Setup a postgres database
 ```sh
-psql -c 'create user torfiles with password "asdf" superuser;" -U postgres
-psql -c 'create database torfiles with owner torfiles;' -U postgres
+psql -c "create user torfiles with password 'asdf' superuser;" -U postgres
+psql -c "create database torfiles with owner torfiles;" -U postgres
 ```
 
 [Or here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04) are some instructions to get your DB up and running.
@@ -100,7 +100,7 @@ node index.js
 
 Or use `pm2` to start multiple instances of it, to crawl faster:
 ```sh
-npm i pm2
+npm i -g pm2
 pm2 start index.js -i 5
 ```
 
