@@ -23,4 +23,7 @@ public class Tables {
     @Table("torrent_peer")
     public static class TorrentPeer extends Model {}
 
+    @Table("table_count_view")
+    public static class TableCountView extends Model {}
+
 }

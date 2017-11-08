@@ -43,6 +43,11 @@ create table file (
 
 --rollback drop table file;
 
+create view table_count_view as
+select reltuples::bigint AS count_ FROM pg_class where relname in ('file', 'torrent');
+
+--rollback drop view if exists table_count_view;
+
 create materialized view file_view as
 select
     f.id,

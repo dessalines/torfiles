@@ -1,21 +1,12 @@
 package com.torfiles;
 
-import com.frostwire.jlibtorrent.TorrentInfo;
-import com.torfiles.db.Actions;
-import com.torfiles.db.Tables;
-import com.torfiles.tools.DataSources;
 import com.torfiles.tools.Tools;
 import com.torfiles.torrent.LibtorrentEngine;
-import com.torfiles.types.TorrentDetail;
-import org.javalite.activejdbc.LazyList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by tyler on 12/4/16.

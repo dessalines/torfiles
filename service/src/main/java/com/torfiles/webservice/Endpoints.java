@@ -25,14 +25,16 @@ public class Endpoints {
 
     public static Logger log = (Logger) LoggerFactory.getLogger(Endpoints.class);
 
-    private static Integer UPLOAD_THREAD_SIZE = 500;
-
     public static void status() {
 
         get("/hello", (req, res) -> "hello");
 
         get("/version", (req, res) -> {
             return "{\"version\":\"" + DataSources.PROPERTIES.getProperty("version") + "\"}";
+        });
+
+        get("/table_counts", (req, res) -> {
+            return Tables.TableCountView.findAll().toJson(false);
         });
 
         before((req, res) -> {
@@ -88,7 +90,8 @@ public class Endpoints {
                     999L,
                     page);
         });
-    }
+
+   }
 
     public static void detail() {
         get("/torrent_detail/:info_hash", (req, res) -> {

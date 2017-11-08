@@ -27,10 +27,16 @@ export class SearchService {
         }
 
 		return url;
-
 	}
+	private tableCountUrl: string = environment.endpoint + 'table_counts';
 
 	constructor(private http: Http) { }
+
+	getTableCounts(): Observable<any> {
+		return this.http.get(this.tableCountUrl)
+			.map(r => r.json())
+			.catch(this.handleError);
+	}
 
 	getSearchResults(q: string = '',
 		limit: number = 25,
