@@ -66,6 +66,7 @@ group by f.id, f.info_hash, f.path, f.size_bytes, f.index_, f.text_search, f.cre
 
 create unique index idx_file_id on file_view(id);
 create index idx_file_info_hash on file_view(info_hash, path);
+create index idx_peer_size on file_view(peers desc, size_bytes desc);
 create index idx_file_text_search on file_view using gin (text_search);
 
 CREATE FUNCTION file_vector_update() RETURNS TRIGGER AS $$
