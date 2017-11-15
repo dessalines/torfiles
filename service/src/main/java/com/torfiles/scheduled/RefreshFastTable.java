@@ -3,6 +3,7 @@ package com.torfiles.scheduled;
 import ch.qos.logback.classic.Logger;
 import com.torfiles.tools.Tools;
 import org.javalite.activejdbc.DB;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -16,6 +17,8 @@ import java.util.UUID;
 /**
  * Created by tyler on 6/15/17.
  */
+
+@DisallowConcurrentExecution
 public class RefreshFastTable implements Job {
 
     public static Logger log = (Logger) LoggerFactory.getLogger(RefreshFastTable.class);

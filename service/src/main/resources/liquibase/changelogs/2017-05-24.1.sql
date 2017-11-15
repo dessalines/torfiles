@@ -41,6 +41,8 @@ create table file (
         on update cascade on delete cascade
 );
 
+create index idx_file_infohash on file(info_hash);
+
 --rollback drop table file;
 
 create view table_count_view as
