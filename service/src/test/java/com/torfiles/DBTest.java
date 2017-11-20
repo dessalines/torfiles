@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -15,8 +16,8 @@ public class DBTest {
 
     @Before
     public void setUp() throws Exception {
-        LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
-        Tools.dbInit();
+       // LibtorrentEngine lte = LibtorrentEngine.INSTANCE;
+       //  Tools.dbInit();
     }
 
     @After
@@ -32,5 +33,11 @@ public class DBTest {
 
         assertEquals(infoHash, "aebe4853b4b7679c61a8377bd63b8833e41b4c6d");
     }
+    @Test
+    public void removeSingleQuoteTest() throws Exception {
+        String singleQuotes = "that's it bo'ys";
+        String removed = singleQuotes.replaceAll("\'","");
 
+        assertTrue(removed.equals("thats it boys"));
+    }
 }

@@ -166,6 +166,8 @@ public class Tools {
             return null;
         }
 
+        nameQuery = nameQuery.replaceAll("'","");
+
         String[] words = nameQuery.split("\\s+");
 
         String joined = String.join(" & ", words);
