@@ -11,7 +11,7 @@
               <div class="input-group">
                 <input [ngModel]="searchTerm" (ngModelChange)="newSearch($event)"
                   name="search" type="text" class="form-control"
-                  placeholder="Search for... (Frasier S01E06, or Etta James At Last)">
+                  placeholder="Search for...[Frasier s01e02]">
                 <span class="input-group-btn">
                   <button (click)="search()" class="btn btn-secondary" type="submit">
                     <i class="fa" [ngClass]="{'fa-spin fa-circle-o-notch': loading, 'fa-search': !loading }"></i>

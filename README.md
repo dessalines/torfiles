@@ -63,7 +63,7 @@ Edit it to point to your own database:
 
 ### Install TorFiles
 
-Local testing:
+Running locally:
 
 `./install_dev.sh` and goto `http://localhost:4567/`
 
