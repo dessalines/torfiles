@@ -23,7 +23,7 @@ export class SearchComponent implements OnInit {
 		'path': '',
 		'size_bytes': '',
 		'age': '',
-		'peers': ''
+		'seeders': ''
 	};
 
 	public searchSub: Subscription;

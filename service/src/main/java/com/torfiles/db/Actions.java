@@ -19,28 +19,26 @@ public class Actions {
     public static Logger log = (Logger) LoggerFactory.getLogger(Actions.class);
 
 
-    public static Torrent saveTorrentInfo(java.io.File torrentFile) {
+    public static Torrent saveTorrentInfo(TorrentInfo ti, Long seeders, Long leechers) {
 
         try {
             new DB("default").openTransaction();
 
-            String infoHash = torrentFile.getName().split(".torrent")[0];
-//            log.debug("Trying to save torrent: " + infoHash);
-            Torrent torrent = Torrent.findFirst("info_hash = ?", infoHash);
+            Torrent torrent = Torrent.findFirst("info_hash = ?", ti.infoHash().toString());
 
             if (torrent != null) {
                 return torrent;
             }
-
-            byte[] bytes = Tools.readFileBytes(torrentFile);
-            TorrentInfo ti = TorrentInfo.bdecode(bytes);
 
             Timestamp age = (ti.creationDate() != 0) ? new Timestamp(ti.creationDate() * 1000L) : new Timestamp(System.currentTimeMillis());
 
             torrent = Torrent.createIt(
                     "info_hash", ti.infoHash().toString(),
                     "name", ti.name(),
-                    "size_bytes", ti.totalSize());
+                    "size_bytes", ti.totalSize(),
+                    "bencode", ti.bencode(),
+                    "seeders", seeders,
+                    "leechers", leechers);
 
             // Save the file info
             for (int i = 0; i < ti.files().numFiles(); i++) {
@@ -52,17 +50,16 @@ public class Actions {
                         "index_", i);
             }
 
-            log.debug("Saving torrent: " + torrent.getString("name"));
+            log.info("Saving torrent: " + torrent.getString("name"));
 
             return torrent;
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         } finally {
             new DB("default").commitTransaction();
         }
-
 
 
     }
@@ -81,12 +78,11 @@ public class Actions {
 
                 log.debug("Saving peers for torrent: " + torrent.getString("name"));
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             new DB("default").commitTransaction();
         }
-
 
 
     }

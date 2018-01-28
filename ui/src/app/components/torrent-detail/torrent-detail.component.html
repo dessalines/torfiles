@@ -3,9 +3,9 @@
   <hr>
   <div class="row">
     <div class="col-sm-8">
-      <span [ngClass]="d.peers | peerHealth">Peers: 
-        <span *ngIf="d.peers">{{d.peers}}</span>
-        <span *ngIf="!d.peers">??</span>
+      <span [ngClass]="d.seeders | peerHealth">Seeders: 
+        <span *ngIf="d.seeders">{{d.seeders}}</span>
+        <span *ngIf="!d.seeders">??</span>
       </span>
     </div>
     <div class="col-sm-4 text-right">

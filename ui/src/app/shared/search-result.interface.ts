@@ -4,6 +4,7 @@ export interface SearchResult {
 	path: string;
 	index_: number;
 	created: number;
-	peers: number;
+	seeders: number;
+	leechers: number;
 	size_bytes: number;
 }

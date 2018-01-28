@@ -6,6 +6,7 @@ package com.torfiles.webservice;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import com.torfiles.crawler.CrawlStarterController;
 import com.torfiles.scheduled.ScheduledJobs;
 import com.torfiles.tools.DataSources;
 import com.torfiles.tools.Tools;
@@ -46,6 +47,8 @@ public class WebService {
         log.setLevel(Level.toLevel(loglevel));
         log.getLoggerContext().getLogger("org.eclipse.jetty").setLevel(Level.OFF);
         log.getLoggerContext().getLogger("spark.webserver").setLevel(Level.OFF);
+        log.getLoggerContext().getLogger("org.javalite.activejdbc").setLevel(Level.OFF);
+
 
         if (liquibase) {
             Tools.runLiquibase();
@@ -68,6 +71,9 @@ public class WebService {
 
         // Add torrents to DB
         ScheduledJobs.start();
+
+        // Start the webcrawler
+        CrawlStarterController.start();
 
     }
 

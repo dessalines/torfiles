@@ -83,8 +83,8 @@ public class Endpoints {
                             "with cte as ( select * from file_view " +
                                     "where text_search @@ to_tsquery('" + nameTokens + "')) " +
                                     "select * from cte " +
-                                    "order by peers desc, size_bytes desc limit " + limit + " offset " + offset) :
-                    Tables.FileView.findAll().orderBy("peers desc, size_bytes desc").limit(limit).offset(offset);
+                                    "order by seeders desc, size_bytes desc limit " + limit + " offset " + offset) :
+                    Tables.FileView.findAll().orderBy("seeders desc, size_bytes desc").limit(limit).offset(offset);
 
             return Tools.wrapPagedResults(files.toJson(false),
                     999L,

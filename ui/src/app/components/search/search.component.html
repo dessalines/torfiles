@@ -3,7 +3,8 @@
     <tr>
       <th>File</th>
       <th class="text-right">Size</th>
-      <th class="text-right">Peers</th>
+      <th class="text-right">Seeders</th>
+      <th class="text-right">Leechers</th>
       <th></th>
     </tr>
   </thead>
@@ -11,7 +12,8 @@
     <tr *ngFor="let row of rows">
       <td class="path_column"><a [routerLink]="['/torrent', row.info_hash]" tooltip="Torrent: {{getTorrentName(row.path)}}">{{getFileName(row.path)}}</a></td>
       <td align="right"><pre>{{row.size_bytes | fileSize: true}}</pre></td>
-      <td align="right" [ngClass]="row.peers | peerHealth">{{row.peers}}</td>
+      <td align="right" [ngClass]="row.seeders | peerHealth">{{row.seeders}}</td>
+      <td align="right" [ngClass]="row.leechers | peerHealth">{{row.leechers}}</td>
       <td align="right">
         <a tooltip="Magnet link" [href]="sanitizer.bypassSecurityTrustUrl(generateMagnetLink(row.info_hash, row.path, row.index_))" title="Magnet link"><i class="fa fa-fw fa-magnet text-danger"></i></a>
       </td>
