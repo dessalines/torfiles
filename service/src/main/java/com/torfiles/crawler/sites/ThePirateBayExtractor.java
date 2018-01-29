@@ -1,12 +1,8 @@
 package com.torfiles.crawler.sites;
 
-import com.torfiles.crawler.SiteMagnet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class ThePirateBayExtractor implements MagnetExtractor {
 

@@ -1,9 +1,10 @@
 package com.torfiles;
 
-import com.torfiles.crawler.SiteMagnet;
+import com.torfiles.crawler.sites.SiteMagnet;
 import com.torfiles.crawler.sites.MagnetExtractor;
 import com.torfiles.crawler.sites.SkyTorrentsExtractor;
 import com.torfiles.crawler.sites.ThePirateBayExtractor;
+import com.torfiles.crawler.sites._1337XExtractor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
@@ -54,6 +55,21 @@ public class ExtractorTest {
         assertTrue(s2.getSeeders().equals(1873L));
         assertTrue(s2.getLeechers().equals(141L));
         assertTrue(s2.getUri().equals("magnet:?xt=urn:btih:6705c69dd697753d7d848f0f7b6ccbccf689a453&dn=Geostorm.2017.720p.HC.HDRip.850MB.&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969"));
+
+    }
+
+    @Test
+    public void _1337XTest() throws Exception {
+        MagnetExtractor me = new _1337XExtractor();
+
+        Document doc = Jsoup.connect("https://1337x.to/torrent/2755454/Padmaavat-2018-Padmavati-HIndi-Cam-700mb-TodayPk/").get();
+
+        SiteMagnet s = me.extractMagnetLink(doc.html());
+
+        assertTrue(s.getSeeders().equals(1270L));
+        assertTrue(s.getLeechers().equals(489L));
+        assertTrue(s.getUri().equals("magnet:?xt=urn:btih:8FE4B851EB4B67F72D3EF88C03C3CB7B65EAD0DD&dn=Padmaavat+%282018%29+%5B+Padmavati+%5D+HIndi+Cam+700mb+-+TodayPk&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.com%3A2710%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce"));
+
 
     }
 
