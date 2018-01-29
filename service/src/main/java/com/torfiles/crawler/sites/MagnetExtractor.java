@@ -1,13 +1,9 @@
 package com.torfiles.crawler.sites;
 
 import com.frostwire.jlibtorrent.TorrentInfo;
-import com.torfiles.crawler.SiteMagnet;
 import com.torfiles.db.Actions;
 import com.torfiles.tools.Tools;
 import com.torfiles.torrent.LibtorrentEngine;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public interface MagnetExtractor {
 

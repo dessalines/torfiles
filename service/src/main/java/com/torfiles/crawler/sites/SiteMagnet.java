@@ -1,4 +1,4 @@
-package com.torfiles.crawler;
+package com.torfiles.crawler.sites;
 
 import java.util.Objects;
 

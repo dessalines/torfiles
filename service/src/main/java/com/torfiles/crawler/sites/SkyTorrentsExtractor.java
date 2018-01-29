@@ -1,15 +1,10 @@
 package com.torfiles.crawler.sites;
 
 import ch.qos.logback.classic.Logger;
-import com.torfiles.crawler.SiteCrawler;
-import com.torfiles.crawler.SiteMagnet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class SkyTorrentsExtractor implements MagnetExtractor {
 

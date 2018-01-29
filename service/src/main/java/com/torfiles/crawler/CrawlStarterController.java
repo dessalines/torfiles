@@ -37,6 +37,7 @@ public class CrawlStarterController {
         controller.addSeed("https://thepiratebay.org/top/all");
         controller.addSeed("https://thepiratebay.org/browse/");
         controller.addSeed("https://www.skytorrents.in/top1000/all/ed/1?l=en-us");
+        controller.addSeed("https://1337x.to/home/");
 
         /*
          * Start the crawl. This is a blocking operation, meaning that your code
