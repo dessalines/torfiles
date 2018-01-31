@@ -1,10 +1,7 @@
 package com.torfiles.crawler;
 
 import ch.qos.logback.classic.Logger;
-import com.torfiles.crawler.sites.MagnetExtractor;
-import com.torfiles.crawler.sites.SkyTorrentsExtractor;
-import com.torfiles.crawler.sites.ThePirateBayExtractor;
-import com.torfiles.crawler.sites._1337XExtractor;
+import com.torfiles.crawler.sites.*;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
@@ -42,7 +39,8 @@ public class SiteCrawler extends WebCrawler {
                 && (href.startsWith("https://thepiratebay.org") &&
                 !href.startsWith("https://thepiratebay.org/language") ||
                 (href.startsWith("https://www.skytorrents.in") && href.endsWith("l=en-us")) ||
-                href.startsWith("https://1337x.to/")
+                href.startsWith("https://1337x.to/") ||
+                href.startsWith("https://rarbg.to/")
         );
     }
 
@@ -72,6 +70,12 @@ public class SiteCrawler extends WebCrawler {
                 me.fetchAndSaveMagnets(html);
             } else if (url.startsWith("https://1337x.to/torrent/")) {
                 me = new _1337XExtractor();
+                me.fetchAndSaveMagnets(html);
+            } else if (url.startsWith("https://idope.se/torrent/")) {
+                me = new IDopeExtractor();
+                me.fetchAndSaveMagnets(html);
+            } else if (url.startsWith("https://rarbg.to/torrent/")) {
+                me = new RarBGExtractor();
                 me.fetchAndSaveMagnets(html);
             }
 

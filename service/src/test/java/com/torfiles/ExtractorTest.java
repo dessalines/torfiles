@@ -1,15 +1,11 @@
 package com.torfiles;
 
-import com.torfiles.crawler.sites.SiteMagnet;
-import com.torfiles.crawler.sites.MagnetExtractor;
-import com.torfiles.crawler.sites.SkyTorrentsExtractor;
-import com.torfiles.crawler.sites.ThePirateBayExtractor;
-import com.torfiles.crawler.sites._1337XExtractor;
+import com.torfiles.crawler.sites.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertEquals;
 
 public class ExtractorTest {
 
@@ -21,17 +17,17 @@ public class ExtractorTest {
 
         SiteMagnet s = me.extractMagnetLink(doc.html());
 
-        assertTrue(s.getSeeders().equals(6599L));
-        assertTrue(s.getLeechers().equals(2842L));
-        assertTrue(s.getUri().equals("magnet:?xt=urn:btih:9d9b0a063b9dd4aad72dfb6e62617e343ab024f8&dn=The.Shape.of.Water.2017.DVDScr.XVID.AC3.HQ.Hive-CM8%5bEtMovies%5d&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Feddie4.nl%3A6969&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969&tr=udp%3A%2F%2Fopentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337"));
+        assertEquals(s.getSeeders().longValue(), 6838);
+        assertEquals(s.getLeechers().longValue(), 2808);
+        assertEquals(s.getUri(), "magnet:?xt=urn:btih:9d9b0a063b9dd4aad72dfb6e62617e343ab024f8&dn=The.Shape.of.Water.2017.DVDScr.XVID.AC3.HQ.Hive-CM8%5bEtMovies%5d&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Feddie4.nl%3A6969&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969&tr=udp%3A%2F%2Fopentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337");
 
-        Document doc2 = Jsoup.connect("https://www.skytorrents.in/info/c602f490e13474fa580bbbc56e868977a6ffdfa5/Grand-Theft-Auto-IV-Razor1911/?l=ja-jp:").get();
+        Document doc2 = Jsoup.connect("https://www.skytorrents.in/info/c602f490e13474fa580bbbc56e868977a6ffdfa5/Grand-Theft-Auto-IV-Razor1911/").get();
 
         SiteMagnet s2 = me.extractMagnetLink(doc2.html());
 
-        assertTrue(s2.getSeeders().equals(4181L));
-        assertTrue(s2.getLeechers().equals(450L));
-        assertTrue(s2.getUri().equals("magnet:?xt=urn:btih:c602f490e13474fa580bbbc56e868977a6ffdfa5&dn=Grand%20Theft%20Auto%20IV-Razor1911&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Feddie4.nl%3A6969&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969&tr=udp%3A%2F%2Fopentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337"));
+        assertEquals(s2.getSeeders().longValue(), 1L);
+        assertEquals(s2.getLeechers().longValue(), 9L);
+        assertEquals(s2.getUri(), "magnet:?xt=urn:btih:c602f490e13474fa580bbbc56e868977a6ffdfa5&dn=Grand%20Theft%20Auto%20IV-Razor1911&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Feddie4.nl%3A6969&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969&tr=udp%3A%2F%2Fopentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337");
 
 
     }
@@ -44,17 +40,17 @@ public class ExtractorTest {
 
         SiteMagnet s = me.extractMagnetLink(doc.html());
 
-        assertTrue(s.getSeeders().equals(1L));
-        assertTrue(s.getLeechers().equals(0L));
-        assertTrue(s.getUri().equals("magnet:?xt=urn:btih:f2467748444d5f312921878a2f8b5081221c2054&dn=Star+Ocean+-+The+Second+Story+%28USA%29&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969"));
+        assertEquals(s.getSeeders().longValue(), 1L);
+        assertEquals(s.getLeechers().longValue(), 0L);
+        assertEquals(s.getUri(), "magnet:?xt=urn:btih:f2467748444d5f312921878a2f8b5081221c2054&dn=Star+Ocean+-+The+Second+Story+%28USA%29&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969");
 
         Document doc2 = Jsoup.connect("https://thepiratebay.org/torrent/19107645/Geostorm.2017.720p.HC.HDRip.850MB").get();
 
         SiteMagnet s2 = me.extractMagnetLink(doc2.html());
 
-        assertTrue(s2.getSeeders().equals(1873L));
-        assertTrue(s2.getLeechers().equals(141L));
-        assertTrue(s2.getUri().equals("magnet:?xt=urn:btih:6705c69dd697753d7d848f0f7b6ccbccf689a453&dn=Geostorm.2017.720p.HC.HDRip.850MB.&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969"));
+        assertEquals(s2.getSeeders().longValue(), 1657);
+        assertEquals(s2.getLeechers().longValue(), 108L);
+        assertEquals(s2.getUri(), "magnet:?xt=urn:btih:6705c69dd697753d7d848f0f7b6ccbccf689a453&dn=Geostorm.2017.720p.HC.HDRip.850MB.&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969");
 
     }
 
@@ -66,10 +62,37 @@ public class ExtractorTest {
 
         SiteMagnet s = me.extractMagnetLink(doc.html());
 
-        assertTrue(s.getSeeders().equals(1270L));
-        assertTrue(s.getLeechers().equals(489L));
-        assertTrue(s.getUri().equals("magnet:?xt=urn:btih:8FE4B851EB4B67F72D3EF88C03C3CB7B65EAD0DD&dn=Padmaavat+%282018%29+%5B+Padmavati+%5D+HIndi+Cam+700mb+-+TodayPk&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.com%3A2710%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce"));
+        assertEquals(s.getSeeders().longValue(), 1270L);
+        assertEquals(s.getLeechers().longValue(), 489L);
+        assertEquals(s.getUri(), "magnet:?xt=urn:btih:8FE4B851EB4B67F72D3EF88C03C3CB7B65EAD0DD&dn=Padmaavat+%282018%29+%5B+Padmavati+%5D+HIndi+Cam+700mb+-+TodayPk&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.com%3A2710%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce");
 
+    }
+
+    @Test
+    public void IDopeTest() throws Exception {
+        MagnetExtractor me = new IDopeExtractor();
+
+        Document doc = Jsoup.connect("https://idope.se/torrent/A-Monster-Calls/fcaccfbba672ae10e4cc1c4328e001b96eab23b7/").get();
+
+        SiteMagnet s = me.extractMagnetLink(doc.html());
+
+        assertEquals(s.getSeeders().longValue(), 340L);
+        assertEquals(s.getLeechers().longValue(), 0L);
+        assertEquals(s.getUri(), "magnet:?xt=urn:btih:fcaccfbba672ae10e4cc1c4328e001b96eab23b7");
+
+    }
+
+    @Test
+    public void RarBGTest() throws Exception {
+        MagnetExtractor me = new RarBGExtractor();
+
+        Document doc = Jsoup.connect("https://rarbg.to/torrent/4igbqhx").get();
+
+        SiteMagnet s = me.extractMagnetLink(doc.html());
+
+        assertEquals(s.getSeeders().longValue(), 35L);
+        assertEquals(s.getLeechers().longValue(), 14L);
+        assertEquals(s.getUri(), "magnet:?xt=urn:btih:2f3c29b9a322db84e3bd9f07f2ceead3f060daf3&dn=My.Kitchen.Rules.S09E03.720p.HDTV.x264-ORENJI%5Brartv%5D&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710");
 
     }
 
