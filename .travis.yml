@@ -11,7 +11,7 @@ after_success:
 - cd ..
 - "./deploy.sh"
 addons:
-  postgresql: '9.3'
+  postgresql: '9.6'
   apt:
     packages:
     - sshpass
