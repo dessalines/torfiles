@@ -1,5 +1,7 @@
 package com.torfiles;
 
+import com.torfiles.crawler.MagnetExtractor;
+import com.torfiles.crawler.SiteMagnet;
 import com.torfiles.crawler.sites.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -68,33 +70,19 @@ public class ExtractorTest {
 
     }
 
-    @Test
-    public void IDopeTest() throws Exception {
-        MagnetExtractor me = new IDopeExtractor();
-
-        Document doc = Jsoup.connect("https://idope.se/torrent/A-Monster-Calls/fcaccfbba672ae10e4cc1c4328e001b96eab23b7/").get();
-
-        SiteMagnet s = me.extractMagnetLink(doc.html());
-
-        assertEquals(s.getSeeders().longValue(), 340L);
-        assertEquals(s.getLeechers().longValue(), 0L);
-        assertEquals(s.getUri(), "magnet:?xt=urn:btih:fcaccfbba672ae10e4cc1c4328e001b96eab23b7");
-
-    }
-
-    @Test
-    public void RarBGTest() throws Exception {
-        MagnetExtractor me = new RarBGExtractor();
-
-        Document doc = Jsoup.connect("https://rarbg.to/torrent/4igbqhx").get();
-
-        SiteMagnet s = me.extractMagnetLink(doc.html());
-
-        assertEquals(s.getSeeders().longValue(), 35L);
-        assertEquals(s.getLeechers().longValue(), 14L);
-        assertEquals(s.getUri(), "magnet:?xt=urn:btih:2f3c29b9a322db84e3bd9f07f2ceead3f060daf3&dn=My.Kitchen.Rules.S09E03.720p.HDTV.x264-ORENJI%5Brartv%5D&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710");
-
-    }
+//    @Test
+//    public void IDopeTest() throws Exception {
+//        MagnetExtractor me = new IDopeExtractor();
+//
+//        Document doc = Jsoup.connect("https://idope.se/torrent/hentai/9f7509e2c8b5e169cb5a9bfce19f9a553431c389/").get();
+//
+//        SiteMagnet s = me.extractMagnetLink(doc.html());
+//
+//        assertEquals(s.getSeeders().longValue(), 340L);
+//        assertEquals(s.getLeechers().longValue(), 0L);
+//        assertEquals(s.getUri(), "magnet:?xt=urn:btih:fcaccfbba672ae10e4cc1c4328e001b96eab23b7");
+//
+//    }
 
 
 }

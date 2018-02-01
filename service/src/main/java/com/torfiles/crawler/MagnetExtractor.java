@@ -1,4 +1,4 @@
-package com.torfiles.crawler.sites;
+package com.torfiles.crawler;
 
 import com.frostwire.jlibtorrent.TorrentInfo;
 import com.torfiles.db.Actions;

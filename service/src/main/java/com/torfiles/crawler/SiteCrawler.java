@@ -40,7 +40,7 @@ public class SiteCrawler extends WebCrawler {
                 !href.startsWith("https://thepiratebay.org/language") ||
                 (href.startsWith("https://www.skytorrents.in") && href.endsWith("l=en-us")) ||
                 href.startsWith("https://1337x.to/") ||
-                href.startsWith("https://rarbg.to/")
+                href.startsWith("https://idope.se")
         );
     }
 
@@ -73,9 +73,6 @@ public class SiteCrawler extends WebCrawler {
                 me.fetchAndSaveMagnets(html);
             } else if (url.startsWith("https://idope.se/torrent/")) {
                 me = new IDopeExtractor();
-                me.fetchAndSaveMagnets(html);
-            } else if (url.startsWith("https://rarbg.to/torrent/")) {
-                me = new RarBGExtractor();
                 me.fetchAndSaveMagnets(html);
             }
 

@@ -1,6 +1,8 @@
 package com.torfiles.crawler.sites;
 
 import ch.qos.logback.classic.Logger;
+import com.torfiles.crawler.MagnetExtractor;
+import com.torfiles.crawler.SiteMagnet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

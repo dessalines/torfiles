@@ -1,5 +1,7 @@
 package com.torfiles.crawler.sites;
 
+import com.torfiles.crawler.MagnetExtractor;
+import com.torfiles.crawler.SiteMagnet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
