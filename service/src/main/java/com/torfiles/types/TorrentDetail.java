@@ -14,7 +14,8 @@ public class TorrentDetail implements JSONWriter {
     private String name, infoHash;
     private Timestamp creationDate;
     private List<FileDetail> files;
-    private Long peers;
+
+    private Long seeders, leechers;
     private Long sizeBytes;
 
 
@@ -22,13 +23,15 @@ public class TorrentDetail implements JSONWriter {
                           String infoHash,
                           Timestamp creationDate,
                           List<FileDetail> files,
-                          Long peers,
+                          Long seeders,
+                          Long leechers,
                           Long sizeBytes) {
         this.name = name;
         this.infoHash = infoHash;
         this.creationDate = creationDate;
         this.sizeBytes = sizeBytes;
-        this.peers = peers;
+        this.seeders = seeders;
+        this.leechers = leechers;
         this.files = files;
 
 
@@ -53,7 +56,8 @@ public class TorrentDetail implements JSONWriter {
                 torrent.getString("info_hash"),
                 torrent.getTimestamp("created"),
                 fileDetails,
-                files.get(0).getLong("peers"),
+                files.get(0).getLong("seeders"),
+                files.get(0).getLong("leechers"),
                 torrent.getLong("size_bytes"));
     }
 
@@ -73,11 +77,15 @@ public class TorrentDetail implements JSONWriter {
         return files;
     }
 
-    public Long getPeers() {
-        return peers;
-    }
-
     public Long getSizeBytes() {
         return sizeBytes;
+    }
+
+    public Long getSeeders() {
+        return seeders;
+    }
+
+    public Long getLeechers() {
+        return leechers;
     }
 }

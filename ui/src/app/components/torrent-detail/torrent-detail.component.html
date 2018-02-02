@@ -3,9 +3,15 @@
   <hr>
   <div class="row">
     <div class="col-sm-8">
-      <span [ngClass]="d.seeders | peerHealth">Seeders: 
+      <span>Seeders:</span>
+      <span [ngClass]="d.seeders | peerHealth">
         <span *ngIf="d.seeders">{{d.seeders}}</span>
         <span *ngIf="!d.seeders">??</span>
+      </span>
+      <span class="ml-2">Leechers:</span>
+      <span [ngClass]="d.leechers | peerHealth"> 
+        <span *ngIf="d.leechers">{{d.leechers}}</span>
+        <span *ngIf="!d.leechers">??</span>
       </span>
     </div>
     <div class="col-sm-4 text-right">
