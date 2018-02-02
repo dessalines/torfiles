@@ -36,11 +36,10 @@ public class SiteCrawler extends WebCrawler {
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
         return !FILTERS.matcher(href).matches()
-                && (href.startsWith("https://thepiratebay.org") &&
-                !href.startsWith("https://thepiratebay.org/language") ||
+                && (href.startsWith("https://thepiratebay.org") && !href.startsWith("https://thepiratebay.org/language") ||
                 (href.startsWith("https://www.skytorrents.in") && href.endsWith("l=en-us")) ||
                 href.startsWith("https://1337x.to/") ||
-                href.startsWith("https://idope.se")
+                (href.startsWith("https://idope.se") && !href.startsWith("https://idope.se/report"))
         );
     }
 
