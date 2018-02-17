@@ -6,4 +6,4 @@ cd ..
 
 # Building the back end
 cd service
-sh install.sh
+sh install.sh -scanTPB

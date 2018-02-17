@@ -9,6 +9,8 @@ import com.torfiles.tools.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -96,11 +98,18 @@ public enum LibtorrentEngine {
 
         // Fetching the magnet uri, waiting 30 seconds max
 
-        byte[] data = s.fetchMagnet(uri, 30);
 
-        TorrentInfo ti = TorrentInfo.bdecode(data);
+        try {
+            byte[] data = s.fetchMagnet(uri, 10);
+            TorrentInfo ti = TorrentInfo.bdecode(data);
 
-        return ti;
+            return ti;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
 
     }
 }

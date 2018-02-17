@@ -38,6 +38,12 @@ public class WebService {
     @Option(name="-liquibase", usage="Run liquibase changesets")
     private Boolean liquibase = false;
 
+    @Option(name="-crawl", usage="Crawl torrent sites.")
+    private Boolean crawl = false;
+
+    @Option(name="-scanTPB", usage="Scan TPB file")
+    private Boolean scanTPB = false;
+
     public void doMain(String[] args) throws IOException {
 
         if (args != null) {
@@ -73,7 +79,13 @@ public class WebService {
         ScheduledJobs.start();
 
         // Start the webcrawler
-        CrawlStarterController.start();
+        if (crawl) {
+            CrawlStarterController.start();
+        }
+
+        if (scanTPB) {
+            Tools.scanTPBFile();
+        }
 
     }
 

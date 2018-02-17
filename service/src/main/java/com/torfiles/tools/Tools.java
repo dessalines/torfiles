@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.torfiles.db.Actions;
 import com.torfiles.db.Tables;
+import com.torfiles.torrent.LibtorrentEngine;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -20,12 +21,17 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Tools {
 
@@ -195,6 +201,33 @@ public class Tools {
         }
 
         return null;
+    }
+
+    public static void scanTPBFile() {
+
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+
+        Pattern pattern = Pattern.compile("xt=urn:btih:[a-z0-9]{20,50}");
+
+
+        try (BufferedReader br = Files.newBufferedReader(Paths.get("/home/tyler/Tyhous_HD2/Downloads/TPB Backup - Jan.1.2017.sql"),
+                StandardCharsets.UTF_8)) {
+            for (String line = null; (line = br.readLine()) != null;) {
+
+                Matcher matcher = pattern.matcher(line);
+                while (matcher.find()) {
+                    String magnetUri = "magnet:?" + matcher.group();
+//                    System.out.println(magnetUri);
+                    executor.submit(() -> {
+                        LibtorrentEngine.INSTANCE.fetchMagnet(magnetUri);
+                    });
+                }
+
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
 
