@@ -2,6 +2,7 @@ package com.torfiles.tools;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.frostwire.jlibtorrent.TorrentInfo;
 import com.torfiles.db.Actions;
 import com.torfiles.db.Tables;
 import com.torfiles.torrent.LibtorrentEngine;
@@ -11,6 +12,13 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.ItemsListVisitor;
+import net.sf.jsqlparser.expression.operators.relational.MultiExpressionList;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.insert.Insert;
+import net.sf.jsqlparser.statement.select.SubSelect;
 import org.apache.commons.io.FileUtils;
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.DBException;
@@ -172,7 +180,7 @@ public class Tools {
             return null;
         }
 
-        nameQuery = nameQuery.replaceAll("'","");
+        nameQuery = nameQuery.replaceAll("'", "");
 
         String[] words = nameQuery.split("\\s+");
 
@@ -196,7 +204,7 @@ public class Tools {
 
             return buffer.toByteArray();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -204,27 +212,52 @@ public class Tools {
     }
 
     public static void scanTPBFile() {
+        /*
+        CREATE TABLE `tpb` (
+  `title` text,
+  `uid` int(11) NOT NULL DEFAULT '0',
+  `size` double NOT NULL DEFAULT '0',
+  `categoryP` text,
+  `categoryS` text,
+  `magnet` text,
+  `seeders` int(11) NOT NULL DEFAULT '0',
+  `leechers` int(11) NOT NULL DEFAULT '0',
+  `uploader` text,
+  `files` int(11) DEFAULT NULL,
+  `time` int(11) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */
 
         ExecutorService executor = Executors.newFixedThreadPool(10);
 
-        Pattern pattern = Pattern.compile("xt=urn:btih:[a-z0-9]{20,50}");
-
-
         try (BufferedReader br = Files.newBufferedReader(Paths.get("/home/tyler/Tyhous_HD2/Downloads/TPB Backup - Jan.1.2017.sql"),
                 StandardCharsets.UTF_8)) {
-            for (String line = null; (line = br.readLine()) != null;) {
+            int i = 0;
+            for (String line = null; (line = br.readLine()) != null; ) {
+                log.info("line number i = " + i++);
+                if (line.startsWith("INSERT INTO")) {
+                    Insert insert = (Insert) CCJSqlParserUtil.parse(line.replaceAll("\\\\'", ""));
+                    for (ExpressionList el : ((MultiExpressionList) insert.getItemsList()).getExprList()) {
+                        executor.submit(() -> {
+                            List<Expression> es = el.getExpressions();
+                            String magnetUri = es.get(5).toString();
+                            magnetUri = "magnet:" + magnetUri.substring(1, magnetUri.length() - 1);
 
-                Matcher matcher = pattern.matcher(line);
-                while (matcher.find()) {
-                    String magnetUri = "magnet:?" + matcher.group();
-//                    System.out.println(magnetUri);
-                    executor.submit(() -> {
-                        LibtorrentEngine.INSTANCE.fetchMagnet(magnetUri);
-                    });
+                            Long seeders = Long.valueOf(es.get(6).toString());
+                            Long leechers = Long.valueOf(es.get(6).toString());
+
+                            TorrentInfo ti = LibtorrentEngine.INSTANCE.fetchMagnet(magnetUri);
+                            Tools.dbInit();
+                            Actions.saveTorrentInfo(ti, seeders, leechers);
+                            Tools.dbClose();
+                        });
+
+                    }
                 }
-
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
